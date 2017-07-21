@@ -148,8 +148,6 @@ public class JumioMobileSDK extends CordovaPlugin {
                         bamSDK.setEnableFlashOnScanStart(options.getBoolean(key));
                     } else if (key.equals("cardNumberMaskingEnabled")) {
                         bamSDK.setCardNumberMaskingEnabled(options.getBoolean(key));
-                    } else if (key.equals("adyenPublicKey")) {
-                        bamSDK.setAdyenPublicKey(options.getString(key));
                     } else if (key.equals("cameraPosition")) {
                         JumioCameraPosition cameraPosition = (options.getString(key).toLowerCase().equals("front")) ? JumioCameraPosition.FRONT : JumioCameraPosition.BACK;
                         bamSDK.setCameraPosition(cameraPosition);
@@ -267,7 +265,7 @@ public class JumioMobileSDK extends CordovaPlugin {
                         netverifySDK.setDataExtractionOnMobileOnly(options.getBoolean(key));
                     } else if (key.equals("cameraPosition")) {
                         JumioCameraPosition cameraPosition = (options.getString(key).toLowerCase().equals("front")) ? JumioCameraPosition.FRONT : JumioCameraPosition.BACK;
-                        bamSDK.setCameraPosition(cameraPosition);
+                        netverifySDK.setCameraPosition(cameraPosition);
                     } else if (key.equals("preselectedDocumentVariant")) {
                         NVDocumentVariant variant = (options.getString(key).toLowerCase().equals("paper")) ? NVDocumentVariant.PAPER : NVDocumentVariant.PLASTIC;
                         netverifySDK.setPreselectedDocumentVariant(variant);
