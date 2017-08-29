@@ -1,0 +1,58 @@
+{
+    "prepare_queue": {
+        "installed": [],
+        "uninstalled": []
+    },
+    "config_munge": {
+        "files": {
+            "config.xml": {
+                "parents": {
+                    "/*": [
+                        {
+                            "xml": "<feature name=\"JumioMobileSDK\"><param name=\"ios-package\" value=\"JumioMobileSDK\" /></feature>",
+                            "count": 1
+                        }
+                    ]
+                }
+            },
+            "*-Info.plist": {
+                "parents": {
+                    "NSCameraUsageDescription": [
+                        {
+                            "xml": "<string>This will allow ${PRODUCT_NAME} to take photos of your credentials.</string>",
+                            "count": 1
+                        }
+                    ]
+                }
+            }
+        }
+    },
+    "installed_plugins": {
+        "cordova-plugin-whitelist": {
+            "PACKAGE_NAME": "com.jumio.cordova.demo"
+        },
+        "cordova-plugin-cocoapod-support": {
+            "PACKAGE_NAME": "com.jumio.cordova.demo"
+        },
+        "cordova-plugin-jumio-mobilesdk": {
+            "CAMERA_USAGE_DESCRIPTION": "This will allow ${PRODUCT_NAME} to take photos of your credentials.",
+            "PACKAGE_NAME": "com.jumio.cordova.demo"
+        }
+    },
+    "dependent_plugins": {},
+    "modules": [
+        {
+            "id": "cordova-plugin-jumio-mobilesdk.JumioMobileSDK",
+            "file": "plugins/cordova-plugin-jumio-mobilesdk/www/JumioMobileSDK.js",
+            "pluginId": "cordova-plugin-jumio-mobilesdk",
+            "clobbers": [
+                "Jumio"
+            ]
+        }
+    ],
+    "plugin_metadata": {
+        "cordova-plugin-whitelist": "1.3.2",
+        "cordova-plugin-cocoapod-support": "1.3.0",
+        "cordova-plugin-jumio-mobilesdk": "2.8.0"
+    }
+}

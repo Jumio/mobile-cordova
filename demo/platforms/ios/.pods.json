@@ -1,0 +1,15 @@
+{
+	"pods": {
+		"JumioMobileSDK-FAT": {
+			"name": "JumioMobileSDK-FAT",
+			"version": "2.8.0",
+			"configurations": "release,debug"
+		}
+	},
+	"sources": {
+		"https://github.com/CocoaPods/Specs.git": true,
+		"http://mobile-sdk.jumio.com/distribution.git": true
+	},
+	"iosMinVersion": "8.0",
+	"useFrameworks": true
+}
