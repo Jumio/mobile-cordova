@@ -5,3 +5,21 @@ demo/platforms/ios/DemoApp.xcodeproj/project.xcworkspace
 demo/platforms/ios/Pods
 demo/platforms/ios/Podfile.lock
 demo/platforms/ios/CordovaLib/CordovaLib.xcodeproj/xcuserdata
+
+# Log Files
+*.log
+
+# Android Studio Navigation editor temp files
+.navigation/
+
+# Android Studio captures folder
+captures/
+
+# Intellij
+*.iml
+.idea/workspace.xml
+.idea/tasks.xml
+.idea/gradle.xml
+.idea/dictionaries
+.idea/libraries
+*.iml

@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<plugin id="cordova-plugin-jumio-mobilesdk" version="2.8.0" xmlns="http://apache.org/cordova/ns/plugins/1.0" xmlns:android="http://schemas.android.com/apk/res/android">
+<plugin id="cordova-plugin-jumio-mobilesdk" version="2.9.0" xmlns="http://apache.org/cordova/ns/plugins/1.0" xmlns:android="http://schemas.android.com/apk/res/android">
     <name>JumioMobileSDK</name>
     <js-module name="JumioMobileSDK" src="www/JumioMobileSDK.js">
         <clobbers target="Jumio" />
@@ -21,11 +21,11 @@
             <string>$CAMERA_USAGE_DESCRIPTION</string>
         </config-file>
         
-        <pods-config ios-min-version="8.0" use-frameworks="true">
+        <pods-config ios-min-version="9.0" use-frameworks="true">
             <source url="https://github.com/CocoaPods/Specs.git" />
             <source url="http://mobile-sdk.jumio.com/distribution.git" />
         </pods-config>
-        <pod name="JumioMobileSDK-FAT" version="2.8.0" configurations="release,debug" />
+        <pod name="JumioMobileSDK-FAT" version="2.9.0" configurations="release,debug" />
     </platform>
     
     <platform name="android">
@@ -63,16 +63,24 @@
         </config-file>
         <proguard-config>
             -keep class com.jumio.** { *; }
-            -keep class net.sf.scuba.smartcards.IsoDepCardService {*;}
-            -keep class org.jmrtd.** { *; }
-            -keep class net.sf.scuba.** {*;}
-            -keep class org.spongycastle.** {*;}
-            -keep class org.ejbca.** {*;}
-            
-            -dontwarn java.nio.**
-            -dontwarn org.codehaus.**
-            -dontwarn org.ejbca.**
-            -dontwarn org.spongycastle.**
+			-keep class jumio.** { *; }
+			-keep class com.samsung.** { *; }
+			-keep class com.samsung.**$* { *; }
+			-keep class com.microblink.** { *; }
+			-keep class com.microblink.**$* { *; }
+
+			-keep class net.sf.scuba.smartcards.IsoDepCardService {*;}
+			-keep class org.jmrtd.** { *; }
+			-keep class net.sf.scuba.** {*;}
+			-keep class org.spongycastle.** {*;}
+			-keep class org.ejbca.** {*;}
+
+			-dontwarn java.nio.**
+			-dontwarn org.codehaus.**
+			-dontwarn org.ejbca.**
+			-dontwarn org.spongycastle.**
+			-dontwarn com.samsung.**
+			-dontwarn com.microblink.**
         </proguard-config>
         <source-file src="src/android/JumioMobileSDK.java" target-dir="src/com/jumio/mobilesdk" />
     </platform>
