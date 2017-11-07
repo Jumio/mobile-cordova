@@ -1,7 +1,7 @@
-platform :ios, '8.0'
+platform :ios, '9.0'
 use_frameworks!
 source 'https://github.com/CocoaPods/Specs.git'
 source 'http://mobile-sdk.jumio.com/distribution.git'
 target 'DemoApp' do
-	pod 'JumioMobileSDK-FAT', '2.8.0'
+	pod 'JumioMobileSDK-FAT', '2.9.0'
 end

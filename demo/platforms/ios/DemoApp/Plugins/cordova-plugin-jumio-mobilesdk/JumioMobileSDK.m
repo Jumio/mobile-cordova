@@ -221,6 +221,8 @@
                     }
                     
                     self.netverifyConfiguration.preselectedDocumentTypes = documentTypes;
+                } else if ([key isEqualToString: @"offlineToken"]) {
+                    self.netverifyConfiguration.offlineToken = [options objectForKey: key];
                 }
             }
         }
@@ -244,14 +246,18 @@
                         [[UINavigationBar netverifyAppearance] setTitleTextAttributes: @{NSForegroundColorAttributeName: color}];
                     } else if ([key isEqualToString: @"foregroundColor"]) {
                         [[NetverifyBaseView netverifyAppearance] setForegroundColor: color];
-                    } else if ([key isEqualToString: @"defaultButtonBackgroundColor"]) {
-                        [[NetverifyScanOptionButton netverifyAppearance] setBackgroundColor: color forState:UIControlStateNormal];
-                    } else if ([key isEqualToString: @"defaultButtonTitleColor"]) {
-                        [[NetverifyScanOptionButton netverifyAppearance] setTitleColor: color forState:UIControlStateNormal];
-                    } else if ([key isEqualToString: @"activeButtonBackgroundColor"]) {
-                        [[NetverifyScanOptionButton netverifyAppearance] setBackgroundColor: color forState:UIControlStateHighlighted];
-                    } else if ([key isEqualToString: @"activeButtonTitleColor"]) {
-                        [[NetverifyScanOptionButton netverifyAppearance] setTitleColor: color forState:UIControlStateHighlighted];
+                    } else if ([key isEqualToString: @"documentSelectionHeaderBackgroundColor"]) {
+                        [[NetverifyDocumentSelectionHeaderView netverifyAppearance] setBackgroundColor: color];
+                    } else if ([key isEqualToString: @"documentSelectionHeaderTitleColor"]) {
+                        [[NetverifyDocumentSelectionHeaderView netverifyAppearance] setTitleColor: color];
+                    } else if ([key isEqualToString: @"documentSelectionHeaderIconColor"]) {
+                        [[NetverifyDocumentSelectionHeaderView netverifyAppearance] setIconColor: color];
+                    } else if ([key isEqualToString: @"documentSelectionButtonBackgroundColor"]) {
+                        [[NetverifyDocumentSelectionButton netverifyAppearance] setBackgroundColor: color forState: UIControlStateNormal];
+                    } else if ([key isEqualToString: @"documentSelectionButtonTitleColor"]) {
+                        [[NetverifyDocumentSelectionButton netverifyAppearance] setTitleColor: color forState: UIControlStateNormal];
+                    } else if ([key isEqualToString: @"documentSelectionButtonIconColor"]) {
+                        [[NetverifyDocumentSelectionButton netverifyAppearance] setIconColor: color forState: UIControlStateNormal];
                     } else if ([key isEqualToString: @"fallbackButtonBackgroundColor"]) {
                         [[NetverifyFallbackButton netverifyAppearance] setBackgroundColor: color forState:UIControlStateNormal];
                     } else if ([key isEqualToString: @"fallbackButtonBorderColor"]) {
@@ -367,20 +373,6 @@
                         [[UINavigationBar netverifyAppearance] setTitleTextAttributes: @{NSForegroundColorAttributeName: color}];
                     } else if ([key isEqualToString: @"foregroundColor"]) {
                         [[NetverifyBaseView netverifyAppearance] setForegroundColor: color];
-                    } else if ([key isEqualToString: @"defaultButtonBackgroundColor"]) {
-                        [[NetverifyScanOptionButton netverifyAppearance] setBackgroundColor: color forState:UIControlStateNormal];
-                    } else if ([key isEqualToString: @"defaultButtonTitleColor"]) {
-                        [[NetverifyScanOptionButton netverifyAppearance] setTitleColor: color forState:UIControlStateNormal];
-                    } else if ([key isEqualToString: @"activeButtonBackgroundColor"]) {
-                        [[NetverifyScanOptionButton netverifyAppearance] setBackgroundColor: color forState:UIControlStateHighlighted];
-                    } else if ([key isEqualToString: @"activeButtonTitleColor"]) {
-                        [[NetverifyScanOptionButton netverifyAppearance] setTitleColor: color forState:UIControlStateHighlighted];
-                    } else if ([key isEqualToString: @"fallbackButtonBackgroundColor"]) {
-                        [[NetverifyFallbackButton netverifyAppearance] setBackgroundColor: color forState:UIControlStateNormal];
-                    } else if ([key isEqualToString: @"fallbackButtonBorderColor"]) {
-                        [[NetverifyFallbackButton netverifyAppearance] setBorderColor: color];
-                    } else if ([key isEqualToString: @"fallbackButtonTitleColor"]) {
-                        [[NetverifyFallbackButton netverifyAppearance] setTitleColor: color forState:UIControlStateNormal];
                     } else if ([key isEqualToString: @"positiveButtonBackgroundColor"]) {
                         [[NetverifyPositiveButton netverifyAppearance] setBackgroundColor: color forState:UIControlStateNormal];
                     } else if ([key isEqualToString: @"positiveButtonBorderColor"]) {

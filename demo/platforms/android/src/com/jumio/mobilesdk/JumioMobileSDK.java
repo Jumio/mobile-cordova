@@ -5,14 +5,6 @@
 
 package com.jumio.mobilesdk;
 
-import org.apache.cordova.CallbackContext;
-import org.apache.cordova.CordovaPlugin;
-import org.apache.cordova.PluginResult;
-import org.apache.cordova.PluginResult.Status;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -21,20 +13,19 @@ import android.widget.Toast;
 
 import com.jumio.MobileSDK;
 import com.jumio.bam.*;
-import com.jumio.bam.custom.*;
 import com.jumio.bam.enums.CreditCardType;
-import com.jumio.commons.json.JSON;
 import com.jumio.core.enums.*;
 import com.jumio.core.exceptions.*;
 import com.jumio.dv.DocumentVerificationSDK;
 import com.jumio.nv.*;
-import com.jumio.nv.data.document.NVDocumentType;
-import com.jumio.nv.data.document.NVDocumentVariant;
+import com.jumio.nv.data.document.*;
 import com.jumio.sdk.SDKExpiredException;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
+import org.apache.cordova.*;
+import org.apache.cordova.PluginResult.Status;
+import org.json.*;
+
+import java.util.*;
 
 public class JumioMobileSDK extends CordovaPlugin {
     
@@ -381,7 +372,7 @@ public class JumioMobileSDK extends CordovaPlugin {
                         documentVerificationSDK.setDocumentName(options.getString(key));
                     } else if (key.equals("cameraPosition")) {
                         JumioCameraPosition cameraPosition = (options.getString(key).toLowerCase().equals("front")) ? JumioCameraPosition.FRONT : JumioCameraPosition.BACK;
-                        bamSDK.setCameraPosition(cameraPosition);
+                        documentVerificationSDK.setCameraPosition(cameraPosition);
                     }
                 }
             }

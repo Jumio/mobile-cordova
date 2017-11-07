@@ -48,7 +48,8 @@ var app = {
 			//dataExtractionOnMobileOnly: false,
 			//cameraPosition: "back",
 			//preselectedDocumentVariant: "plastic",
-			//documentTypes: ["PASSPORT", "DRIVER_LICENSE", "IDENTITY_CARD", "VISA"]
+			//documentTypes: ["PASSPORT", "DRIVER_LICENSE", "IDENTITY_CARD", "VISA"],
+            //offlineToken: ""
 		}, {
 			// Customization iOS only
 			//disableBlur: true,
@@ -57,10 +58,12 @@ var app = {
 			//tintColor: "#ff0000",
 			//barTintColor: "#ff0000",
 			//textTitleColor: "#ff0000",
-			//defaultButtonBackgroundColor: "#ff0000",
-			//defaultButtonTitleColor: "#ff0000",
-			//activeButtonBackgroundColor: "#ff0000",
-			//activeButtonTitleColor: "#ff0000",
+            //documentSelectionHeaderBackgroundColor: "#ff0000",
+            //documentSelectionHeaderTitleColor: "#ff0000",
+            //documentSelectionHeaderIconColor: "#ff0000",
+            //documentSelectionButtonBackgroundColor: "#ff0000",
+            //documentSelectionButtonTitleColor: "#ff0000",
+            //documentSelectionButtonIconColor: "#ff0000",
 			//fallbackButtonBackgroundColor: "#ff0000",
 			//fallbackButtonBorderColor: "#ff0000",
 			//fallbackButtonTitleColor: "#ff0000",
