@@ -1,4 +1,5 @@
 build
+demo/info.txt
 demo/platforms/ios/DemoApp.xcworkspace/xcuserdata
 demo/platforms/ios/DemoApp.xcodeproj/xcuserdata
 demo/platforms/ios/DemoApp.xcodeproj/project.xcworkspace

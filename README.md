@@ -6,7 +6,7 @@ Official Jumio Mobile SDK plugin for Apache Cordova
 With this release, we only ensure compatibility with the latest Cordova versions and plugins.
 At the time of this release, the following minimum versions are supported:
 * Cordova: 7.1.0
-* Cordova Android: 6.3.0
+* Cordova Android: 6.4.0
 * Cordova iOS: 4.5.3
 
 ## Setup
@@ -17,14 +17,14 @@ cordova create MyProject com.my.project "MyProject"
 cd MyProject
 cordova platform add ios
 cordova platform add android
-cordova plugin add https://github.com/Jumio/mobile-cordova.git#v2.9.0
+cordova plugin add https://github.com/Jumio/mobile-cordova.git#v2.10.0
 ```
 
 ## Integration
 
 ### iOS
 
-Manual integration or dependency management via cocoapods possible, please see [the official documentation of the Jumio Mobile SDK for iOS](https://github.com/Jumio/mobile-sdk-ios/tree/v2.9.0#basic-setup)
+Manual integration or dependency management via cocoapods possible, please see [the official documentation of the Jumio Mobile SDK for iOS](https://github.com/Jumio/mobile-sdk-ios/tree/v2.10.0#basic-setup)
 
 ### Android
 
@@ -41,17 +41,17 @@ Add a parameter for your SDK_VERSION into the ext-section:
 
 ```
 ext {
-    SDK_VERSION = "2.9.0"
+    SDK_VERSION = "2.10.0"
 }
 ```
 
-Add required permissions for the products as described in chapter [Permissions](https://github.com/Jumio/mobile-sdk-android/blob/v2.9.0/README.md#permissions)
+Add required permissions for the products as described in chapter [Permissions](https://github.com/Jumio/mobile-sdk-android/blob/v2.10.0/README.md#permissions)
 
 Open the android project of your cordova project located in */platforms/android* and insert the dependencies from the products you require to your **build.gradle** file. (Module: android)
 
-* [Netverify & Fastfill](https://github.com/Jumio/mobile-sdk-android/blob/v2.9.0/docs/integration_netverify-fastfill.md#dependencies)
-* [Document Verification](https://github.com/Jumio/mobile-sdk-android/blob/v2.9.0/docs/integration_document-verification.md#dependencies)
-* [BAM Checkout](https://github.com/Jumio/mobile-sdk-android/blob/v2.9.0/docs/integration_bam-checkout.md#dependencies)
+* [Netverify & Fastfill](https://github.com/Jumio/mobile-sdk-android/blob/v2.10.0/docs/integration_netverify-fastfill.md#dependencies)
+* [Document Verification](https://github.com/Jumio/mobile-sdk-android/blob/v2.10.0/docs/integration_document-verification.md#dependencies)
+* [BAM Checkout](https://github.com/Jumio/mobile-sdk-android/blob/v2.10.0/docs/integration_bam-checkout.md#dependencies)
 
 __Note:__ If you are using Netverify, make sure to add the Google vision meta-data to you **AndroidManifest.xml** accordingly:
 
@@ -260,7 +260,7 @@ Configure the SDK with the *configuration*-Object.
 | cardNumberMaskingEnabled | Boolean |
 | offlineToken | String | In your Jumio merchant backend on the "Settings" page under "API credentials" you can find your Offline token. In case you use your offline token, you must not set the API token and secret|
 | cameraPosition | String | Which camera is used by default. Can be **FRONT** or **BACK**. |
-| cardTypes | String-Array | An array of accepted card types. Available card types: **VISA**, **MASTER_CARD**, **AMERICAN_EXPRESS**, **CHINA_UNIONPAY**, **DINERS_CLUB**, **DISCOVER**, **JCB**, **STARBUCKS** |
+| cardTypes | String-Array | An array of accepted card types. Available card types: **VISA**, **MASTER_CARD**, **AMERICAN_EXPRESS**, **CHINA_UNIONPAY**, **DINERS_CLUB**, **DISCOVER**, **JCB** |
 
 Initialization example with configuration.
 
@@ -293,7 +293,15 @@ Jumio.startBAM(function(cardInformation) {
 ## Customization
 
 ### Android
-The Netverify SDK can be customized to the respective needs by following this [customization chapter](https://github.com/Jumio/mobile-sdk-android/blob/v2.9.0/docs/integration_netverify-fastfill.md#customization).
+
+#### Netverify
+The Netverify SDK can be customized to the respective needs by following this [customization chapter](https://github.com/Jumio/mobile-sdk-android/blob/v2.10.0/docs/integration_netverify-fastfill.md#customization).
+
+#### BAM Checkout
+The Netverify SDK can be customized to the respective needs by following this [customization chapter](https://github.com/Jumio/mobile-sdk-android/blob/v2.10.0/docs/integration_bam-checkout.md#customization).
+
+#### Document Verification
+The Netverify SDK can be customized to the respective needs by following this [customization chapter](https://github.com/Jumio/mobile-sdk-android/blob/v2.10.0/docs/integration_document-verification.md#customization).
 
 ### iOS
 The SDK can be customized to the respective needs. You can pass the following customization options to the initializer:
