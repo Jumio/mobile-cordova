@@ -11,9 +11,11 @@
     
 - (void)initBAM:(CDVInvokedUrlCommand*)command
     {
+        self.callbackId = command.callbackId;
+        
         NSUInteger argc = [command.arguments count];
         if (argc < 3) {
-            [self showSDKError: @"Missing required parameters apiToken, apiSecret or dataCenter."];
+            [self sendErrorMessage: @"Missing required parameters apiToken, apiSecret or dataCenter."];
             return;
         }
         
@@ -131,18 +133,24 @@
                 }
             }
         }
-        
-        self.bamViewController = [[BAMCheckoutViewController alloc] initWithConfiguration: self.bamConfiguration];
+
+        @try {
+            self.bamViewController = [[BAMCheckoutViewController alloc] initWithConfiguration: self.bamConfiguration];
+        } @catch (NSException *exception) {
+            NSString *msg = [NSString stringWithFormat: @"Cancelled with exception %@: %@", exception.name, exception.reason];
+            [self sendErrorMessage: msg];
+        }
     }
     
 - (void)startBAM:(CDVInvokedUrlCommand*)command
     {
+        self.callbackId = command.callbackId;
+        
         if (self.bamViewController == nil) {
-            [self showSDKError: @"The BAM SDK is not initialized yet. Call initBAM() first."];
+            [self sendErrorMessage: @"The BAM SDK is not initialized yet. Call initBAM() first."];
             return;
         }
         
-        self.callbackId = command.callbackId;
         [self.viewController presentViewController: self.bamViewController animated: YES completion: nil];
     }
     
@@ -150,9 +158,11 @@
     
 - (void)initNetverify:(CDVInvokedUrlCommand*)command
     {
+        self.callbackId = command.callbackId;
+        
         NSUInteger argc = [command.arguments count];
         if (argc < 3) {
-            [self showSDKError: @"Missing required parameters apiToken, apiSecret or dataCenter."];
+            [self sendErrorMessage: @"Missing required parameters apiToken, apiSecret or dataCenter."];
             return;
         }
         
@@ -286,18 +296,24 @@
                 }
             }
         }
-        
-        self.netverifyViewController = [[NetverifyViewController alloc] initWithConfiguration: self.netverifyConfiguration];
+
+        @try {
+            self.netverifyViewController = [[NetverifyViewController alloc] initWithConfiguration: self.netverifyConfiguration];
+        } @catch (NSException *exception) {
+            NSString *msg = [NSString stringWithFormat: @"Cancelled with exception %@: %@", exception.name, exception.reason];
+            [self sendErrorMessage: msg];
+        }
     }
     
 - (void)startNetverify:(CDVInvokedUrlCommand*)command
     {
+        self.callbackId = command.callbackId;
+        
         if (self.netverifyViewController == nil) {
-            [self showSDKError: @"The Netverify SDK is not initialized yet. Call initNetverify() first."];
+            [self sendErrorMessage: @"The Netverify SDK is not initialized yet. Call initNetverify() first."];
             return;
         }
         
-        self.callbackId = command.callbackId;
         [self.viewController presentViewController: self.netverifyViewController animated: YES completion: nil];
     }
     
@@ -305,9 +321,11 @@
     
 - (void)initDocumentVerification:(CDVInvokedUrlCommand*)command
     {
+        self.callbackId = command.callbackId;
+        
         NSUInteger argc = [command.arguments count];
         if (argc < 3) {
-            [self showSDKError: @"Missing required parameters apiToken, apiSecret or dataCenter."];
+            [self sendErrorMessage: @"Missing required parameters apiToken, apiSecret or dataCenter."];
             return;
         }
         
@@ -390,17 +408,23 @@
             }
         }
         
-        self.documentVerificationViewController = [[DocumentVerificationViewController alloc] initWithConfiguration: self.documentVerifcationConfiguration];
+        @try {
+            self.documentVerificationViewController = [[DocumentVerificationViewController alloc] initWithConfiguration: self.documentVerifcationConfiguration];
+        } @catch (NSException *exception) {
+            NSString *msg = [NSString stringWithFormat: @"Cancelled with exception %@: %@", exception.name, exception.reason];
+            [self sendErrorMessage: msg];
+        }
     }
     
 - (void)startDocumentVerification:(CDVInvokedUrlCommand*)command
     {
+        self.callbackId = command.callbackId;
+        
         if (self.documentVerificationViewController == nil) {
-            [self showSDKError: @"The Document-Verification SDK is not initialized yet. Call initDocumentVerification() first."];
+            [self sendErrorMessage: @"The Document-Verification SDK is not initialized yet. Call initDocumentVerification() first."];
             return;
         }
         
-        self.callbackId = command.callbackId;
         [self.viewController presentViewController: self.documentVerificationViewController animated: YES completion: nil];
     }
     
@@ -440,6 +464,8 @@
     [result setValue: cardInformation.cardAccountNumber forKey: @"cardAccountNumber"];
     [result setValue: [NSNumber numberWithBool: cardInformation.cardSortCodeValid] forKey: @"cardSortCodeValid"];
     [result setValue: [NSNumber numberWithBool: cardInformation.cardAccountNumberValid] forKey: @"cardAccountNumberValid"];
+	
+	[result setValue: scanReference forKey: @"scanReference"];
     
     CDVPluginResult *pluginResult = [CDVPluginResult resultWithStatus: CDVCommandStatus_OK messageAsDictionary: result];
     [self.commandDelegate sendPluginResult: pluginResult callbackId: self.callbackId];
@@ -447,8 +473,8 @@
 }
     
 - (void) bamCheckoutViewController:(BAMCheckoutViewController *)controller didCancelWithError:(NSError *)error scanReference:(NSString *)scanReference {
-    NSString *msg = [NSString stringWithFormat: @"Cancelled with error code %ld: %@", (long)error.code, error.localizedDescription];
-    [self showSDKError: msg];
+    [self sendError: error scanReference: scanReference];
+    [self.viewController dismissViewControllerAnimated: YES completion: nil];
 }
     
 #pragma mark - Netverify Delegates
@@ -531,6 +557,7 @@
         [result setValue: mrzData forKey: @"mrzData"];
     }
     
+	[result setValue: scanReference forKey: @"scanReference"];
     
     CDVPluginResult *pluginResult = [CDVPluginResult resultWithStatus: CDVCommandStatus_OK messageAsDictionary: result];
     [self.commandDelegate sendPluginResult: pluginResult callbackId: self.callbackId];
@@ -539,37 +566,49 @@
     
 - (void)netverifyViewController:(NetverifyViewController *)netverifyViewController didFinishInitializingWithError:(NSError *)error {
     if (error != nil) {
-        NSString *msg = [NSString stringWithFormat: @"Cancelled with error code %ld: %@", (long)error.code, error.localizedDescription];
-        [self showSDKError: msg];
+        [self sendError: error scanReference: nil];
     }
 }
     
 - (void)netverifyViewController:(NetverifyViewController *)netverifyViewController didCancelWithError:(NSError *)error scanReference:(NSString *)scanReference {
-    NSString *msg = [NSString stringWithFormat: @"Cancelled with error code %ld: %@", (long)error.code, error.localizedDescription];
-    [self showSDKError: msg];
+    [self sendError: error scanReference: scanReference];
+    [self.viewController dismissViewControllerAnimated: YES completion: nil];
 }
-    
+
 #pragma mark - Document Verification Delegates
     
 - (void) documentVerificationViewController:(DocumentVerificationViewController *)documentVerificationViewController didFinishWithScanReference:(NSString *)scanReference {
-    NSString *msg = @"Document-Verification finished successfully.";
-    CDVPluginResult *pluginResult = [CDVPluginResult resultWithStatus: CDVCommandStatus_ERROR messageAsString: msg];
+    NSDictionary *result = [NSDictionary dictionaryWithObject: scanReference forKey: @"scanReference"];
+    CDVPluginResult *pluginResult = [CDVPluginResult resultWithStatus: CDVCommandStatus_ERROR messageAsDictionary: result];
     [self.commandDelegate sendPluginResult: pluginResult callbackId: self.callbackId];
     [self.viewController dismissViewControllerAnimated: YES completion: nil];
 }
     
 - (void) documentVerificationViewController:(DocumentVerificationViewController *)documentVerificationViewController didFinishWithError:(NSError *)error {
-    NSString *msg = [NSString stringWithFormat: @"Cancelled with error code %ld: %@", (long)error.code, error.localizedDescription];
-    [self showSDKError: msg];
+    [self sendError: error scanReference: nil];
+    [self.viewController dismissViewControllerAnimated: YES completion: nil];
 }
     
     
 #pragma mark - Helper Methods
+
+
+- (void) sendErrorMessage: (NSString *)errorMessage {
+    NSDictionary* result = [NSDictionary dictionaryWithObject: errorMessage forKey: @"errorMessage"];
+    CDVPluginResult *pluginResult = [CDVPluginResult resultWithStatus: CDVCommandStatus_ERROR messageAsDictionary: result];
+    [self.commandDelegate sendPluginResult: pluginResult callbackId: self.callbackId];
+    [self.viewController dismissViewControllerAnimated: YES completion: nil];
+}
+
+- (void)sendError:(NSError *)error scanReference:(NSString *)scanReference {
+    NSMutableDictionary *result = [[NSMutableDictionary alloc] init];
+    [result setValue: [NSNumber numberWithInteger: error.code] forKey: @"errorCode"];
+    [result setValue: error.localizedDescription forKey: @"errorMessage"];
+    if (scanReference) {
+        [result setValue: scanReference forKey: @"scanReference"];
+    }
     
-- (void)showSDKError:(NSString *)msg {
-    NSLog(@"%@", msg);
-    
-    CDVPluginResult *pluginResult = [CDVPluginResult resultWithStatus: CDVCommandStatus_ERROR messageAsString: msg];
+    CDVPluginResult *pluginResult = [CDVPluginResult resultWithStatus: CDVCommandStatus_ERROR messageAsDictionary: result];
     [self.commandDelegate sendPluginResult: pluginResult callbackId: self.callbackId];
     [self.viewController dismissViewControllerAnimated: YES completion: nil];
 }

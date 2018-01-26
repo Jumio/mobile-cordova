@@ -10,7 +10,7 @@
         "spec": "latest",
         "type": "tag"
       },
-      "/Users/lkoblmueller/Documents/dev/Cordova/mobile-cordova-pilot/demo/node_modules"
+      "C:\\Users\\pkoller\\Documents\\Github\\mobile-cordova-pilot\\demo"
     ]
   ],
   "_from": "cordova-plugin-cocoapod-support@latest",
@@ -45,7 +45,7 @@
   "_shasum": "7d5de96cd25da43c03eaec8cff0017cfaef14644",
   "_shrinkwrap": null,
   "_spec": "cordova-plugin-cocoapod-support",
-  "_where": "/Users/lkoblmueller/Documents/dev/Cordova/mobile-cordova-pilot/demo/node_modules",
+  "_where": "C:\\Users\\pkoller\\Documents\\Github\\mobile-cordova-pilot\\demo",
   "bugs": {
     "url": "https://github.com/blakgeek/cordova-plugin-cocoapods-support/issues"
   },

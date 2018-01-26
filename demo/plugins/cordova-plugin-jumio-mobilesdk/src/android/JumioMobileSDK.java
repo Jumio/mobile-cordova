@@ -381,7 +381,7 @@ public class JumioMobileSDK extends CordovaPlugin {
                         documentVerificationSDK.setDocumentName(options.getString(key));
                     } else if (key.equals("cameraPosition")) {
                         JumioCameraPosition cameraPosition = (options.getString(key).toLowerCase().equals("front")) ? JumioCameraPosition.FRONT : JumioCameraPosition.BACK;
-                        bamSDK.setCameraPosition(cameraPosition);
+                        documentVerificationSDK.setCameraPosition(cameraPosition);
                     }
                 }
             }

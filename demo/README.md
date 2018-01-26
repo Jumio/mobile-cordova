@@ -4,11 +4,17 @@
 
 Update your SDK credentials in www/js/index.js and run the following commands.
 
+### iOS
+
 ```
 cd platform/ios
 pod install
 cd ../..
-cordova run <platform>
+cordova run ios
 ```
 
-Platform is either **ios** or **android**.
+### Android
+
+```
+cordova run android
+```

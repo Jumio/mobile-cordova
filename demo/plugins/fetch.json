@@ -1,26 +1,26 @@
 {
-    "cordova-plugin-whitelist": {
-        "source": {
-            "type": "registry",
-            "id": "cordova-plugin-whitelist@1"
-        },
-        "is_top_level": true,
-        "variables": {}
+  "cordova-plugin-whitelist": {
+    "source": {
+      "type": "registry",
+      "id": "cordova-plugin-whitelist@1"
     },
-    "cordova-plugin-cocoapod-support": {
-        "source": {
-            "type": "registry",
-            "id": "cordova-plugin-cocoapod-support"
-        },
-        "is_top_level": false,
-        "variables": {}
+    "is_top_level": true,
+    "variables": {}
+  },
+  "cordova-plugin-cocoapod-support": {
+    "source": {
+      "type": "registry",
+      "id": "cordova-plugin-cocoapod-support"
     },
-    "cordova-plugin-jumio-mobilesdk": {
-        "source": {
-            "type": "registry",
-            "id": "https://github.com/Jumio/mobile-cordova.git#v2.8.0"
-        },
-        "is_top_level": true,
-        "variables": {}
-    }
+    "is_top_level": false,
+    "variables": {}
+  },
+  "cordova-plugin-jumio-mobilesdk": {
+    "source": {
+      "type": "registry",
+      "id": "https://github.com/Jumio/mobile-cordova.git#v2.9.0"
+    },
+    "is_top_level": true,
+    "variables": {}
+  }
 }

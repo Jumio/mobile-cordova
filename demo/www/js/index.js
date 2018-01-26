@@ -78,7 +78,7 @@ var app = {
 		Jumio.startNetverify(function(documentData) {
 			alert(JSON.stringify(documentData));
 		}, function(error) {
-		    alert(error);
+		    alert(JSON.stringify(error));
 		});
 	},
 	
@@ -103,7 +103,7 @@ var app = {
 		Jumio.startDocumentVerification(function(documentData) {
 			alert(JSON.stringify(documentData));
 		}, function(error) {
-			alert(error);
+			alert(JSON.stringify(error));
 		});
 	},
 	
@@ -122,7 +122,7 @@ var app = {
 			//cardNumberMaskingEnabled: false,
 			//offlineToken: "TOKEN",
 			//cameraPosition: "back",
-			//cardTypes: ["VISA", "MASTER_CARD", "AMERICAN_EXPRESS", "CHINA_UNIONPAY", "DINERS_CLUB", "DISCOVER", "JCB", "STARBUCKS"]
+			//cardTypes: ["VISA", "MASTER_CARD", "AMERICAN_EXPRESS", "CHINA_UNIONPAY", "DINERS_CLUB", "DISCOVER", "JCB"]
 		}, {
 		 // Customization iOS only
 			//disableBlur: true,
@@ -151,7 +151,7 @@ var app = {
 		Jumio.startBAM(function(cardInformation) {
 			alert(JSON.stringify(cardInformation));
 		}, function(error) {
-			alert(error);
+			alert(JSON.stringify(error));
 		});
 	}
 };

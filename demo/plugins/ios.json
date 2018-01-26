@@ -7,11 +7,11 @@
     "files": {}
   },
   "installed_plugins": {
-    "cordova-plugin-jumio-mobilesdk": {
-      "CAMERA_USAGE_DESCRIPTION": "This will allow ${PRODUCT_NAME} to take photos of your credentials.",
+    "cordova-plugin-whitelist": {
       "PACKAGE_NAME": "com.jumio.cordova.demo"
     },
-    "cordova-plugin-whitelist": {
+    "cordova-plugin-jumio-mobilesdk": {
+      "CAMERA_USAGE_DESCRIPTION": "This will allow ${PRODUCT_NAME} to take photos of your credentials.",
       "PACKAGE_NAME": "com.jumio.cordova.demo"
     }
   },

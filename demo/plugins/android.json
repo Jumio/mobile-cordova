@@ -7,10 +7,10 @@
     "files": {}
   },
   "installed_plugins": {
-    "cordova-plugin-jumio-mobilesdk": {
+    "cordova-plugin-whitelist": {
       "PACKAGE_NAME": "com.jumio.cordova.demo"
     },
-    "cordova-plugin-whitelist": {
+    "cordova-plugin-jumio-mobilesdk": {
       "PACKAGE_NAME": "com.jumio.cordova.demo"
     }
   },

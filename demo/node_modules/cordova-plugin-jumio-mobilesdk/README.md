@@ -3,7 +3,11 @@
 Official Jumio Mobile SDK plugin for Apache Cordova
 
 ## Compatibility
-With every release, we only ensure compatibility with the latest version of Cordova.
+With this release, we only ensure compatibility with the latest Cordova versions and plugins.
+At the time of this release, the following minimum versions are supported:
+* Cordova: 7.1.0
+* Cordova Android: 6.3.0
+* Cordova iOS: 4.5.3
 
 ## Setup
 
@@ -13,14 +17,14 @@ cordova create MyProject com.my.project "MyProject"
 cd MyProject
 cordova platform add ios
 cordova platform add android
-cordova plugin add https://github.com/Jumio/mobile-cordova.git#v2.8.0
+cordova plugin add https://github.com/Jumio/mobile-cordova.git#v2.9.0
 ```
 
 ## Integration
 
 ### iOS
 
-Manual integration or dependency management via cocoapods possible, please see [the official documentation of the Jumio Mobile SDK for iOS](https://github.com/Jumio/mobile-sdk-ios/tree/v2.8.0#basic-setup)
+Manual integration or dependency management via cocoapods possible, please see [the official documentation of the Jumio Mobile SDK for iOS](https://github.com/Jumio/mobile-sdk-ios/tree/v2.9.0#basic-setup)
 
 ### Android
 
@@ -29,6 +33,7 @@ Add the Jumio repository:
 ```
 repositories {
     maven { url 'http://mobile-sdk.jumio.com' }
+    maven { url 'https://maven.google.com/' }
 }
 ```
 
@@ -36,17 +41,26 @@ Add a parameter for your SDK_VERSION into the ext-section:
 
 ```
 ext {
-    SDK_VERSION = "2.8.0"
+    SDK_VERSION = "2.9.0"
 }
 ```
 
-Add required permissions for the products as described in chapter [Permissions](https://github.com/Jumio/mobile-sdk-android/blob/v2.8.0/README.md#permissions)
+Add required permissions for the products as described in chapter [Permissions](https://github.com/Jumio/mobile-sdk-android/blob/v2.9.0/README.md#permissions)
 
 Open the android project of your cordova project located in */platforms/android* and insert the dependencies from the products you require to your **build.gradle** file. (Module: android)
 
-* [Netverify & Fastfill](https://github.com/Jumio/mobile-sdk-android/blob/v2.8.0/docs/integration_netverify-fastfill.md#dependencies)
-* [Document Verification](https://github.com/Jumio/mobile-sdk-android/blob/v2.8.0/docs/integration_document-verification.md#dependencies)
-* [BAM Checkout](https://github.com/Jumio/mobile-sdk-android/blob/v2.8.0/docs/integration_bam-checkout.md#dependencies)
+* [Netverify & Fastfill](https://github.com/Jumio/mobile-sdk-android/blob/v2.9.0/docs/integration_netverify-fastfill.md#dependencies)
+* [Document Verification](https://github.com/Jumio/mobile-sdk-android/blob/v2.9.0/docs/integration_document-verification.md#dependencies)
+* [BAM Checkout](https://github.com/Jumio/mobile-sdk-android/blob/v2.9.0/docs/integration_bam-checkout.md#dependencies)
+
+__Note:__ If you are using Netverify, make sure to add the Google vision meta-data to you **AndroidManifest.xml** accordingly:
+
+```
+<meta-data
+			android:name="com.google.android.gms.vision.DEPENDENCIES"
+			android:value="barcode, face"
+			tools:replace="android:value"/>
+```
 
 ## Usage
 
@@ -279,7 +293,7 @@ Jumio.startBAM(function(cardInformation) {
 ## Customization
 
 ### Android
-The Netverify SDK can be customized to the respective needs by following this [customization chapter](https://github.com/Jumio/mobile-sdk-android/blob/v2.8.0/docs/integration_netverify-fastfill.md#customization).
+The Netverify SDK can be customized to the respective needs by following this [customization chapter](https://github.com/Jumio/mobile-sdk-android/blob/v2.9.0/docs/integration_netverify-fastfill.md#customization).
 
 ### iOS
 The SDK can be customized to the respective needs. You can pass the following customization options to the initializer:
@@ -292,10 +306,12 @@ The SDK can be customized to the respective needs. You can pass the following cu
 | tintColor         | STRING | Change the tint color of the navigation bar |
 | barTintColor      | STRING | Change the bar tint color of the navigation bar |
 | textTitleColor    | STRING | Change the text title color of the navigation bar |
-| defaultButtonBackgroundColor | STRING | Change the background color of the default button |
-| defaultButtonTitleColor | STRING | Change the title color of the default button |
-| activeButtonBackgroundColor | STRING | Change the background color of the active button |
-| activeButtonTitleColor | STRING | Change the title color of the active button |
+| documentSelectionHeaderBackgroundColor | STRING | Change the background color of the document selection header |
+| documentSelectionHeaderTitleColor | STRING | Change the title color of the document selection header |
+| documentSelectionHeaderIconColor | STRING | Change the icon color of the document selection header |
+| documentSelectionButtonBackgroundColor | STRING | Change the background color of the document selection button |
+| documentSelectionButtonTitleColor | STRING | Change the title color of the document selection button |
+| documentSelectionButtonIconColor | STRING | Change the icon color of the document selection button |
 | fallbackButtonBackgroundColor | STRING | Change the background color of the fallback button |
 | fallbackButtonBorderColor | STRING | Change the border color of the fallback button |
 | fallbackButtonTitleColor | STRING | Change the title color of the fallback button |

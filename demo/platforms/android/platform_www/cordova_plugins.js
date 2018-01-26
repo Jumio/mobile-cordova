@@ -12,9 +12,9 @@ module.exports = [
 module.exports.metadata = 
 // TOP OF METADATA
 {
+  "cordova-plugin-whitelist": "1.3.2",
   "cordova-plugin-cocoapod-support": "1.3.0",
-  "cordova-plugin-jumio-mobilesdk": "2.8.0",
-  "cordova-plugin-whitelist": "1.3.2"
+  "cordova-plugin-jumio-mobilesdk": "2.9.0"
 };
 // BOTTOM OF METADATA
 });
