@@ -32,7 +32,7 @@ Add the Jumio repository:
 
 ```
 repositories {
-    maven { url 'http://mobile-sdk.jumio.com' }
+    maven { url 'https://mobile-sdk.jumio.com' }
     maven { url 'https://maven.google.com/' }
 }
 ```
