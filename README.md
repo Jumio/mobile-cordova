@@ -17,14 +17,14 @@ cordova create MyProject com.my.project "MyProject"
 cd MyProject
 cordova platform add ios
 cordova platform add android
-cordova plugin add https://github.com/Jumio/mobile-cordova.git#v2.10.0
+cordova plugin add https://github.com/Jumio/mobile-cordova.git#v2.11.0
 ```
 
 ## Integration
 
 ### iOS
 
-Manual integration or dependency management via cocoapods possible, please see [the official documentation of the Jumio Mobile SDK for iOS](https://github.com/Jumio/mobile-sdk-ios/tree/v2.10.0#basic-setup)
+Manual integration or dependency management via cocoapods possible, please see [the official documentation of the Jumio Mobile SDK for iOS](https://github.com/Jumio/mobile-sdk-ios/tree/v2.11.0#basic-setup)
 
 ### Android
 
@@ -32,7 +32,7 @@ Add the Jumio repository:
 
 ```
 repositories {
-    maven { url 'https://mobile-sdk.jumio.com' }
+    maven { url 'http://mobile-sdk.jumio.com' }
     maven { url 'https://maven.google.com/' }
 }
 ```
@@ -41,17 +41,17 @@ Add a parameter for your SDK_VERSION into the ext-section:
 
 ```
 ext {
-    SDK_VERSION = "2.10.0"
+    SDK_VERSION = "2.11.0"
 }
 ```
 
-Add required permissions for the products as described in chapter [Permissions](https://github.com/Jumio/mobile-sdk-android/blob/v2.10.0/README.md#permissions)
+Add required permissions for the products as described in chapter [Permissions](https://github.com/Jumio/mobile-sdk-android/blob/v2.11.0/README.md#permissions)
 
 Open the android project of your cordova project located in */platforms/android* and insert the dependencies from the products you require to your **build.gradle** file. (Module: android)
 
-* [Netverify & Fastfill](https://github.com/Jumio/mobile-sdk-android/blob/v2.10.0/docs/integration_netverify-fastfill.md#dependencies)
-* [Document Verification](https://github.com/Jumio/mobile-sdk-android/blob/v2.10.0/docs/integration_document-verification.md#dependencies)
-* [BAM Checkout](https://github.com/Jumio/mobile-sdk-android/blob/v2.10.0/docs/integration_bam-checkout.md#dependencies)
+* [Netverify & Fastfill](https://github.com/Jumio/mobile-sdk-android/blob/v2.11.0/docs/integration_netverify-fastfill.md#dependencies)
+* [Document Verification](https://github.com/Jumio/mobile-sdk-android/blob/v2.11.0/docs/integration_document-verification.md#dependencies)
+* [BAM Checkout](https://github.com/Jumio/mobile-sdk-android/blob/v2.11.0/docs/integration_bam-checkout.md#dependencies)
 
 __Note:__ If you are using Netverify, make sure to add the Google vision meta-data to you **AndroidManifest.xml** accordingly:
 
@@ -295,13 +295,13 @@ Jumio.startBAM(function(cardInformation) {
 ### Android
 
 #### Netverify
-The Netverify SDK can be customized to the respective needs by following this [customization chapter](https://github.com/Jumio/mobile-sdk-android/blob/v2.10.0/docs/integration_netverify-fastfill.md#customization).
+The Netverify SDK can be customized to the respective needs by following this [customization chapter](https://github.com/Jumio/mobile-sdk-android/blob/v2.11.0/docs/integration_netverify-fastfill.md#customization).
 
 #### BAM Checkout
-The Netverify SDK can be customized to the respective needs by following this [customization chapter](https://github.com/Jumio/mobile-sdk-android/blob/v2.10.0/docs/integration_bam-checkout.md#customization).
+The Netverify SDK can be customized to the respective needs by following this [customization chapter](https://github.com/Jumio/mobile-sdk-android/blob/v2.11.0/docs/integration_bam-checkout.md#customization).
 
 #### Document Verification
-The Netverify SDK can be customized to the respective needs by following this [customization chapter](https://github.com/Jumio/mobile-sdk-android/blob/v2.10.0/docs/integration_document-verification.md#customization).
+The Netverify SDK can be customized to the respective needs by following this [customization chapter](https://github.com/Jumio/mobile-sdk-android/blob/v2.11.0/docs/integration_document-verification.md#customization).
 
 ### iOS
 The SDK can be customized to the respective needs. You can pass the following customization options to the initializer:
@@ -372,7 +372,7 @@ The JSONObject with all the extracted data that is returned for the specific pro
 | firstName | String | 100 | First name of the customer|
 | middleName | String | 100 | Middle name of the customer |
 | dob | Date | | Date of birth |
-| gender | String | 1| m or f |
+| gender | String | 1| m, f or x |
 | originatingCountry | String | 3|Country of origin as ([ISO 3166-1 alpha-3](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-3)) country code |
 | addressLine | String | 64 | Street name	|
 | city | String | 64 | City |

@@ -45,7 +45,6 @@ public class JumioMobileSDK extends CordovaPlugin {
 	private NetverifySDK netverifySDK;
 	private DocumentVerificationSDK documentVerificationSDK;
 	private CallbackContext callbackContext;
-	private String errorMsg;
 
 	@Override
 	public boolean execute(String action, JSONArray args, CallbackContext callbackContext) throws JSONException {
@@ -506,9 +505,19 @@ public class JumioMobileSDK extends CordovaPlugin {
 					showErrorMessage("Result could not be sent. Try again.");
 				}
 			} else if (resultCode == Activity.RESULT_CANCELED) {
-				int errorCode = intent.getIntExtra(BamSDK.EXTRA_ERROR_CODE, 0);
+				String errorCode = intent.getStringExtra(BamSDK.EXTRA_ERROR_CODE);
 				String errorMsg = intent.getStringExtra(BamSDK.EXTRA_ERROR_MESSAGE);
-				sendErrorObject(errorCode, errorMsg, "");
+				ArrayList<String> scanReferenceList = intent.getStringArrayListExtra(BamSDK.EXTRA_SCAN_ATTEMPTS);
+				String scanRef = null;
+				if (scanReferenceList != null && scanReferenceList.size() > 0) {
+					scanRef = scanReferenceList.get(0);
+				}
+				sendErrorObject(errorCode, errorMsg, scanRef != null ? scanRef : "");
+			}
+
+			if (bamSDK != null) {
+				bamSDK.destroy();
+				bamSDK = null;
 			}
 			// Netverify Results
 		} else if (requestCode == NetverifySDK.REQUEST_CODE) {
@@ -564,12 +573,18 @@ public class JumioMobileSDK extends CordovaPlugin {
 					showErrorMessage("Result could not be sent: " + e.getLocalizedMessage());
 				}
 			} else if (resultCode == Activity.RESULT_CANCELED) {
-				int errorCode = intent.getIntExtra(NetverifySDK.EXTRA_ERROR_CODE, 0);
+				String errorCode = intent.getStringExtra(NetverifySDK.EXTRA_ERROR_CODE);
 				String errorMsg = intent.getStringExtra(NetverifySDK.EXTRA_ERROR_MESSAGE);
 				sendErrorObject(errorCode, errorMsg, scanReference);
 			}
+
+			if (netverifySDK != null) {
+				netverifySDK.destroy();
+				netverifySDK = null;
+			}
+			// Document Verification Results
 		} else if (requestCode == DocumentVerificationSDK.REQUEST_CODE) {
-			String scanReference = intent.getStringExtra(NetverifySDK.EXTRA_SCAN_REFERENCE) != null ? intent.getStringExtra(NetverifySDK.EXTRA_SCAN_REFERENCE) : "";
+			String scanReference = intent.getStringExtra(DocumentVerificationSDK.EXTRA_SCAN_REFERENCE) != null ? intent.getStringExtra(DocumentVerificationSDK.EXTRA_SCAN_REFERENCE) : "";
 
 			if (resultCode == Activity.RESULT_OK) {
 				try {
@@ -581,10 +596,15 @@ public class JumioMobileSDK extends CordovaPlugin {
 					showErrorMessage("Result could not be sent: " + e.getLocalizedMessage());
 				}
 			} else if (resultCode == Activity.RESULT_CANCELED) {
-				int errorCode = intent.getIntExtra(DocumentVerificationSDK.EXTRA_ERROR_CODE, 0);
+				String errorCode = intent.getStringExtra(DocumentVerificationSDK.EXTRA_ERROR_CODE);
 				String errorMsg = intent.getStringExtra(DocumentVerificationSDK.EXTRA_ERROR_MESSAGE);
 				Log.e(TAG, errorMsg);
 				sendErrorObject(errorCode, errorMsg, scanReference);
+			}
+
+			if (documentVerificationSDK != null) {
+				documentVerificationSDK.destroy();
+				documentVerificationSDK = null;
 			}
 		}
 	}
@@ -610,10 +630,10 @@ public class JumioMobileSDK extends CordovaPlugin {
 		}
 	}
 
-	private void sendErrorObject(int errorCode, String errorMsg, String scanReference) {
+	private void sendErrorObject(String errorCode, String errorMsg, String scanReference) {
 		try {
 			JSONObject errorResult = new JSONObject();
-			errorResult.put("errorCode", String.valueOf(errorCode));
+			errorResult.put("errorCode", errorMsg != null ? errorCode : "");
 			errorResult.put("errorMessage", errorMsg != null ? errorMsg : "");
 			errorResult.put("scanReference", scanReference != null ? scanReference : "");
 			callbackContext.error(errorResult);

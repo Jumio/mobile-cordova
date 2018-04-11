@@ -507,6 +507,8 @@
         [result setValue: @"m" forKey: @"gender"];
     } else if (documentData.gender == NetverifyGenderF) {
         [result setValue: @"f" forKey: @"gender"];
+    } else if (documentData.gender == NetverifyGenderX) {
+        [result setValue: @"x" forKey: @"gender"];
     }
     [result setValue: documentData.originatingCountry forKey: @"originatingCountry"];
     [result setValue: documentData.addressLine forKey: @"addressLine"];
@@ -564,14 +566,14 @@
     [self.viewController dismissViewControllerAnimated: YES completion: nil];
 }
     
-- (void)netverifyViewController:(NetverifyViewController *)netverifyViewController didFinishInitializingWithError:(NSError *)error {
+- (void)netverifyViewController:(NetverifyViewController *)netverifyViewController didFinishInitializingWithError:(NetverifyError *)error {
     if (error != nil) {
-        [self sendError: error scanReference: nil];
+        [self sendNetverifyError: error scanReference: nil];
     }
 }
     
-- (void)netverifyViewController:(NetverifyViewController *)netverifyViewController didCancelWithError:(NSError *)error scanReference:(NSString *)scanReference {
-    [self sendError: error scanReference: scanReference];
+- (void)netverifyViewController:(NetverifyViewController *)netverifyViewController didCancelWithError:(NetverifyError *)error scanReference:(NSString *)scanReference {
+    [self sendNetverifyError: error scanReference: scanReference];
     [self.viewController dismissViewControllerAnimated: YES completion: nil];
 }
 
@@ -584,8 +586,8 @@
     [self.viewController dismissViewControllerAnimated: YES completion: nil];
 }
     
-- (void) documentVerificationViewController:(DocumentVerificationViewController *)documentVerificationViewController didFinishWithError:(NSError *)error {
-    [self sendError: error scanReference: nil];
+- (void) documentVerificationViewController:(DocumentVerificationViewController *)documentVerificationViewController didFinishWithError:(DocumentVerificationError *)error {
+    [self sendDocumentVerificationError: error scanReference: nil];
     [self.viewController dismissViewControllerAnimated: YES completion: nil];
 }
     
@@ -604,6 +606,32 @@
     NSMutableDictionary *result = [[NSMutableDictionary alloc] init];
     [result setValue: [NSNumber numberWithInteger: error.code] forKey: @"errorCode"];
     [result setValue: error.localizedDescription forKey: @"errorMessage"];
+    if (scanReference) {
+        [result setValue: scanReference forKey: @"scanReference"];
+    }
+    
+    CDVPluginResult *pluginResult = [CDVPluginResult resultWithStatus: CDVCommandStatus_ERROR messageAsDictionary: result];
+    [self.commandDelegate sendPluginResult: pluginResult callbackId: self.callbackId];
+    [self.viewController dismissViewControllerAnimated: YES completion: nil];
+}
+
+- (void)sendNetverifyError:(NetverifyError *)error scanReference:(NSString *)scanReference {
+    NSMutableDictionary *result = [[NSMutableDictionary alloc] init];
+    [result setValue: error.code forKey: @"errorCode"];
+    [result setValue: error.message forKey: @"errorMessage"];
+    if (scanReference) {
+        [result setValue: scanReference forKey: @"scanReference"];
+    }
+    
+    CDVPluginResult *pluginResult = [CDVPluginResult resultWithStatus: CDVCommandStatus_ERROR messageAsDictionary: result];
+    [self.commandDelegate sendPluginResult: pluginResult callbackId: self.callbackId];
+    [self.viewController dismissViewControllerAnimated: YES completion: nil];
+}
+
+- (void)sendDocumentVerificationError:(DocumentVerificationError *)error scanReference:(NSString *)scanReference {
+    NSMutableDictionary *result = [[NSMutableDictionary alloc] init];
+    [result setValue: error.code forKey: @"errorCode"];
+    [result setValue: error.message forKey: @"errorMessage"];
     if (scanReference) {
         [result setValue: scanReference forKey: @"scanReference"];
     }
