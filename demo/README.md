@@ -7,7 +7,7 @@ Update your SDK credentials in www/js/index.js and run the following commands.
 ### iOS
 
 ```
-cd platform/ios
+cd platforms/ios
 pod install
 cd ../..
 cordova run ios

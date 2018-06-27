@@ -265,8 +265,6 @@ public class JumioMobileSDK extends CordovaPlugin {
                         netverifySDK.setMerchantReportingCriteria(options.getString(key));
                     } else if (key.equals("customerID")) {
                         netverifySDK.setCustomerId(options.getString(key));
-                    } else if (key.equals("additionalInformation")) {
-                        netverifySDK.setAdditionalInformation(options.getString(key));
                     } else if (key.equals("enableEpassport")) {
                         netverifySDK.setEnableEMRTD(options.getBoolean(key));
                     } else if (key.equals("sendDebugInfoToJumio")) {
@@ -371,8 +369,6 @@ public class JumioMobileSDK extends CordovaPlugin {
                         documentVerificationSDK.setMerchantReportingCriteria(options.getString(key));
                     } else if (key.equals("callbackUrl")) {
                         documentVerificationSDK.setCallbackUrl(options.getString(key));
-                    } else if (key.equals("additionalInformation")) {
-                        documentVerificationSDK.setAdditionalInformation(options.getString(key));
                     } else if (key.equals("merchantScanReference")) {
                         documentVerificationSDK.setMerchantScanReference(options.getString(key));
                     } else if (key.equals("customerId")) {
@@ -382,6 +378,8 @@ public class JumioMobileSDK extends CordovaPlugin {
                     } else if (key.equals("cameraPosition")) {
                         JumioCameraPosition cameraPosition = (options.getString(key).toLowerCase().equals("front")) ? JumioCameraPosition.FRONT : JumioCameraPosition.BACK;
                         documentVerificationSDK.setCameraPosition(cameraPosition);
+					} else if (key.equalsIgnoreCase("enableExtraction")) {
+						documentVerificationSDK.setEnableExtraction(options.getString(key));
                     }
                 }
             }

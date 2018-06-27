@@ -362,6 +362,8 @@
                     self.documentVerifcationConfiguration.merchantScanReference = [options objectForKey: key];
                 } else if ([key isEqualToString: @"customerId"]) {
                     self.documentVerifcationConfiguration.customerId = [options objectForKey: key];
+                } else if ([key isEqualToString: @"enableExtraction"]) {
+                    self.documentVerifcationConfiguration.enableExtraction = [options objectForKey: key];
                 } else if ([key isEqualToString: @"documentName"]) {
                     self.documentVerifcationConfiguration.documentName = [options objectForKey: key];
                 } else if ([key isEqualToString: @"cameraPosition"]) {

@@ -197,8 +197,6 @@
                     self.netverifyConfiguration.merchantReportingCriteria = [options objectForKey: key];
                 } else if ([key isEqualToString: @"customerId"]) {
                     self.netverifyConfiguration.customerId = [options objectForKey: key];
-                } else if ([key isEqualToString: @"additionalInformation"]) {
-                    self.netverifyConfiguration.additionalInformation = [options objectForKey: key];
                 } else if ([key isEqualToString: @"sendDebugInfoToJumio"]) {
                     self.netverifyConfiguration.sendDebugInfoToJumio = [options objectForKey: key];
                 } else if ([key isEqualToString: @"dataExtractionOnMobileOnly"]) {
@@ -356,14 +354,14 @@
                     self.documentVerifcationConfiguration.merchantReportingCriteria = [options objectForKey: key];
                 } else if ([key isEqualToString: @"callbackUrl"]) {
                     self.documentVerifcationConfiguration.callbackUrl = [options objectForKey: key];
-                } else if ([key isEqualToString: @"additionalInformation"]) {
-                    self.documentVerifcationConfiguration.additionalInformation = [options objectForKey: key];
                 } else if ([key isEqualToString: @"merchantScanReference"]) {
                     self.documentVerifcationConfiguration.merchantScanReference = [options objectForKey: key];
                 } else if ([key isEqualToString: @"customerId"]) {
                     self.documentVerifcationConfiguration.customerId = [options objectForKey: key];
                 } else if ([key isEqualToString: @"documentName"]) {
                     self.documentVerifcationConfiguration.documentName = [options objectForKey: key];
+                } else if ([key isEqualToString: @"enableExtraction"]) {
+                    self.documentVerifcationConfiguration.enableExtraction = [options objectForKey: key];
                 } else if ([key isEqualToString: @"cameraPosition"]) {
                     NSString *cameraString = [[options objectForKey: key] lowercaseString];
                     JumioCameraPosition cameraPosition = ([cameraString isEqualToString: @"front"]) ? JumioCameraPositionFront : JumioCameraPositionBack;

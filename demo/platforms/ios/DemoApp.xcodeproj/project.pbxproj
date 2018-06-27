@@ -15,27 +15,33 @@
 		302D95F114D2391D003F00A1 /* MainViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 302D95EF14D2391D003F00A1 /* MainViewController.m */; };
 		302D95F214D2391D003F00A1 /* MainViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 302D95F014D2391D003F00A1 /* MainViewController.xib */; };
 		6AFF5BF91D6E424B00AB3073 /* CDVLaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6AFF5BF81D6E424B00AB3073 /* CDVLaunchScreen.storyboard */; };
+		77AD1B4820DD41710013A92C /* zh-Hans.lproj in Resources */ = {isa = PBXBuildFile; fileRef = 77AD1B4220DD41710013A92C /* zh-Hans.lproj */; };
+		77AD1B4920DD41710013A92C /* fr.lproj in Resources */ = {isa = PBXBuildFile; fileRef = 77AD1B4320DD41710013A92C /* fr.lproj */; };
+		77AD1B4A20DD41710013A92C /* es.lproj in Resources */ = {isa = PBXBuildFile; fileRef = 77AD1B4420DD41710013A92C /* es.lproj */; };
+		77AD1B4B20DD41710013A92C /* de.lproj in Resources */ = {isa = PBXBuildFile; fileRef = 77AD1B4520DD41710013A92C /* de.lproj */; };
+		77AD1B4C20DD41710013A92C /* en.lproj in Resources */ = {isa = PBXBuildFile; fileRef = 77AD1B4620DD41710013A92C /* en.lproj */; };
+		77AD1B4D20DD41710013A92C /* nl.lproj in Resources */ = {isa = PBXBuildFile; fileRef = 77AD1B4720DD41710013A92C /* nl.lproj */; };
 		922F5423EE1B9D28E57C4A95 /* Pods_DemoApp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2FE191D370693296E1AABCB4 /* Pods_DemoApp.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
 		301BF534109A57CC0062928A /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = 301BF52D109A57CC0062928A /* CordovaLib.xcodeproj */;
+			containerPortal = 301BF52D109A57CC0062928A /* CordovaLib/CordovaLib.xcodeproj */;
 			proxyType = 2;
 			remoteGlobalIDString = D2AAC07E0554694100DB518D;
 			remoteInfo = CordovaLib;
 		};
 		301BF550109A68C00062928A /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = 301BF52D109A57CC0062928A /* CordovaLib.xcodeproj */;
+			containerPortal = 301BF52D109A57CC0062928A /* CordovaLib/CordovaLib.xcodeproj */;
 			proxyType = 1;
 			remoteGlobalIDString = D2AAC07D0554694100DB518D;
 			remoteInfo = CordovaLib;
 		};
 		5417F0961FB06502002A392A /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = 301BF52D109A57CC0062928A /* CordovaLib.xcodeproj */;
+			containerPortal = 301BF52D109A57CC0062928A /* CordovaLib/CordovaLib.xcodeproj */;
 			proxyType = 2;
 			remoteGlobalIDString = C0C01EB21E3911D50056E6CB;
 			remoteInfo = Cordova;
@@ -49,7 +55,7 @@
 		1D6058910D05DD3D006BFB54 /* DemoApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DemoApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		29B97316FDCFA39411CA2CEA /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		2FE191D370693296E1AABCB4 /* Pods_DemoApp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_DemoApp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		301BF52D109A57CC0062928A /* CordovaLib.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; path = CordovaLib/CordovaLib.xcodeproj; sourceTree = "<group>"; };
+		301BF52D109A57CC0062928A /* CordovaLib/CordovaLib.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; path = CordovaLib/CordovaLib.xcodeproj; sourceTree = "<group>"; };
 		301BF56E109A69640062928A /* www */ = {isa = PBXFileReference; lastKnownFileType = folder; path = www; sourceTree = SOURCE_ROOT; };
 		302D95EE14D2391D003F00A1 /* MainViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MainViewController.h; sourceTree = "<group>"; };
 		302D95EF14D2391D003F00A1 /* MainViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MainViewController.m; sourceTree = "<group>"; };
@@ -59,6 +65,12 @@
 		3047A5111AB8059700498E2A /* build.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = build.xcconfig; path = cordova/build.xcconfig; sourceTree = SOURCE_ROOT; };
 		32CA4F630368D1EE00C91783 /* DemoApp-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "DemoApp-Prefix.pch"; sourceTree = "<group>"; };
 		6AFF5BF81D6E424B00AB3073 /* CDVLaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = CDVLaunchScreen.storyboard; path = DemoApp/CDVLaunchScreen.storyboard; sourceTree = SOURCE_ROOT; };
+		77AD1B4220DD41710013A92C /* zh-Hans.lproj */ = {isa = PBXFileReference; lastKnownFileType = folder; name = "zh-Hans.lproj"; path = "Pods/JumioMobileSDK/frameworks/zh-Hans.lproj"; sourceTree = SOURCE_ROOT; };
+		77AD1B4320DD41710013A92C /* fr.lproj */ = {isa = PBXFileReference; lastKnownFileType = folder; name = fr.lproj; path = Pods/JumioMobileSDK/frameworks/fr.lproj; sourceTree = SOURCE_ROOT; };
+		77AD1B4420DD41710013A92C /* es.lproj */ = {isa = PBXFileReference; lastKnownFileType = folder; name = es.lproj; path = Pods/JumioMobileSDK/frameworks/es.lproj; sourceTree = SOURCE_ROOT; };
+		77AD1B4520DD41710013A92C /* de.lproj */ = {isa = PBXFileReference; lastKnownFileType = folder; name = de.lproj; path = Pods/JumioMobileSDK/frameworks/de.lproj; sourceTree = SOURCE_ROOT; };
+		77AD1B4620DD41710013A92C /* en.lproj */ = {isa = PBXFileReference; lastKnownFileType = folder; name = en.lproj; path = Pods/JumioMobileSDK/frameworks/en.lproj; sourceTree = SOURCE_ROOT; };
+		77AD1B4720DD41710013A92C /* nl.lproj */ = {isa = PBXFileReference; lastKnownFileType = folder; name = nl.lproj; path = Pods/JumioMobileSDK/frameworks/nl.lproj; sourceTree = SOURCE_ROOT; };
 		81E0ECE9D11741CCA1B8B37F /* JumioMobileSDK.h */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = sourcecode.c.h; name = JumioMobileSDK.h; path = "cordova-plugin-jumio-mobilesdk/JumioMobileSDK.h"; sourceTree = "<group>"; };
 		8D1107310486CEB800E47090 /* DemoApp-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "DemoApp-Info.plist"; path = "DemoApp/DemoApp-Info.plist"; plistStructureDefinitionIdentifier = "com.apple.xcode.plist.structure-definition.iphone.info-plist"; sourceTree = SOURCE_ROOT; };
 		E11AD5E6E7C945BA99E5550C /* JumioMobileSDK.m */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = sourcecode.c.objc; name = JumioMobileSDK.m; path = "cordova-plugin-jumio-mobilesdk/JumioMobileSDK.m"; sourceTree = "<group>"; };
@@ -110,13 +122,14 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		29B97314FDCFA39411CA2CEA = {
+		29B97314FDCFA39411CA2CEA /* CustomTemplate */ = {
 			isa = PBXGroup;
 			children = (
+				77AD1B4020DD41530013A92C /* Localization */,
 				EB87FDF41871DAF40020F90C /* config.xml */,
 				EB87FDF31871DA8E0020F90C /* www */,
 				EB87FDF11871DA420020F90C /* Staging */,
-				301BF52D109A57CC0062928A /* CordovaLib.xcodeproj */,
+				301BF52D109A57CC0062928A /* CordovaLib/CordovaLib.xcodeproj */,
 				080E96DDFE201D6D7F000001 /* Classes */,
 				307C750510C5A3420062BCA9 /* Plugins */,
 				29B97315FDCFA39411CA2CEA /* Other Sources */,
@@ -187,6 +200,19 @@
 			name = Pods;
 			sourceTree = "<group>";
 		};
+		77AD1B4020DD41530013A92C /* Localization */ = {
+			isa = PBXGroup;
+			children = (
+				77AD1B4520DD41710013A92C /* de.lproj */,
+				77AD1B4620DD41710013A92C /* en.lproj */,
+				77AD1B4420DD41710013A92C /* es.lproj */,
+				77AD1B4320DD41710013A92C /* fr.lproj */,
+				77AD1B4720DD41710013A92C /* nl.lproj */,
+				77AD1B4220DD41710013A92C /* zh-Hans.lproj */,
+			);
+			path = Localization;
+			sourceTree = "<group>";
+		};
 		EB87FDF11871DA420020F90C /* Staging */ = {
 			isa = PBXGroup;
 			children = (
@@ -242,13 +268,13 @@
 			knownRegions = (
 				en,
 			);
-			mainGroup = 29B97314FDCFA39411CA2CEA;
+			mainGroup = 29B97314FDCFA39411CA2CEA /* CustomTemplate */;
 			productRefGroup = 19C28FACFE9D520D11CA2CBB /* Products */;
 			projectDirPath = "";
 			projectReferences = (
 				{
 					ProductGroup = 301BF52E109A57CC0062928A /* Products */;
-					ProjectRef = 301BF52D109A57CC0062928A /* CordovaLib.xcodeproj */;
+					ProjectRef = 301BF52D109A57CC0062928A /* CordovaLib/CordovaLib.xcodeproj */;
 				},
 			);
 			projectRoot = "";
@@ -280,9 +306,15 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				77AD1B4C20DD41710013A92C /* en.lproj in Resources */,
+				77AD1B4B20DD41710013A92C /* de.lproj in Resources */,
 				302D95F214D2391D003F00A1 /* MainViewController.xib in Resources */,
+				77AD1B4A20DD41710013A92C /* es.lproj in Resources */,
 				0207DA581B56EA530066E2B4 /* Images.xcassets in Resources */,
 				6AFF5BF91D6E424B00AB3073 /* CDVLaunchScreen.storyboard in Resources */,
+				77AD1B4920DD41710013A92C /* fr.lproj in Resources */,
+				77AD1B4D20DD41710013A92C /* nl.lproj in Resources */,
+				77AD1B4820DD41710013A92C /* zh-Hans.lproj in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

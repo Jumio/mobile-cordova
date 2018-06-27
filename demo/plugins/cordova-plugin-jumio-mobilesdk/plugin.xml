@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<plugin id="cordova-plugin-jumio-mobilesdk" version="2.11.0" xmlns="http://apache.org/cordova/ns/plugins/1.0" xmlns:android="http://schemas.android.com/apk/res/android">
+<plugin id="cordova-plugin-jumio-mobilesdk" version="2.12.0" xmlns="http://apache.org/cordova/ns/plugins/1.0" xmlns:android="http://schemas.android.com/apk/res/android">
     <name>JumioMobileSDK</name>
     <js-module name="JumioMobileSDK" src="www/JumioMobileSDK.js">
         <clobbers target="Jumio" />
@@ -24,7 +24,7 @@
         <pods-config ios-min-version="9.0" use-frameworks="true">
             <source url="https://github.com/CocoaPods/Specs.git" />
         </pods-config>
-        <pod name="JumioMobileSDK" version="2.11.0" configurations="release,debug" />
+        <pod name="JumioMobileSDK" version="2.12.0" configurations="release,debug" />
     </platform>
     
     <platform name="android">

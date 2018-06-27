@@ -43,7 +43,6 @@ var app = {
 			//merchantScanReference: "ScanRef",
 			//merchantReportingCriteria: "Criteria",
 			//customerId: "ID",
-			//additionalInformation: "Information",
 			//sendDebugInfoToJumio: true,
 			//dataExtractionOnMobileOnly: false,
 			//cameraPosition: "back",
@@ -91,7 +90,6 @@ var app = {
 			merchantScanReference: "123456789",
 			//merchantScanReportingCriteria: "Criteria",
 			//callbackUrl: "URL",
-			//additionalInformation: "Information",
 			//documentName: "Name",
 			//customDocumentCode: "Custom",
 			//cameraPosition: "back"

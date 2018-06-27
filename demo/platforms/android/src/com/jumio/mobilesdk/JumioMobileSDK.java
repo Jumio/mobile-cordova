@@ -253,8 +253,6 @@ public class JumioMobileSDK extends CordovaPlugin {
 						netverifySDK.setMerchantReportingCriteria(options.getString(key));
 					} else if (key.equalsIgnoreCase("customerID")) {
 						netverifySDK.setCustomerId(options.getString(key));
-					} else if (key.equalsIgnoreCase("additionalInformation")) {
-						netverifySDK.setAdditionalInformation(options.getString(key));
 					} else if (key.equalsIgnoreCase("enableEpassport")) {
 						netverifySDK.setEnableEMRTD(options.getBoolean(key));
 					} else if (key.equalsIgnoreCase("sendDebugInfoToJumio")) {
@@ -359,8 +357,6 @@ public class JumioMobileSDK extends CordovaPlugin {
 						documentVerificationSDK.setMerchantReportingCriteria(options.getString(key));
 					} else if (key.equalsIgnoreCase("callbackUrl")) {
 						documentVerificationSDK.setCallbackUrl(options.getString(key));
-					} else if (key.equalsIgnoreCase("additionalInformation")) {
-						documentVerificationSDK.setAdditionalInformation(options.getString(key));
 					} else if (key.equalsIgnoreCase("merchantScanReference")) {
 						documentVerificationSDK.setMerchantScanReference(options.getString(key));
 					} else if (key.equalsIgnoreCase("customerId")) {
@@ -370,6 +366,8 @@ public class JumioMobileSDK extends CordovaPlugin {
 					} else if (key.equalsIgnoreCase("cameraPosition")) {
 						JumioCameraPosition cameraPosition = (options.getString(key).toLowerCase().equals("front")) ? JumioCameraPosition.FRONT : JumioCameraPosition.BACK;
 						documentVerificationSDK.setCameraPosition(cameraPosition);
+					} else if (key.equalsIgnoreCase("enableExtraction")) {
+						documentVerificationSDK.setEnableExtraction(options.getBoolean(key));
 					}
 				}
 			}

@@ -2,6 +2,8 @@
 
 Official Jumio Mobile SDK plugin for Apache Cordova
 
+This plugin is compatible with version 2.12.0 of the Jumio SDK. This is the final update to the Cordova plugin — future SDK compatibility can not be guaranteed. If you have questions, please reach out to your Account Manager or contact Jumio Support at support@jumio.com or https://support.jumio.com 
+
 ## Compatibility
 With this release, we only ensure compatibility with the latest Cordova versions and plugins.
 At the time of this release, the following minimum versions are supported:
@@ -17,14 +19,14 @@ cordova create MyProject com.my.project "MyProject"
 cd MyProject
 cordova platform add ios
 cordova platform add android
-cordova plugin add https://github.com/Jumio/mobile-cordova.git#v2.11.0
+cordova plugin add https://github.com/Jumio/mobile-cordova.git#v2.12.0
 ```
 
 ## Integration
 
 ### iOS
 
-Manual integration or dependency management via cocoapods possible, please see [the official documentation of the Jumio Mobile SDK for iOS](https://github.com/Jumio/mobile-sdk-ios/tree/v2.11.0#basic-setup)
+Manual integration or dependency management via cocoapods possible, please see [the official documentation of the Jumio Mobile SDK for iOS](https://github.com/Jumio/mobile-sdk-ios/tree/v2.12.0#basic-setup)
 
 ### Android
 
@@ -41,17 +43,17 @@ Add a parameter for your SDK_VERSION into the ext-section:
 
 ```
 ext {
-    SDK_VERSION = "2.11.0"
+    SDK_VERSION = "2.12.0"
 }
 ```
 
-Add required permissions for the products as described in chapter [Permissions](https://github.com/Jumio/mobile-sdk-android/blob/v2.11.0/README.md#permissions)
+Add required permissions for the products as described in chapter [Permissions](https://github.com/Jumio/mobile-sdk-android/blob/v2.12.0/README.md#permissions)
 
 Open the android project of your cordova project located in */platforms/android* and insert the dependencies from the products you require to your **build.gradle** file. (Module: android)
 
-* [Netverify & Fastfill](https://github.com/Jumio/mobile-sdk-android/blob/v2.11.0/docs/integration_netverify-fastfill.md#dependencies)
-* [Document Verification](https://github.com/Jumio/mobile-sdk-android/blob/v2.11.0/docs/integration_document-verification.md#dependencies)
-* [BAM Checkout](https://github.com/Jumio/mobile-sdk-android/blob/v2.11.0/docs/integration_bam-checkout.md#dependencies)
+* [Netverify & Fastfill](https://github.com/Jumio/mobile-sdk-android/blob/v2.12.0/docs/integration_netverify-fastfill.md#dependencies)
+* [Document Verification](https://github.com/Jumio/mobile-sdk-android/blob/v2.12.0/docs/integration_document-verification.md#dependencies)
+* [BAM Checkout](https://github.com/Jumio/mobile-sdk-android/blob/v2.12.0/docs/integration_bam-checkout.md#dependencies)
 
 __Note:__ If you are using Netverify, make sure to add the Google vision meta-data to you **AndroidManifest.xml** accordingly:
 
@@ -63,7 +65,6 @@ __Note:__ If you are using Netverify, make sure to add the Google vision meta-da
 ```
 
 ## Usage
-
 
 ### Netverify / Fastfill
 
@@ -88,7 +89,6 @@ Configure the SDK with the *configuration*-Object.
 | merchantScanReference | String | Allows you to identify the scan (max. 100 characters) |
 | merchantReportingCriteria | String | Use this option to identify the scan in your reports (max. 100 characters) |
 | customerId | String | Set a customer identifier (max. 100 characters) |
-| additionalInformation | String | Add additional paramter (max. 255 characters) |
 | sendDebugInfoToJumio | Boolean | Send debug information to Jumio. |
 | dataExtractionOnMobileOnly | Boolean | Limit data extraction to be done on device only |
 | cameraPosition | String | Which camera is used by default. Can be **FRONT** or **BACK**. |
@@ -170,10 +170,10 @@ Configure the SDK with the *configuration*-Object. **(configuration marked with 
 | **merchantScanReference*** | String | Allows you to identify the scan (max. 100 characters) |
 | merchantReportingCriteria | String | Use this option to identify the scan in your reports (max. 100 characters) |
 | callbackUrl | String | Specify an URL for individual transactions |
-| additionalInformation | String | Add additional paramter (max. 255 characters) |
 | documentName | String | Override the document label on the help screen |
 | customDocumentCode | String | Set your custom document code (set in the merchant backend under "Settings" - "Multi Documents" - "Custom" |
 | cameraPosition | String | Which camera is used by default. Can be **FRONT** or **BACK**. |
+| enableExtraction | bool | Enable/disable data extraction for documents. |
 
 Possible types:
 
@@ -295,13 +295,13 @@ Jumio.startBAM(function(cardInformation) {
 ### Android
 
 #### Netverify
-The Netverify SDK can be customized to the respective needs by following this [customization chapter](https://github.com/Jumio/mobile-sdk-android/blob/v2.11.0/docs/integration_netverify-fastfill.md#customization).
+The Netverify SDK can be customized to the respective needs by following this [customization chapter](https://github.com/Jumio/mobile-sdk-android/blob/v2.12.0/docs/integration_netverify-fastfill.md#customization).
 
 #### BAM Checkout
-The Netverify SDK can be customized to the respective needs by following this [customization chapter](https://github.com/Jumio/mobile-sdk-android/blob/v2.11.0/docs/integration_bam-checkout.md#customization).
+The Netverify SDK can be customized to the respective needs by following this [customization chapter](https://github.com/Jumio/mobile-sdk-android/blob/v2.12.0/docs/integration_bam-checkout.md#customization).
 
 #### Document Verification
-The Netverify SDK can be customized to the respective needs by following this [customization chapter](https://github.com/Jumio/mobile-sdk-android/blob/v2.11.0/docs/integration_document-verification.md#customization).
+The Netverify SDK can be customized to the respective needs by following this [customization chapter](https://github.com/Jumio/mobile-sdk-android/blob/v2.12.0/docs/integration_document-verification.md#customization).
 
 ### iOS
 The SDK can be customized to the respective needs. You can pass the following customization options to the initializer:

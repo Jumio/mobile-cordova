@@ -6,6 +6,7 @@ demo/platforms/ios/DemoApp.xcodeproj/project.xcworkspace
 demo/platforms/ios/Pods
 demo/platforms/ios/Podfile.lock
 demo/platforms/ios/CordovaLib/CordovaLib.xcodeproj/xcuserdata
+demo/package-lock.json
 
 # Log Files
 *.log
