@@ -21,6 +21,8 @@ var app = {
     initialize: function() {
         document.addEventListener('deviceready', this.onDeviceReady.bind(this), false);
 		document.getElementById("startNetverify").addEventListener("click", this.startNetverify);
+		document.getElementById("initAuthentication").addEventListener("click", this.initAuthentication);
+		document.getElementById("startAuthentication").addEventListener("click", this.startAuthentication);
 		document.getElementById("startBAM").addEventListener("click", this.startBAM);
 		document.getElementById("startDocumentVerification").addEventListener("click", this.startDocumentVerification);
     },
@@ -32,7 +34,7 @@ var app = {
     onDeviceReady: function() {
 		
     },
-	
+
 	startNetverify: function() {
 		// Netverify / Fastfill
 		Jumio.initNetverify('API_TOKEN', 'API_SECRET', 'DATACENTER', {
@@ -80,6 +82,23 @@ var app = {
 		    alert(JSON.stringify(error));
 		});
 	},
+
+	initAuthentication: function() {
+    	// Authentication
+    	Jumio.initAuthentication('API_TOKEN', 'API_SECRET', 'DATACENTER', {
+    		enrollmentTransactionReference: "EnrollmentTransactionReference",
+    		//userReference: "UserReference",
+    		//callbackUrl: "URL"
+    	});
+    },
+
+    startAuthentication: function() {
+    	Jumio.startAuthentication(function(documentData) {
+    			alert(JSON.stringify(documentData));
+    		}, function(error) {
+    			alert(JSON.stringify(error));
+    	});
+    },
 	
 	startDocumentVerification: function() {
 		// Document Verification
@@ -91,6 +110,7 @@ var app = {
 			//merchantScanReportingCriteria: "Criteria",
 			//callbackUrl: "URL",
 			//documentName: "Name",
+            //enableExtraction: true,
 			//customDocumentCode: "Custom",
 			//cameraPosition: "back"
 		}, {

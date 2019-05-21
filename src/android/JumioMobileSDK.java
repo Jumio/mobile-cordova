@@ -12,6 +12,9 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.jumio.MobileSDK;
+import com.jumio.auth.AuthenticationCallback;
+import com.jumio.auth.AuthenticationResult;
+import com.jumio.auth.AuthenticationSDK;
 import com.jumio.bam.*;
 import com.jumio.bam.enums.CreditCardType;
 import com.jumio.core.enums.*;
@@ -33,18 +36,23 @@ public class JumioMobileSDK extends CordovaPlugin {
 	private static final int PERMISSION_REQUEST_CODE_BAM = 300;
 	private static final int PERMISSION_REQUEST_CODE_NETVERIFY = 301;
 	private static final int PERMISSION_REQUEST_CODE_DOCUMENT_VERIFICATION = 303;
+	private static final int PERMISSION_REQUEST_CODE_AUTHENTICATION = 304;
 
 	private static final String ACTION_BAM_INIT = "initBAM";
 	private static final String ACTION_BAM_START = "startBAM";
 	private static final String ACTION_NV_INIT = "initNetverify";
 	private static final String ACTION_NV_START = "startNetverify";
+	private static final String ACTION_AUTH_INIT = "initAuthentication";
+	private static final String ACTION_AUTH_START = "startAuthentication";
 	private static final String ACTION_DV_INIT = "initDocumentVerification";
 	private static final String ACTION_DV_START = "startDocumentVerification";
 
 	private BamSDK bamSDK;
 	private NetverifySDK netverifySDK;
+	private AuthenticationSDK authenticationSDK;
 	private DocumentVerificationSDK documentVerificationSDK;
 	private CallbackContext callbackContext;
+	private boolean initiateSuccessful = false;
 
 	@Override
 	public boolean execute(String action, JSONArray args, CallbackContext callbackContext) throws JSONException {
@@ -68,6 +76,16 @@ public class JumioMobileSDK extends CordovaPlugin {
 			return true;
 		} else if (action.equals(ACTION_NV_START)) {
 			startNetverify(args);
+			result = new PluginResult(Status.NO_RESULT);
+			result.setKeepCallback(true);
+			return true;
+		} else if (action.equals(ACTION_AUTH_INIT)) {
+			initAuthentication(args);
+			result = new PluginResult(Status.NO_RESULT);
+			result.setKeepCallback(false);
+			return true;
+		} else if (action.equals(ACTION_AUTH_START)) {
+			startAuthentication();
 			result = new PluginResult(Status.NO_RESULT);
 			result.setKeepCallback(true);
 			return true;
@@ -239,20 +257,20 @@ public class JumioMobileSDK extends CordovaPlugin {
 				while (keys.hasNext()) {
 					String key = keys.next();
 
-					if (key.equalsIgnoreCase("requireVerification")) {
-						netverifySDK.setRequireVerification(options.getBoolean(key));
+					if (key.equalsIgnoreCase("enableVerification")) {
+						netverifySDK.setEnableVerification(options.getBoolean(key));
 					} else if (key.equalsIgnoreCase("callbackUrl")) {
 						netverifySDK.setCallbackUrl(options.getString(key));
-					} else if (key.equalsIgnoreCase("requireFaceMatch")) {
-						netverifySDK.setRequireFaceMatch(options.getBoolean(key));
+					} else if (key.equalsIgnoreCase("enableIdentityVerification")) {
+						netverifySDK.setEnableIdentityVerification(options.getBoolean(key));
 					} else if (key.equalsIgnoreCase("preselectedCountry")) {
 						netverifySDK.setPreselectedCountry(options.getString(key));
-					} else if (key.equalsIgnoreCase("merchantScanReference")) {
-						netverifySDK.setMerchantScanReference(options.getString(key));
-					} else if (key.equalsIgnoreCase("merchantReportingCriteria")) {
-						netverifySDK.setMerchantReportingCriteria(options.getString(key));
-					} else if (key.equalsIgnoreCase("customerID")) {
-						netverifySDK.setCustomerId(options.getString(key));
+					} else if (key.equalsIgnoreCase("customerInternalReference")) {
+						netverifySDK.setCustomerInternalReference(options.getString(key));
+					} else if (key.equalsIgnoreCase("reportingCriteria")) {
+						netverifySDK.setReportingCriteria(options.getString(key));
+					} else if (key.equalsIgnoreCase("userReference")) {
+						netverifySDK.setUserReference(options.getString(key));
 					} else if (key.equalsIgnoreCase("enableEpassport")) {
 						netverifySDK.setEnableEMRTD(options.getBoolean(key));
 					} else if (key.equalsIgnoreCase("sendDebugInfoToJumio")) {
@@ -320,6 +338,90 @@ public class JumioMobileSDK extends CordovaPlugin {
 		this.cordova.getActivity().runOnUiThread(runnable);
 	}
 
+	// Authentication
+
+	private void initAuthentication(JSONArray data){
+		if (!AuthenticationSDK.isSupportedPlatform(cordova.getActivity())){
+			showErrorMessage("This platform is not supported.");
+			return;
+		}
+
+		try{
+			if (data.isNull(0) || data.isNull(1) || data.isNull(2) || data.isNull(3)){
+				showErrorMessage("Missing required parameters apiToken, apiSecret or dataCenter.");
+				return;
+			}
+
+			String apiToken = data.getString(0);
+			String apiSecret = data.getString(1);
+			JumioDataCenter dataCenter = (data.getString(2).toLowerCase().equalsIgnoreCase("us")) ? JumioDataCenter.US : JumioDataCenter.EU;
+
+			authenticationSDK = AuthenticationSDK.create(cordova.getActivity(), apiToken, apiSecret, dataCenter);
+
+			// Configuration options
+			String enrollmentTransactionReference = null;
+			if (!data.isNull(3)){
+				JSONObject options = data.getJSONObject(3);
+				Iterator<String> keys = options.keys();
+				while (keys.hasNext()){
+					String key = keys.next();
+
+					if (key.equalsIgnoreCase("enrollmentTransactionReference")){
+						enrollmentTransactionReference = options.getString(key);
+					} else if (key.equalsIgnoreCase("userReference")){
+						authenticationSDK.setUserReference(options.getString(key));
+					} else if (key.equalsIgnoreCase("callbackUrl")){
+						authenticationSDK.setCallbackUrl(options.getString(key));
+					}
+				}
+			}
+
+			if(enrollmentTransactionReference != null){
+				authenticationSDK.initiate(enrollmentTransactionReference, new AuthenticationCallback(){
+					@Override
+					public void onAuthenticationInitiateSuccess(){
+						initiateSuccessful = true;
+						callbackContext.success("Authentication SDK initialized successfully");
+					}
+
+					@Override
+					public void onAuthenticationInitiateError(String errorCode, String errorMessage, boolean retryPossible){
+						initiateSuccessful = false;
+						showErrorMessage("Authentication initiate failed - " + errorCode + ": " + errorMessage);
+					}
+				});
+			}
+		} catch (JSONException e) {
+			showErrorMessage("Invalid parameters: " + e.getLocalizedMessage());
+		} catch (PlatformNotSupportedException e) {
+			showErrorMessage("Error initializing the Authentication SDK: " + e.getLocalizedMessage());
+		} catch (MissingPermissionException e) {
+			showErrorMessage("Missing permission: " + e.getLocalizedMessage());
+		}
+	}
+
+
+	private void startAuthentication() {
+		if (authenticationSDK == null || !initiateSuccessful) {
+			showErrorMessage("The Authentication SDK has not been initialized with a valid transaction reference.");
+			return;
+		}
+
+		Runnable runnable = new Runnable() {
+			@Override
+			public void run() {
+				try {
+					checkPermissionsAndStart(authenticationSDK);
+				} catch (Exception e) {
+					showErrorMessage("Error starting the Authentication SDK: " + e.getLocalizedMessage());
+				}
+			}
+		};
+
+		this.cordova.setActivityResultCallback(this);
+		this.cordova.getActivity().runOnUiThread(runnable);
+	}
+
 	// Document Verification
 
 	private void initDocumentVerification(JSONArray data) {
@@ -353,14 +455,14 @@ public class JumioMobileSDK extends CordovaPlugin {
 						documentVerificationSDK.setCustomDocumentCode(options.getString(key));
 					} else if (key.equalsIgnoreCase("country")) {
 						documentVerificationSDK.setCountry(options.getString(key));
-					} else if (key.equalsIgnoreCase("merchantReportingCriteria")) {
-						documentVerificationSDK.setMerchantReportingCriteria(options.getString(key));
+					} else if (key.equalsIgnoreCase("reportingCriteria")) {
+						documentVerificationSDK.setReportingCriteria(options.getString(key));
 					} else if (key.equalsIgnoreCase("callbackUrl")) {
 						documentVerificationSDK.setCallbackUrl(options.getString(key));
-					} else if (key.equalsIgnoreCase("merchantScanReference")) {
-						documentVerificationSDK.setMerchantScanReference(options.getString(key));
-					} else if (key.equalsIgnoreCase("customerId")) {
-						documentVerificationSDK.setCustomerId(options.getString(key));
+					} else if (key.equalsIgnoreCase("customerInternalReference")) {
+						documentVerificationSDK.setCustomerInternalReference(options.getString(key));
+					} else if (key.equalsIgnoreCase("userReference")) {
+						documentVerificationSDK.setUserReference(options.getString(key));
 					} else if (key.equalsIgnoreCase("documentName")) {
 						documentVerificationSDK.setDocumentName(options.getString(key));
 					} else if (key.equalsIgnoreCase("cameraPosition")) {
@@ -414,18 +516,20 @@ public class JumioMobileSDK extends CordovaPlugin {
 	// Permissions
 
 	private void checkPermissionsAndStart(MobileSDK sdk) {
-		if (!MobileSDK.hasAllRequiredPermissions(cordova.getActivity().getApplicationContext())) {
+		if (!MobileSDK.hasAllRequiredPermissions(cordova.getActivity().getApplicationContext())){
 			//Acquire missing permissions.
 			String[] mp = MobileSDK.getMissingPermissions(cordova.getActivity().getApplicationContext());
 
 			int code;
-			if (sdk instanceof BamSDK)
+			if (sdk instanceof BamSDK){
 				code = PERMISSION_REQUEST_CODE_BAM;
-			else if (sdk instanceof NetverifySDK)
+			} else if (sdk instanceof AuthenticationSDK){
+				code = PERMISSION_REQUEST_CODE_AUTHENTICATION;
+			} else if (sdk instanceof NetverifySDK){
 				code = PERMISSION_REQUEST_CODE_NETVERIFY;
-			else if (sdk instanceof DocumentVerificationSDK)
+			} else if (sdk instanceof DocumentVerificationSDK){
 				code = PERMISSION_REQUEST_CODE_DOCUMENT_VERIFICATION;
-			else {
+			} else {
 				showErrorMessage("Invalid SDK instance");
 				return;
 			}
@@ -451,11 +555,13 @@ public class JumioMobileSDK extends CordovaPlugin {
 				startSdk(this.bamSDK);
 			} else if (requestCode == JumioMobileSDK.PERMISSION_REQUEST_CODE_NETVERIFY) {
 				startSdk(this.netverifySDK);
+			} else if (requestCode == JumioMobileSDK.PERMISSION_REQUEST_CODE_AUTHENTICATION) {
+				startSdk(this.authenticationSDK);
 			} else if (requestCode == JumioMobileSDK.PERMISSION_REQUEST_CODE_DOCUMENT_VERIFICATION) {
 				startSdk(this.documentVerificationSDK);
 			}
 		} else {
-			showErrorMessage("You need to grant all required permissions to start the Jumio SDK.");
+			showErrorMessage("You need to grant all required permissions to continue");
 			super.onRequestPermissionResult(requestCode, permissions, grantResults);
 		}
 	}
@@ -518,16 +624,16 @@ public class JumioMobileSDK extends CordovaPlugin {
 				bamSDK = null;
 			}
 			// Netverify Results
-		} else if (requestCode == NetverifySDK.REQUEST_CODE) {
-			if (intent == null) {
+		} else if (requestCode == NetverifySDK.REQUEST_CODE){
+			if (intent == null){
 				return;
 			}
 			String scanReference = intent.getStringExtra(NetverifySDK.EXTRA_SCAN_REFERENCE) != null ? intent.getStringExtra(NetverifySDK.EXTRA_SCAN_REFERENCE) : "";
 
-			if (resultCode == Activity.RESULT_OK) {
+			if (resultCode == Activity.RESULT_OK){
 				NetverifyDocumentData documentData = intent.getParcelableExtra(NetverifySDK.EXTRA_SCAN_DATA);
 				JSONObject result = new JSONObject();
-				try {
+				try{
 					result.put("scanReference", scanReference);
 					result.put("selectedCountry", documentData.getSelectedCountry());
 					result.put("selectedDocumentType", documentData.getSelectedDocumentType());
@@ -538,7 +644,6 @@ public class JumioMobileSDK extends CordovaPlugin {
 					result.put("issuingCountry", documentData.getIssuingCountry());
 					result.put("lastName", documentData.getLastName());
 					result.put("firstName", documentData.getFirstName());
-					result.put("middleName", documentData.getMiddleName());
 					result.put("dob", documentData.getDob());
 					result.put("gender", documentData.getGender());
 					result.put("originatingCountry", documentData.getOriginatingCountry());
@@ -552,7 +657,7 @@ public class JumioMobileSDK extends CordovaPlugin {
 					result.put("extractionMethod", documentData.getExtractionMethod());
 
 					// MRZ data if available
-					if (documentData.getMrzData() != null) {
+					if (documentData.getMrzData() != null){
 						JSONObject mrzData = new JSONObject();
 						mrzData.put("format", documentData.getMrzData().getFormat());
 						mrzData.put("line1", documentData.getMrzData().getMrzLine1());
@@ -567,19 +672,49 @@ public class JumioMobileSDK extends CordovaPlugin {
 					}
 
 					callbackContext.success(result);
-				} catch (JSONException e) {
+				}catch (JSONException e){
 					showErrorMessage("Result could not be sent: " + e.getLocalizedMessage());
 				}
-			} else if (resultCode == Activity.RESULT_CANCELED) {
+			}else if (resultCode == Activity.RESULT_CANCELED){
 				String errorCode = intent.getStringExtra(NetverifySDK.EXTRA_ERROR_CODE);
 				String errorMsg = intent.getStringExtra(NetverifySDK.EXTRA_ERROR_MESSAGE);
 				sendErrorObject(errorCode, errorMsg, scanReference);
 			}
 
-			if (netverifySDK != null) {
+			if (netverifySDK != null){
 				netverifySDK.destroy();
 				netverifySDK = null;
 			}
+
+			// Authentication results
+		} else if (requestCode == AuthenticationSDK.REQUEST_CODE) {
+			if (intent == null)
+				return;
+			if (resultCode == Activity.RESULT_OK) {
+				String transactionReference = intent.getStringExtra(AuthenticationSDK.EXTRA_TRANSACTION_REFERENCE);
+				AuthenticationResult authenticationResult = (AuthenticationResult) intent.getSerializableExtra(AuthenticationSDK.EXTRA_SCAN_DATA);
+				try {
+					JSONObject result = new JSONObject();
+					result.put("transactionReference", transactionReference);
+					result.put("authenticationResult", authenticationResult.toString());
+					callbackContext.success(result);
+				} catch (JSONException e) {
+					showErrorMessage("Result could not be sent: " + e.getLocalizedMessage());
+				}
+			} else if (resultCode == Activity.RESULT_CANCELED) {
+				String errorMessage = intent.getStringExtra(AuthenticationSDK.EXTRA_ERROR_MESSAGE);
+				String errorCode = intent.getStringExtra(AuthenticationSDK.EXTRA_ERROR_CODE);
+				Log.e(TAG, errorCode != null ? errorCode : "" + " " + errorMessage);
+				sendErrorObject(errorCode, errorMessage, null);
+			}
+
+			//At this point, the SDK is not needed anymore. It is highly advisable to call destroy(), so that
+			//internal resources can be freed.
+			if (authenticationSDK != null) {
+				authenticationSDK.destroy();
+				authenticationSDK = null;
+			}
+
 			// Document Verification Results
 		} else if (requestCode == DocumentVerificationSDK.REQUEST_CODE) {
 			String scanReference = intent.getStringExtra(DocumentVerificationSDK.EXTRA_SCAN_REFERENCE) != null ? intent.getStringExtra(DocumentVerificationSDK.EXTRA_SCAN_REFERENCE) : "";
@@ -596,7 +731,7 @@ public class JumioMobileSDK extends CordovaPlugin {
 			} else if (resultCode == Activity.RESULT_CANCELED) {
 				String errorCode = intent.getStringExtra(DocumentVerificationSDK.EXTRA_ERROR_CODE);
 				String errorMsg = intent.getStringExtra(DocumentVerificationSDK.EXTRA_ERROR_MESSAGE);
-				Log.e(TAG, errorMsg);
+				Log.e(TAG, errorCode != null ? errorCode : "" + " " + errorMsg);
 				sendErrorObject(errorCode, errorMsg, scanReference);
 			}
 

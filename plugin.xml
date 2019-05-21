@@ -1,12 +1,9 @@
 <?xml version='1.0' encoding='utf-8'?>
-<plugin id="cordova-plugin-jumio-mobilesdk" version="2.12.0" xmlns="http://apache.org/cordova/ns/plugins/1.0" xmlns:android="http://schemas.android.com/apk/res/android">
+<plugin id="cordova-plugin-jumio-mobilesdk" version="3.1.0" xmlns="http://apache.org/cordova/ns/plugins/1.0" xmlns:android="http://schemas.android.com/apk/res/android">
     <name>JumioMobileSDK</name>
     <js-module name="JumioMobileSDK" src="www/JumioMobileSDK.js">
         <clobbers target="Jumio" />
     </js-module>
-
-    <dependency id="cordova-plugin-cocoapod-support" />
-
     <platform name="ios">
         <config-file target="config.xml" parent="/*">
             <feature name="JumioMobileSDK">
@@ -21,10 +18,7 @@
             <string>$CAMERA_USAGE_DESCRIPTION</string>
         </config-file>
         
-        <pods-config ios-min-version="9.0" use-frameworks="true">
-            <source url="https://github.com/CocoaPods/Specs.git" />
-        </pods-config>
-        <pod name="JumioMobileSDK" version="2.12.0" configurations="release,debug" />
+        <framework src="JumioMobileSDK" type="podspec" spec="3.1.0"/>
     </platform>
     
     <platform name="android">
@@ -53,6 +47,12 @@
                 android:configChanges="orientation|screenSize|screenLayout|keyboardHidden"
                 android:hardwareAccelerated="true"
                 android:theme="@style/Theme.DocumentVerification"/>
+			<activity
+                android:name="com.jumio.auth.AuthenticationActivity"
+                android:windowSoftInputMode="adjustResize"
+                android:configChanges="orientation|screenSize|screenLayout|keyboardHidden"
+                android:hardwareAccelerated="true"
+                android:theme="@style/Theme.Authentication"/>
         </config-file>
         <config-file target="config.xml" parent="/*">
             <feature name="JumioMobileSDK">
@@ -61,25 +61,25 @@
             </feature>
         </config-file>
         <proguard-config>
-            -keep class com.jumio.** { *; }
+			-ignorewarnings
+			-keep class com.jumio.** { *; }
 			-keep class jumio.** { *; }
-			-keep class com.samsung.** { *; }
-			-keep class com.samsung.**$* { *; }
 			-keep class com.microblink.** { *; }
 			-keep class com.microblink.**$* { *; }
+			-keep class com.facetec.zoom.** { *; }
 
 			-keep class net.sf.scuba.smartcards.IsoDepCardService {*;}
 			-keep class org.jmrtd.** { *; }
 			-keep class net.sf.scuba.** {*;}
-			-keep class org.spongycastle.** {*;}
+			-keep class org.bouncycastle.** {*;}
 			-keep class org.ejbca.** {*;}
 
 			-dontwarn java.nio.**
 			-dontwarn org.codehaus.**
 			-dontwarn org.ejbca.**
-			-dontwarn org.spongycastle.**
-			-dontwarn com.samsung.**
+			-dontwarn org.bouncycastle.**
 			-dontwarn com.microblink.**
+			-dontwarn javax.annotation.Nullable
         </proguard-config>
         <source-file src="src/android/JumioMobileSDK.java" target-dir="src/com/jumio/mobilesdk" />
     </platform>

@@ -13,6 +13,19 @@ exports.startNetverify = function(success, error) {
     exec(success, error, "JumioMobileSDK", "startNetverify", []);
 };
 
+exports.initAuthentication = function(token, secret, datacenter, options) {
+    exec(function(success) { console.log("Authentication::init Success: " + success) },
+		 function(error) { console.log("Authentication::init Error: " + error) },
+		 "JumioMobileSDK",
+		 "initAuthentication",
+		 [token, secret, datacenter, options]);
+};
+
+
+exports.startAuthentication = function(success, error) {
+    exec(success, error, "JumioMobileSDK", "startAuthentication", []);
+};
+
 exports.initBAM = function(token, secret, datacenter, options, customization) {
     exec(function(success) { console.log("BAM::init Success: " + success) }, 
 		 function(error) { console.log("BAM::init Error: " + error) },

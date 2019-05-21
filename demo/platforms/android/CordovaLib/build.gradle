@@ -24,17 +24,17 @@ ext {
 
 buildscript {
     repositories {
+		google()
         jcenter()
         maven {
             url "https://maven.google.com"
         }
-		google()
 	}
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.1.3'
-        classpath 'com.github.dcendents:android-maven-gradle-plugin:1.5'
-        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.7.3'
+        classpath 'com.android.tools.build:gradle:3.4.0'
+        classpath 'com.github.dcendents:android-maven-gradle-plugin:2.1'
+        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.8.4'
     }
 }
 
@@ -43,21 +43,26 @@ apply plugin: 'com.github.dcendents.android-maven'
 apply plugin: 'com.jfrog.bintray'
 
 group = 'org.apache.cordova'
-version = '6.4.0'
+version = '8.0.0'
 
 android {
-    compileSdkVersion cdvCompileSdkVersion
-    buildToolsVersion cdvBuildToolsVersion
+    compileSdkVersion 28
+    buildToolsVersion "28.0.3"
     publishNonDefault true
+
+    lintOptions {
+        abortOnError false
+    }
 
     defaultConfig {
         // Enabling multidex support.
+        minSdkVersion 19
         multiDexEnabled true
     }
 
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_6
-        targetCompatibility JavaVersion.VERSION_1_6
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
     }
 
     sourceSets {
@@ -135,9 +140,9 @@ bintray {
         licenses = ['Apache-2.0']
         labels = ['android', 'cordova', 'phonegap']
         version {
-            name = '6.4.0'
+            name = '8.0.0'
             released  = new Date()
-            vcsTag = '6.4.0'
+            vcsTag = '8.0.0'
         }
     }
 }

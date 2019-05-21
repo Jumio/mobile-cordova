@@ -1,0 +1,12 @@
+{
+    "declarations": {},
+    "sources": {},
+    "libraries": {
+        "JumioMobileSDK": {
+            "name": "JumioMobileSDK",
+            "type": "podspec",
+            "spec": "3.1.0",
+            "count": 1
+        }
+    }
+}

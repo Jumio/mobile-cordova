@@ -1,4 +1,5 @@
 cordova.define("cordova-plugin-jumio-mobilesdk.JumioMobileSDK", function(require, exports, module) {
+cordova.define("cordova-plugin-jumio-mobilesdk.JumioMobileSDK", function(require, exports, module) {
 var exec = require('cordova/exec');
 
 exports.initNetverify = function(token, secret, datacenter, options, customization) {
@@ -11,6 +12,19 @@ exports.initNetverify = function(token, secret, datacenter, options, customizati
 
 exports.startNetverify = function(success, error) {
     exec(success, error, "JumioMobileSDK", "startNetverify", []);
+};
+
+exports.initAuthentication = function(token, secret, datacenter, options) {
+    exec(function(success) { console.log("Authentication::init Success: " + success) },
+		 function(error) { console.log("Authentication::init Error: " + error) },
+		 "JumioMobileSDK",
+		 "initAuthentication",
+		 [token, secret, datacenter, options]);
+};
+
+
+exports.startAuthentication = function(success, error) {
+    exec(success, error, "JumioMobileSDK", "startAuthentication", []);
 };
 
 exports.initBAM = function(token, secret, datacenter, options, customization) {
@@ -36,4 +50,6 @@ exports.initDocumentVerification = function(token, secret, datacenter, options, 
 exports.startDocumentVerification = function(success, error) {
     exec(success, error, "JumioMobileSDK", "startDocumentVerification", []);
 };
+});
+
 });

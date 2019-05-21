@@ -21,6 +21,8 @@ var app = {
     initialize: function() {
         document.addEventListener('deviceready', this.onDeviceReady.bind(this), false);
 		document.getElementById("startNetverify").addEventListener("click", this.startNetverify);
+		document.getElementById("initAuthentication").addEventListener("click", this.initAuthentication);
+		document.getElementById("startAuthentication").addEventListener("click", this.startAuthentication);
 		document.getElementById("startBAM").addEventListener("click", this.startBAM);
 		document.getElementById("startDocumentVerification").addEventListener("click", this.startDocumentVerification);
     },
@@ -32,17 +34,17 @@ var app = {
     onDeviceReady: function() {
 		
     },
-	
+
 	startNetverify: function() {
 		// Netverify / Fastfill
 		Jumio.initNetverify('API_TOKEN', 'API_SECRET', 'DATACENTER', {
-			requireVerification: true,
+			enableVerification: true,
 			//callbackUrl: "URL",
-			//requireFaceMatch: true,
+			//enableIdentityVerification: true,
 			//preselectedCountry: "AUT",
-			//merchantScanReference: "ScanRef",
-			//merchantReportingCriteria: "Criteria",
-			//customerId: "ID",
+			//customerInternalReference: "CustomerInternalReference",
+			//reportingCriteria: "ReportingCriteria",
+			//userReference: "UserReference",
 			//sendDebugInfoToJumio: true,
 			//dataExtractionOnMobileOnly: false,
 			//cameraPosition: "back",
@@ -80,15 +82,32 @@ var app = {
 		    alert(JSON.stringify(error));
 		});
 	},
+
+	initAuthentication: function() {
+    	// Authentication
+    	Jumio.initAuthentication('API_TOKEN', 'API_SECRET', 'DATACENTER', {
+    		enrollmentTransactionReference: "EnrollmentTransactionReference",
+    		//userReference: "UserReference",
+    		//callbackUrl: "URL"
+    	});
+    },
+
+    startAuthentication: function() {
+    	Jumio.startAuthentication(function(documentData) {
+    			alert(JSON.stringify(documentData));
+    		}, function(error) {
+    			alert(JSON.stringify(error));
+    	});
+    },
 	
 	startDocumentVerification: function() {
 		// Document Verification
 		Jumio.initDocumentVerification('API_TOKEN', 'API_SECRET', 'DATACENTER', {
 			type: "BS",
-			customerId: "123456789",
+			userReference: "123456789",
 			country: "USA",
-			merchantScanReference: "123456789",
-			//merchantScanReportingCriteria: "Criteria",
+			customerInternalReference: "123456789",
+			//reportingCriteria: "ReportingCriteria",
 			//callbackUrl: "URL",
 			//documentName: "Name",
             //enableExtraction: true,
@@ -115,7 +134,7 @@ var app = {
 			//cvvRequired: false,
 			//expiryEditable: false,
 			//cardHolderNameEditable: false,
-			//merchantReportingCriteria: "Criteria",
+			//reportingCriteria: "ReportingCriteria",
 			//vibrationEffectEnabled: true,
 			//enableFlashOnScanStart: false,
 			//cardNumberMaskingEnabled: false,
