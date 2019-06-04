@@ -1,4 +1,3 @@
-cordova.define("cordova-plugin-jumio-mobilesdk.JumioMobileSDK", function(require, exports, module) {
 var exec = require('cordova/exec');
 
 exports.initNetverify = function(token, secret, datacenter, options, customization) {
@@ -49,4 +48,3 @@ exports.initDocumentVerification = function(token, secret, datacenter, options, 
 exports.startDocumentVerification = function(success, error) {
     exec(success, error, "JumioMobileSDK", "startDocumentVerification", []);
 };
-});

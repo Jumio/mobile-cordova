@@ -55,6 +55,9 @@ Open the android project of your cordova project located in */platforms/android*
 * [Document Verification](https://github.com/Jumio/mobile-sdk-android/blob/v3.1.0/docs/integration_document-verification.md#dependencies)
 * [BAM Checkout](https://github.com/Jumio/mobile-sdk-android/blob/v3.1.0/docs/integration_bam-checkout.md#dependencies)
 
+Due to the outdated Cordova platform that is not yet updated for Android API version 28 and AndroidX, it's necessary to adapt your project to support the proper build environment for the native Jumio Android component. Take a look at the [Demo App build.gradle](https://github.com/Jumio/mobile-cordova/blob/master/demo/platforms/android/build.gradle) how to upgrade to API level 28. The [FAQ section](#faq) at the bottom covers common build issues and how to fix them.
+Open your Cordova Android project in Android Studio to get IDE auto-suggestions and support for all the required changes.
+
 ## Usage
 
 ### Netverify / Fastfill
@@ -455,6 +458,28 @@ The JSONObject with all the extracted data that is returned for the specific pro
 ### Document Verification
 
 No data returned.
+
+# FAQ
+
+This is a list of common Android build issues and how to resolve them:
+* Gradle plugin 4.X not supported, please install 5.X
+
+	-> Change the version in the gradle-wrapper.properties file
+* MinSdkVersion/TargetSdkVersion not supported in AndroidManifest.xml
+
+	-> Remove both versions from AndroidManifest.xml as suggested by Android Studio (as they are taken from build.gradle only since Gradle 5)
+* Command "compile" is obsolete, use implementation instead
+
+	-> Change all dependency declarations to use "implementation" instead of "compile" to support the latest gradle changes - https://github.com/Jumio/mobile-cordova/blob/master/demo/platforms/android/build.gradle#L291
+* Theme.Netverify/Bam/DocumentVerification/Authentication cannot be resolved
+
+	-> Add the Jumio dependencies as proposed here: https://github.com/Jumio/mobile-cordova/blob/master/demo/platforms/android/build.gradle#L95
+* Ressources from styles.xml "cornerRadius" and others not found
+
+  -> Build tools and support library are not at version 28. Change compileSdk and buildToolsVersion as described here -> https://github.com/Jumio/mobile-cordova/blob/master/demo/platforms/android/build.gradle#L222
+* Device-ready not fired after X seconds
+
+  -> The plugin definition in "YOURPROJECT/platforms/android/platform_www/plugins/cordova-plugin-jumio-mobilesdk/www" might be duplicated/corrupted due to the issue mentioned in this Stackoverflow post - https://stackoverflow.com/questions/28017540/cordova-plugin-javascript-gets-corrupted-when-added-to-project/28264312#28264312 , please fix the duplicated "cordova.define()" call in these files as mentioned in the post.
 
 # Support
 
