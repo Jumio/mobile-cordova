@@ -21,7 +21,6 @@ var path = require('path');
 var Q = require('q');
 
 var AndroidProject = require('./lib/AndroidProject');
-var AndroidStudio = require('./lib/AndroidStudio');
 var PluginManager = require('cordova-common').PluginManager;
 
 var CordovaLogger = require('cordova-common').CordovaLogger;
@@ -59,33 +58,24 @@ function Api (platform, platformRootDir, events) {
 
     setupEvents(events);
 
-    var self = this;
+    const appMain = path.join(this.root, 'app', 'src', 'main');
+    const appRes = path.join(appMain, 'res');
 
     this.locations = {
-        root: self.root,
-        www: path.join(self.root, 'assets/www'),
-        res: path.join(self.root, 'res'),
-        platformWww: path.join(self.root, 'platform_www'),
-        configXml: path.join(self.root, 'res/xml/config.xml'),
-        defaultConfigXml: path.join(self.root, 'cordova/defaults.xml'),
-        strings: path.join(self.root, 'res/values/strings.xml'),
-        manifest: path.join(self.root, 'AndroidManifest.xml'),
-        build: path.join(self.root, 'build'),
+        root: this.root,
+        www: path.join(appMain, 'assets', 'www'),
+        res: appRes,
+        platformWww: path.join(this.root, 'platform_www'),
+        configXml: path.join(appRes, 'xml', 'config.xml'),
+        defaultConfigXml: path.join(this.root, 'cordova', 'defaults.xml'),
+        strings: path.join(appRes, 'values', 'strings.xml'),
+        manifest: path.join(appMain, 'AndroidManifest.xml'),
+        build: path.join(this.root, 'build'),
+        javaSrc: path.join(appMain, 'java'),
         // NOTE: Due to platformApi spec we need to return relative paths here
         cordovaJs: 'bin/templates/project/assets/www/cordova.js',
         cordovaJsSrc: 'cordova-js-src'
     };
-
-    // XXX Override some locations for Android Studio projects
-    if (AndroidStudio.isAndroidStudioProject(self.root) === true) {
-        selfEvents.emit('log', 'Android Studio project detected');
-        this.android_studio = true;
-        this.locations.configXml = path.join(self.root, 'app/src/main/res/xml/config.xml');
-        this.locations.strings = path.join(self.root, 'app/src/main/res/xml/strings.xml');
-        this.locations.manifest = path.join(self.root, 'app/src/main/AndroidManifest.xml');
-        this.locations.www = path.join(self.root, 'app/src/main/assets/www');
-        this.locations.res = path.join(self.root, 'app/src/main/res');
-    }
 }
 
 /**
@@ -218,34 +208,13 @@ Api.prototype.addPlugin = function (plugin, installOptions) {
         installOptions.variables.PACKAGE_NAME = project.getPackageName();
     }
 
-    if (this.android_studio === true) {
-        installOptions.android_studio = true;
-    }
-
     return Q().then(function () {
-        // CB-11964: Do a clean when installing the plugin code to get around
-        // the Gradle bug introduced by the Android Gradle Plugin Version 2.2
-        // TODO: Delete when the next version of Android Gradle plugin comes out
-
-        // Since clean doesn't just clean the build, it also wipes out www, we need
-        // to pass additional options.
-
-        // Do some basic argument parsing
-        var opts = {};
-
-        // Skip cleaning prepared files when not invoking via cordova CLI.
-        opts.noPrepare = true;
-
-        if (!AndroidStudio.isAndroidStudioProject(self.root) && !project.isClean()) {
-            return self.clean(opts);
-        }
-    }).then(function () {
         return PluginManager.get(self.platform, self.locations, project).addPlugin(plugin, installOptions);
     }).then(function () {
         if (plugin.getFrameworks(this.platform).length === 0) return;
-
         selfEvents.emit('verbose', 'Updating build files since android plugin contained <framework>');
-        require('./lib/builders/builders').getBuilder('gradle').prepBuildFiles();
+        // This should pick the correct builder, not just get gradle
+        require('./lib/builders/builders').getBuilder().prepBuildFiles();
     }.bind(this))
         // CB-11022 Return truthy value to prevent running prepare after
         .thenResolve(true);
@@ -267,9 +236,8 @@ Api.prototype.addPlugin = function (plugin, installOptions) {
 Api.prototype.removePlugin = function (plugin, uninstallOptions) {
     var project = AndroidProject.getProjectFile(this.root);
 
-    if (uninstallOptions && uninstallOptions.usePlatformWww === true && this.android_studio === true) {
+    if (uninstallOptions && uninstallOptions.usePlatformWww === true) {
         uninstallOptions.usePlatformWww = false;
-        uninstallOptions.android_studio = true;
     }
 
     return PluginManager.get(this.platform, this.locations, project)
@@ -278,7 +246,7 @@ Api.prototype.removePlugin = function (plugin, uninstallOptions) {
             if (plugin.getFrameworks(this.platform).length === 0) return;
 
             selfEvents.emit('verbose', 'Updating build files since android plugin contained <framework>');
-            require('./lib/builders/builders').getBuilder('gradle').prepBuildFiles();
+            require('./lib/builders/builders').getBuilder().prepBuildFiles();
         }.bind(this))
         // CB-11022 Return truthy value to prevent running prepare after
         .thenResolve(true);
@@ -331,6 +299,7 @@ Api.prototype.removePlugin = function (plugin, uninstallOptions) {
  */
 Api.prototype.build = function (buildOptions) {
     var self = this;
+
     return require('./lib/check_reqs').run().then(function () {
         return require('./lib/build').run.call(self, buildOptions);
     }).then(function (buildResults) {
@@ -374,6 +343,11 @@ Api.prototype.run = function (runOptions) {
  */
 Api.prototype.clean = function (cleanOptions) {
     var self = this;
+    // This will lint, checking for null won't
+    if (typeof cleanOptions === 'undefined') {
+        cleanOptions = {};
+    }
+
     return require('./lib/check_reqs').run().then(function () {
         return require('./lib/build').runClean.call(self, cleanOptions);
     }).then(function () {

@@ -1,0 +1,49 @@
+// PLUGIN GRADLE EXTENSIONS START
+repositories {
+    google()
+    jcenter()
+    maven { url 'https://mobile-sdk.jumio.com' }
+}
+
+ext {
+    SDK_VERSION = "3.3.1"
+}
+
+dependencies {
+    implementation "com.jumio.android:core:${SDK_VERSION}@aar"
+    implementation "com.jumio.android:bam:${SDK_VERSION}@aar"
+    implementation "com.jumio.android:auth:${SDK_VERSION}@aar"
+    implementation "com.jumio.android:nv:${SDK_VERSION}@aar"
+    implementation "com.jumio.android:nv-mrz:${SDK_VERSION}@aar"
+    implementation "com.jumio.android:nv-nfc:${SDK_VERSION}@aar"
+    implementation "com.jumio.android:nv-ocr:${SDK_VERSION}@aar"
+    implementation "com.jumio.android:nv-barcode:${SDK_VERSION}@aar"
+    implementation "com.jumio.android:nv-barcode-vision:${SDK_VERSION}@aar"
+    implementation "com.jumio.android:face:${SDK_VERSION}@aar"
+    implementation "com.jumio.android:dv:${SDK_VERSION}@aar"
+
+    //for core:
+    implementation "androidx.appcompat:appcompat:1.0.2"
+    implementation "androidx.room:room-runtime:2.0.0"
+
+    //for nv:
+    implementation "com.google.android.material:material:1.0.0"
+    implementation "androidx.cardview:cardview:1.0.0"
+
+    //only for nv-barcode-vision
+    implementation("com.google.android.gms:play-services-vision:18.0.0") {
+        exclude group: 'com.android.support', module: 'support-v4'
+    }
+
+    //only for nv-nfc
+    implementation "org.bouncycastle:bcprov-jdk15on:1.61"
+    implementation "net.sf.scuba:scuba-sc-android:0.0.18"
+
+    implementation "androidx.multidex:multidex:2.0.1"
+
+    //only for face
+    implementation "com.facetec:zoom-authentication-hybrid:7.0.14@aar"
+
+    implementation fileTree(dir: 'libs', include: '*.jar')
+}
+// PLUGIN GRADLE EXTENSIONS END

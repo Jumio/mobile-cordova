@@ -4,5 +4,5 @@ platform :ios, '9.0'
 
 target 'DemoApp' do
 	project 'DemoApp.xcodeproj'
-	pod 'JumioMobileSDK', '3.1.0'
+	pod 'JumioMobileSDK', '3.3.0'
 end

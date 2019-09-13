@@ -31,11 +31,10 @@ var events = require('cordova-common').events;
 var spawn = require('cordova-common').superspawn.spawn;
 var CordovaError = require('cordova-common').CordovaError;
 
+module.exports.parseBuildOptions = parseOpts;
 function parseOpts (options, resolvedTarget, projectRoot) {
     options = options || {};
     options.argv = nopt({
-        gradle: Boolean,
-        ant: Boolean,
         prepenv: Boolean,
         versionCode: String,
         minSdkVersion: String,
@@ -47,22 +46,16 @@ function parseOpts (options, resolvedTarget, projectRoot) {
         keystoreType: String
     }, {}, options.argv, 0);
 
+    // Android Studio Build method is the default
     var ret = {
         buildType: options.release ? 'release' : 'debug',
-        buildMethod: process.env.ANDROID_BUILD || 'gradle',
         prepEnv: options.argv.prepenv,
         arch: resolvedTarget && resolvedTarget.arch,
         extraArgs: []
     };
 
-    if (options.argv.ant || options.argv.gradle) { ret.buildMethod = options.argv.ant ? 'ant' : 'gradle'; }
-
-    if (options.nobuild) ret.buildMethod = 'none';
-
     if (options.argv.versionCode) { ret.extraArgs.push('-PcdvVersionCode=' + options.argv.versionCode); }
-
     if (options.argv.minSdkVersion) { ret.extraArgs.push('-PcdvMinSdkVersion=' + options.argv.minSdkVersion); }
-
     if (options.argv.gradleArg) {
         ret.extraArgs = ret.extraArgs.concat(options.argv.gradleArg);
     }
@@ -122,7 +115,8 @@ function parseOpts (options, resolvedTarget, projectRoot) {
  */
 module.exports.runClean = function (options) {
     var opts = parseOpts(options, null, this.root);
-    var builder = builders.getBuilder(opts.buildMethod);
+    var builder = builders.getBuilder();
+
     return builder.prepEnv(opts).then(function () {
         return builder.clean(opts);
     });
@@ -142,7 +136,8 @@ module.exports.runClean = function (options) {
  */
 module.exports.run = function (options, optResolvedTarget) {
     var opts = parseOpts(options, optResolvedTarget, this.root);
-    var builder = builders.getBuilder(opts.buildMethod);
+    var builder = builders.getBuilder();
+
     return builder.prepEnv(opts).then(function () {
         if (opts.prepEnv) {
             events.emit('verbose', 'Build file successfully prepared.');
@@ -153,8 +148,7 @@ module.exports.run = function (options, optResolvedTarget) {
             events.emit('log', 'Built the following apk(s): \n\t' + apkPaths.join('\n\t'));
             return {
                 apkPaths: apkPaths,
-                buildType: opts.buildType,
-                buildMethod: opts.buildMethod
+                buildType: opts.buildType
             };
         });
     });
@@ -268,12 +262,10 @@ module.exports.help = function () {
     console.log('Flags:');
     console.log('    \'--debug\': will build project in debug mode (default)');
     console.log('    \'--release\': will build project for release');
-    console.log('    \'--ant\': will build project with ant');
-    console.log('    \'--gradle\': will build project with gradle (default)');
     console.log('    \'--nobuild\': will skip build process (useful when using run command)');
     console.log('    \'--prepenv\': don\'t build, but copy in build scripts where necessary');
-    console.log('    \'--versionCode=#\': Override versionCode for this build. Useful for uploading multiple APKs. Requires --gradle.');
-    console.log('    \'--minSdkVersion=#\': Override minSdkVersion for this build. Useful for uploading multiple APKs. Requires --gradle.');
+    console.log('    \'--versionCode=#\': Override versionCode for this build. Useful for uploading multiple APKs.');
+    console.log('    \'--minSdkVersion=#\': Override minSdkVersion for this build. Useful for uploading multiple APKs.');
     console.log('    \'--gradleArg=<gradle command line arg>\': Extra args to pass to the gradle command. Use one flag per arg. Ex. --gradleArg=-PcdvBuildMultipleApks=true');
     console.log('');
     console.log('Signed APK flags (overwrites debug/release-signing.proprties) :');

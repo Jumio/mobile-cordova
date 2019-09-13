@@ -1,7 +1,4 @@
 /*
- *
- * Copyright 2013 Anis Kadri
- *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -17,8 +14,6 @@
  *
 */
 
-/* jshint unused: vars */
-
 var fs = require('fs');
 var path = require('path');
 var shell = require('shelljs');
@@ -31,11 +26,7 @@ var handlers = {
             if (!obj.src) throw new CordovaError(generateAttributeError('src', 'source-file', plugin.id));
             if (!obj.targetDir) throw new CordovaError(generateAttributeError('target-dir', 'source-file', plugin.id));
 
-            var dest = path.join(obj.targetDir, path.basename(obj.src));
-
-            if (options && options.android_studio === true) {
-                dest = path.join('app/src/main/java', obj.targetDir.substring(4), path.basename(obj.src));
-            }
+            var dest = getInstallDestination(obj);
 
             if (options && options.force) {
                 copyFile(plugin.dir, obj.src, project.projectDir, dest, !!(options && options.link));
@@ -44,37 +35,35 @@ var handlers = {
             }
         },
         uninstall: function (obj, plugin, project, options) {
-            var dest = path.join(obj.targetDir, path.basename(obj.src));
+            var dest = getInstallDestination(obj);
 
-            if (options && options.android_studio === true) {
-                dest = path.join('app/src/main/java', obj.targetDir.substring(4), path.basename(obj.src));
+            // TODO: Add Koltin extension to uninstall, since they are handled like Java files
+            if (obj.src.endsWith('java')) {
+                deleteJava(project.projectDir, dest);
+            } else {
+                // Just remove the file, not the whole parent directory
+                removeFile(project.projectDir, dest);
             }
-
-            deleteJava(project.projectDir, dest);
         }
     },
     'lib-file': {
         install: function (obj, plugin, project, options) {
-            var dest = path.join('libs', path.basename(obj.src));
-            if (options && options.android_studio === true) {
-                dest = path.join('app/libs', path.basename(obj.src));
-            }
+            var dest = path.join('app/libs', path.basename(obj.src));
             copyFile(plugin.dir, obj.src, project.projectDir, dest, !!(options && options.link));
         },
         uninstall: function (obj, plugin, project, options) {
-            var dest = path.join('libs', path.basename(obj.src));
-            if (options && options.android_studio === true) {
-                dest = path.join('app/libs', path.basename(obj.src));
-            }
+            var dest = path.join('app/libs', path.basename(obj.src));
             removeFile(project.projectDir, dest);
         }
     },
     'resource-file': {
         install: function (obj, plugin, project, options) {
-            copyFile(plugin.dir, obj.src, project.projectDir, path.normalize(obj.target), !!(options && options.link));
+            var dest = path.join('app', 'src', 'main', obj.target);
+            copyFile(plugin.dir, obj.src, project.projectDir, dest, !!(options && options.link));
         },
         uninstall: function (obj, plugin, project, options) {
-            removeFile(project.projectDir, path.normalize(obj.target));
+            var dest = path.join('app', 'src', 'main', obj.target);
+            removeFile(project.projectDir, dest);
         }
     },
     'framework': {
@@ -301,4 +290,45 @@ function removeFileAndParents (baseDir, destFile, stopper) {
 
 function generateAttributeError (attribute, element, id) {
     return 'Required attribute "' + attribute + '" not specified in <' + element + '> element from plugin: ' + id;
+}
+
+function getInstallDestination (obj) {
+    var APP_MAIN_PREFIX = 'app/src/main';
+    var PATH_SEPARATOR = '/';
+
+    var PATH_SEP_MATCH = '\\' + PATH_SEPARATOR;
+    var PATH_SEP_OR_EOL_MATCH = '(\\' + PATH_SEPARATOR + '|$)';
+
+    var appReg = new RegExp('^app' + PATH_SEP_OR_EOL_MATCH);
+    var libsReg = new RegExp('^libs' + PATH_SEP_OR_EOL_MATCH);
+    var srcReg = new RegExp('^src' + PATH_SEP_OR_EOL_MATCH);
+    var srcMainReg = new RegExp('^src' + PATH_SEP_MATCH + 'main' + PATH_SEP_OR_EOL_MATCH);
+
+    if (appReg.test(obj.targetDir)) {
+        // If any source file is using the new app directory structure,
+        // don't penalize it
+        return path.join(obj.targetDir, path.basename(obj.src));
+    } else {
+        // Plugin using deprecated target directory structure (GH-580)
+        if (obj.src.endsWith('.java')) {
+            return path.join(APP_MAIN_PREFIX, 'java', obj.targetDir.replace(srcReg, ''),
+                path.basename(obj.src));
+        } else if (obj.src.endsWith('.aidl')) {
+            return path.join(APP_MAIN_PREFIX, 'aidl', obj.targetDir.replace(srcReg, ''),
+                path.basename(obj.src));
+        } else if (libsReg.test(obj.targetDir)) {
+            if (obj.src.endsWith('.so')) {
+                return path.join(APP_MAIN_PREFIX, 'jniLibs', obj.targetDir.replace(libsReg, ''),
+                    path.basename(obj.src));
+            } else {
+                return path.join('app', obj.targetDir, path.basename(obj.src));
+            }
+        } else if (srcMainReg.test(obj.targetDir)) {
+            return path.join('app', obj.targetDir, path.basename(obj.src));
+        }
+
+        // For all other source files not using the new app directory structure,
+        // add 'app/src/main' to the targetDir
+        return path.join(APP_MAIN_PREFIX, obj.targetDir, path.basename(obj.src));
+    }
 }

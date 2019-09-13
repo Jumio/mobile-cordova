@@ -181,23 +181,34 @@
         if (![options isEqual:[NSNull null]]) {
             for (NSString *key in options) {
                 if ([key isEqualToString: @"enableVerification"]) {
-                    self.netverifyConfiguration.enableVerification = [options objectForKey: key];
+                    self.netverifyConfiguration.enableVerification = [self getBoolValue: [options objectForKey: key]];
                 } else if ([key isEqualToString: @"callbackUrl"]) {
                     self.netverifyConfiguration.callbackUrl = [options objectForKey: key];
                 } else if ([key isEqualToString: @"enableIdentityVerification"]) {
-                    self.netverifyConfiguration.enableIdentityVerification = [options objectForKey: key];
+                    self.netverifyConfiguration.enableIdentityVerification = [self getBoolValue: [options objectForKey: key]];
                 } else if ([key isEqualToString: @"preselectedCountry"]) {
                     self.netverifyConfiguration.preselectedCountry = [options objectForKey: key];
                 } else if ([key isEqualToString: @"customerInternalReference"]) {
                     self.netverifyConfiguration.customerInternalReference = [options objectForKey: key];
+                } else if ([key isEqualToString: @"enableWatchlistScreening"]) {
+                    NSString* watchlistScreeningValue = [[options objectForKey: key] lowercaseString];
+                    if ([watchlistScreeningValue isEqualToString:@"enabled"]) {
+                        self.netverifyConfiguration.watchlistScreening = NetverifyWatchlistScreeningEnabled;
+                    } else if ([watchlistScreeningValue isEqualToString:@"disabled"]) {
+                        self.netverifyConfiguration.watchlistScreening = NetverifyWatchlistScreeningDisabled;
+                    } else {
+                        self.netverifyConfiguration.watchlistScreening = NetverifyWatchlistScreeningDefault;
+                    }
+                } else if ([key isEqualToString: @"watchlistSearchProfile"]) {
+                    self.netverifyConfiguration.watchlistSearchProfile = [options objectForKey: key];
                 } else if ([key isEqualToString: @"reportingCriteria"]) {
                     self.netverifyConfiguration.reportingCriteria = [options objectForKey: key];
                 } else if ([key isEqualToString: @"userReference"]) {
                     self.netverifyConfiguration.userReference = [options objectForKey: key];
                 } else if ([key isEqualToString: @"sendDebugInfoToJumio"]) {
-                    self.netverifyConfiguration.sendDebugInfoToJumio = [options objectForKey: key];
+                    self.netverifyConfiguration.sendDebugInfoToJumio = [self getBoolValue: [options objectForKey: key]];
                 } else if ([key isEqualToString: @"dataExtractionOnMobileOnly"]) {
-                    self.netverifyConfiguration.dataExtractionOnMobileOnly = [options objectForKey: key];
+                    self.netverifyConfiguration.dataExtractionOnMobileOnly = [self getBoolValue:[options objectForKey: key]];
                 } else if ([key isEqualToString: @"cameraPosition"]) {
                     NSString *cameraString = [[options objectForKey: key] lowercaseString];
                     JumioCameraPosition cameraPosition = ([cameraString isEqualToString: @"front"]) ? JumioCameraPositionFront : JumioCameraPositionBack;
@@ -339,11 +350,16 @@
     self.authenticationConfiguration.dataCenter = dataCenter;
 
     // Configuration
+    NSString *enrollmentTransactionReference = nil;
+    NSString *authenticationTransactionReference = nil;
+    
     NSDictionary *configuration = [command.arguments objectAtIndex: 3];
     if (![configuration isEqual:[NSNull null]]) {
         for (NSString *key in configuration) {
             if ([key isEqualToString: @"enrollmentTransactionReference"]) {
-                self.authenticationConfiguration.enrollmentTransactionReference = [configuration objectForKey: key];
+                enrollmentTransactionReference = [configuration objectForKey: key];
+            } else if ([key isEqualToString:@"authenticationTransactionReference"]) {
+                authenticationTransactionReference = [configuration objectForKey:key];
             } else if ([key isEqualToString: @"callbackUrl"]) {
                 self.authenticationConfiguration.callbackUrl = [configuration objectForKey: key];
             } else if ([key isEqualToString:@"userReference"]) {
@@ -351,14 +367,21 @@
             }
         }
     }
-        
 
-    @try {
-        self.authenticationController = [[AuthenticationController alloc] initWithConfiguration:self.authenticationConfiguration];
-    } @catch (NSException *exception) {
-        NSString *msg = [NSString stringWithFormat: @"Cancelled with exception %@: %@", exception.name, exception.reason];
-        [self sendErrorMessage: msg];
-    }
+    if (enrollmentTransactionReference != nil || authenticationTransactionReference != nil){
+        if (authenticationTransactionReference != nil) {
+        self.authenticationConfiguration.authenticationTransactionReference = authenticationTransactionReference;
+        } else {
+        self.authenticationConfiguration.enrollmentTransactionReference = enrollmentTransactionReference;
+        }
+        
+        @try {
+            self.authenticationController = [[AuthenticationController alloc] initWithConfiguration:self.authenticationConfiguration];
+        } @catch (NSException *exception) {
+            NSString *msg = [NSString stringWithFormat: @"Cancelled with exception %@: %@", exception.name, exception.reason];
+            [self sendErrorMessage: msg];
+        }
+    }        
 }
 
 - (void)startAuthentication:(CDVInvokedUrlCommand*)command {
@@ -418,7 +441,7 @@
                 } else if ([key isEqualToString: @"documentName"]) {
                     self.documentVerifcationConfiguration.documentName = [options objectForKey: key];
                 } else if ([key isEqualToString: @"enableExtraction"]) {
-                    self.documentVerifcationConfiguration.enableExtraction = [options objectForKey: key];
+                    self.documentVerifcationConfiguration.enableExtraction = [self getBoolValue:[options objectForKey: key]];
                 } else if ([key isEqualToString: @"cameraPosition"]) {
                     NSString *cameraString = [[options objectForKey: key] lowercaseString];
                     JumioCameraPosition cameraPosition = ([cameraString isEqualToString: @"front"]) ? JumioCameraPositionFront : JumioCameraPositionBack;
@@ -615,7 +638,10 @@
     
     CDVPluginResult *pluginResult = [CDVPluginResult resultWithStatus: CDVCommandStatus_OK messageAsDictionary: result];
     [self.commandDelegate sendPluginResult: pluginResult callbackId: self.callbackId];
-    [self.viewController dismissViewControllerAnimated: YES completion: nil];
+    [self.viewController dismissViewControllerAnimated: YES completion: ^{
+        [self.netverifyViewController destroy];
+        self.netverifyViewController = nil;
+    }];
 }
     
 - (void)netverifyViewController:(NetverifyViewController *)netverifyViewController didFinishInitializingWithError:(NetverifyError *)error {
@@ -655,7 +681,7 @@
         [self.commandDelegate sendPluginResult: pluginResult callbackId: self.callbackId];
         
         [self.authenticationController destroy];
-        self.authenticationConfiguration = nil;
+        self.authenticationController = nil;
     }];
 }
 
@@ -733,7 +759,12 @@
     
     CDVPluginResult *pluginResult = [CDVPluginResult resultWithStatus: CDVCommandStatus_ERROR messageAsDictionary: result];
     [self.commandDelegate sendPluginResult: pluginResult callbackId: self.callbackId];
-    [self.viewController dismissViewControllerAnimated: YES completion: nil];
+    [self.viewController dismissViewControllerAnimated: YES completion: ^{
+        if (self.netverifyViewController) {
+            [self.netverifyViewController destroy];
+            self.netverifyViewController = nil;
+        }
+    }];
 }
 
 - (void)sendDocumentVerificationError:(DocumentVerificationError *)error scanReference:(NSString *)scanReference {

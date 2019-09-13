@@ -50,6 +50,8 @@ var app = {
 			//cameraPosition: "back",
 			//preselectedDocumentVariant: "plastic",
 			//documentTypes: ["PASSPORT", "DRIVER_LICENSE", "IDENTITY_CARD", "VISA"],
+			//enableWatchlistScreening: ["enabled", "disabled" || "default"],
+			//watchlistSearchProfile: "YOURPROFILENAME"
             //offlineToken: ""
 		}, {
 			// Customization iOS only
@@ -87,8 +89,9 @@ var app = {
     	// Authentication
     	Jumio.initAuthentication('API_TOKEN', 'API_SECRET', 'DATACENTER', {
     		enrollmentTransactionReference: "EnrollmentTransactionReference",
-    		//userReference: "UserReference",
-    		//callbackUrl: "URL"
+			//userReference: "UserReference",
+			//callbackUrl: "URL",
+			//authenticationTransactionReference: "AuthenticationTransactionReference"
     	});
     },
 

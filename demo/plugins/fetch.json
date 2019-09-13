@@ -1,0 +1,10 @@
+{
+  "cordova-plugin-jumio-mobilesdk": {
+    "source": {
+      "type": "local",
+      "path": "/Users/davidpanholzer/Documents/DEV/bitbucket/mobile-cordova-pilot/demo/node_modules/cordova-plugin-jumio-mobilesdk"
+    },
+    "is_top_level": true,
+    "variables": {}
+  }
+}

@@ -5,7 +5,7 @@
         "JumioMobileSDK": {
             "name": "JumioMobileSDK",
             "type": "podspec",
-            "spec": "3.1.0",
+            "spec": "3.3.0",
             "count": 1
         }
     }
