@@ -37,7 +37,7 @@ var app = {
 
 	startNetverify: function() {
 		// Netverify / Fastfill
-		Jumio.initNetverify('0ca780fe-527c-4207-b4cc-0b3752965298', 'nAFnEUfTQ92vidchQtO53kETPDo49ECQ', 'EU', {
+		Jumio.initNetverify('API_TOKEN', 'API_SECRET', 'DATACENTER', {
 			enableVerification: true,
 			//callbackUrl: "URL",
 			//enableIdentityVerification: true,
