@@ -48,7 +48,7 @@ task wrapper(type: Wrapper) {
 // Configuration properties. Set these via environment variables, build-extras.gradle, or gradle.properties.
 // Refer to: http://www.gradle.org/docs/current/userguide/tutorial_this_and_that.html
 ext {
-    SDK_VERSION = "3.3.1"
+    SDK_VERSION = "3.4.1"
     
     apply from: '../CordovaLib/cordova.gradle'
 

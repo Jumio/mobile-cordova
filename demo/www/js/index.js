@@ -25,6 +25,9 @@ var app = {
 		document.getElementById("startAuthentication").addEventListener("click", this.startAuthentication);
 		document.getElementById("startBAM").addEventListener("click", this.startBAM);
 		document.getElementById("startDocumentVerification").addEventListener("click", this.startDocumentVerification);
+		document.getElementById("log").addEventListener("change",function unhide() {
+			document.getElementById("logtitle").hidden = true
+		})			
     },
 
     // deviceready Event Handler
@@ -33,7 +36,7 @@ var app = {
     // 'pause', 'resume', etc.
     onDeviceReady: function() {
 		
-    },
+	},
 
 	startNetverify: function() {
 		// Netverify / Fastfill
@@ -79,28 +82,31 @@ var app = {
 		});
 
 		Jumio.startNetverify(function(documentData) {
-			alert(JSON.stringify(documentData));
+			// alert(JSON.stringify(documentData));
+			document.getElementById("log").textContent = JSON.stringify(documentData);
 		}, function(error) {
-		    alert(JSON.stringify(error));
+			// alert(JSON.stringify(error));
+			document.getElementById("log").textContent = JSON.stringify(error);
 		});
 	},
 
-	initAuthentication: function() {
-    	// Authentication
-    	Jumio.initAuthentication('API_TOKEN', 'API_SECRET', 'DATACENTER', {
+    initAuthentication: function() {
+		// Authentication
+		Jumio.initAuthentication('API_TOKEN', 'API_SECRET', 'DATACENTER', {
     		enrollmentTransactionReference: "EnrollmentTransactionReference",
 			//userReference: "UserReference",
 			//callbackUrl: "URL",
 			//authenticationTransactionReference: "AuthenticationTransactionReference"
-    	});
-    },
+		});
+	},
 
-    startAuthentication: function() {
+	startAuthentication: function() {
+		
     	Jumio.startAuthentication(function(documentData) {
-    			alert(JSON.stringify(documentData));
-    		}, function(error) {
-    			alert(JSON.stringify(error));
-    	});
+			document.getElementById("log").textContent = JSON.stringify(documentData);
+		}, function(error) {
+			document.getElementById("log").textContent = JSON.stringify(error);
+		});
     },
 	
 	startDocumentVerification: function() {
@@ -122,9 +128,9 @@ var app = {
 		});
 
 		Jumio.startDocumentVerification(function(documentData) {
-			alert(JSON.stringify(documentData));
+			document.getElementById("log").textContent = JSON.stringify(documentData);
 		}, function(error) {
-			alert(JSON.stringify(error));
+			document.getElementById("log").textContent = JSON.stringify(error);
 		});
 	},
 	
@@ -170,9 +176,9 @@ var app = {
 		});
 
 		Jumio.startBAM(function(cardInformation) {
-			alert(JSON.stringify(cardInformation));
+			document.getElementById("log").textContent = JSON.stringify(documentData);
 		}, function(error) {
-			alert(JSON.stringify(error));
+			document.getElementById("log").textContent = JSON.stringify(error);
 		});
 	}
 };

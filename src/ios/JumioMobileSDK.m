@@ -5,12 +5,22 @@
 
 #import "JumioMobileSDK.h"
 
+@interface JumioMobileSDK ()
+
+@property (nonatomic, assign) BOOL initiateSuccessfulBAMCheckout;
+@property (nonatomic, assign) BOOL initiateSuccessfulNetverify;
+@property (nonatomic, assign) BOOL initiateSuccessfulDocumentVerification;
+@property (nonatomic, assign) BOOL initiateSuccessfulAuthentication;
+
+@end
+
 @implementation JumioMobileSDK
     
 #pragma mark - BAM Checkout
     
 - (void)initBAM:(CDVInvokedUrlCommand*)command
     {
+        self.initiateSuccessfulBAMCheckout = NO;
         self.callbackId = command.callbackId;
         
         NSUInteger argc = [command.arguments count];
@@ -134,6 +144,7 @@
 
         @try {
             self.bamViewController = [[BAMCheckoutViewController alloc] initWithConfiguration: self.bamConfiguration];
+            self.initiateSuccessfulBAMCheckout = YES;
         } @catch (NSException *exception) {
             NSString *msg = [NSString stringWithFormat: @"Cancelled with exception %@: %@", exception.name, exception.reason];
             [self sendErrorMessage: msg];
@@ -144,7 +155,7 @@
     {
         self.callbackId = command.callbackId;
         
-        if (self.bamViewController == nil) {
+        if (self.bamViewController == nil && self.initiateSuccessfulBAMCheckout == NO) {
             [self sendErrorMessage: @"The BAM SDK is not initialized yet. Call initBAM() first."];
             return;
         }
@@ -156,6 +167,7 @@
     
 - (void)initNetverify:(CDVInvokedUrlCommand*)command {
         self.callbackId = command.callbackId;
+        self.initiateSuccessfulNetverify = NO;
         
         NSUInteger argc = [command.arguments count];
         if (argc < 3) {
@@ -317,7 +329,7 @@
     {
         self.callbackId = command.callbackId;
         
-        if (self.netverifyViewController == nil) {
+        if (self.netverifyViewController == nil && self.initiateSuccessfulNetverify == NO) {
             [self sendErrorMessage: @"The Netverify SDK is not initialized yet. Call initNetverify() first."];
             return;
         }
@@ -328,6 +340,11 @@
 #pragma mark - Authentication
 
 - (void)initAuthentication:(CDVInvokedUrlCommand*)command {
+    self.initiateSuccessfulAuthentication = NO;
+    self.authenticationController = nil;
+    self.authenticationScanViewController = nil;
+    self.authenticationConfiguration = nil;
+    
     self.callbackId = command.callbackId;
         
     NSUInteger argc = [command.arguments count];
@@ -387,7 +404,7 @@
 - (void)startAuthentication:(CDVInvokedUrlCommand*)command {
     self.callbackId = command.callbackId;
     
-    if (self.authenticationController == nil) {
+    if (self.authenticationController == nil && self.initiateSuccessfulAuthentication == NO) {
         [self sendErrorMessage: @"The Authentication SDK has not been initialized yet."];
         return;
     }
@@ -400,6 +417,7 @@
 - (void)initDocumentVerification:(CDVInvokedUrlCommand*)command
     {
         self.callbackId = command.callbackId;
+        self.initiateSuccessfulDocumentVerification = NO;
         
         NSUInteger argc = [command.arguments count];
         if (argc < 3) {
@@ -488,6 +506,7 @@
         
         @try {
             self.documentVerificationViewController = [[DocumentVerificationViewController alloc] initWithConfiguration: self.documentVerifcationConfiguration];
+            self.initiateSuccessfulDocumentVerification = YES;
         } @catch (NSException *exception) {
             NSString *msg = [NSString stringWithFormat: @"Cancelled with exception %@: %@", exception.name, exception.reason];
             [self sendErrorMessage: msg];
@@ -498,7 +517,7 @@
     {
         self.callbackId = command.callbackId;
         
-        if (self.documentVerificationViewController == nil) {
+        if (self.documentVerificationViewController == nil && self.initiateSuccessfulDocumentVerification == NO) {
             [self sendErrorMessage: @"The Document-Verification SDK is not initialized yet. Call initDocumentVerification() first."];
             return;
         }
@@ -510,6 +529,7 @@
 #pragma mark - BAM Checkout Delegates
     
 - (void) bamCheckoutViewController:(BAMCheckoutViewController *)controller didFinishScanWithCardInformation:(BAMCheckoutCardInformation *)cardInformation scanReference:(NSString *)scanReference {
+    self.initiateSuccessfulBAMCheckout = NO;
     NSDictionary *result = [[NSMutableDictionary alloc] init];
     
     if (cardInformation.cardType == BAMCheckoutCreditCardTypeVisa) {
@@ -549,6 +569,7 @@
 }
     
 - (void) bamCheckoutViewController:(BAMCheckoutViewController *)controller didCancelWithError:(NSError *)error scanReference:(NSString *)scanReference {
+    self.initiateSuccessfulBAMCheckout = NO;
     [self sendError: error scanReference: scanReference];
     [self.viewController dismissViewControllerAnimated: YES completion: nil];
 }
@@ -556,6 +577,8 @@
 #pragma mark - Netverify Delegates
     
 - (void)netverifyViewController:(NetverifyViewController *)netverifyViewController didFinishWithDocumentData:(NetverifyDocumentData *)documentData scanReference:(NSString *)scanReference {
+    self.initiateSuccessfulNetverify = NO;
+
     NSDictionary *result = [[NSMutableDictionary alloc] init];
     NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
     [formatter setDateFormat: @"yyyy-MM-dd'T'HH:mm:ss.SSS"];
@@ -647,10 +670,14 @@
 - (void)netverifyViewController:(NetverifyViewController *)netverifyViewController didFinishInitializingWithError:(NetverifyError *)error {
     if (error != nil) {
         [self sendNetverifyError: error scanReference: nil];
+        return;
     }
+
+    self.initiateSuccessfulNetverify = YES;
 }
     
 - (void)netverifyViewController:(NetverifyViewController *)netverifyViewController didCancelWithError:(NetverifyError *)error scanReference:(NSString *)scanReference {
+    self.initiateSuccessfulNetverify = NO;
     [self sendNetverifyError: error scanReference: scanReference];
     [self.viewController dismissViewControllerAnimated: YES completion: nil];
 }
@@ -659,6 +686,7 @@
 
 - (void)authenticationController:(nonnull AuthenticationController *)authenticationController didFinishInitializingScanViewController:(nonnull UIViewController *)scanViewController {
     self.authenticationScanViewController = scanViewController;
+    self.initiateSuccessfulAuthentication = YES;
     NSMutableDictionary* result = [[NSMutableDictionary alloc] init];
     
     CDVPluginResult *pluginResult = [CDVPluginResult resultWithStatus: CDVCommandStatus_OK messageAsDictionary: result];
@@ -666,6 +694,8 @@
 }
 
 - (void)authenticationController:(nonnull AuthenticationController *)authenticationController didFinishWithAuthenticationResult:(AuthenticationResult)authenticationResult transactionReference:(nonnull NSString *)transactionReference {
+    self.initiateSuccessfulAuthentication = NO;
+
     NSMutableDictionary *result = [[NSMutableDictionary alloc] init];
     if (authenticationResult == AuthenticationResultSuccess) {
         [result setValue: @"SUCCESS" forKey: @"authenticationResult"];
@@ -686,6 +716,7 @@
 }
 
 - (void)authenticationController:(nonnull AuthenticationController *)authenticationController didFinishWithError:(nonnull AuthenticationError *)error transactionReference:(NSString * _Nullable)transactionReference {
+    self.initiateSuccessfulAuthentication = NO;
     
     NSMutableDictionary *result = [[NSMutableDictionary alloc] init];
     [result setValue: error.code forKey: @"errorCode"];
@@ -714,6 +745,7 @@
 #pragma mark - Document Verification Delegates
     
 - (void) documentVerificationViewController:(DocumentVerificationViewController *)documentVerificationViewController didFinishWithScanReference:(NSString *)scanReference {
+    self.initiateSuccessfulDocumentVerification = NO;
     NSDictionary *result = [NSDictionary dictionaryWithObject: scanReference forKey: @"scanReference"];
     CDVPluginResult *pluginResult = [CDVPluginResult resultWithStatus: CDVCommandStatus_ERROR messageAsDictionary: result];
     [self.commandDelegate sendPluginResult: pluginResult callbackId: self.callbackId];
@@ -721,6 +753,7 @@
 }
     
 - (void) documentVerificationViewController:(DocumentVerificationViewController *)documentVerificationViewController didFinishWithError:(DocumentVerificationError *)error {
+    self.initiateSuccessfulDocumentVerification = NO;
     [self sendDocumentVerificationError: error scanReference: nil];
     [self.viewController dismissViewControllerAnimated: YES completion: nil];
 }
