@@ -59,6 +59,7 @@ var app = {
 		}, {
 			// Customization iOS only
 			//disableBlur: true,
+			//enableDarkMode: true,
 			//backgroundColor: "#ff0000",
 			//foregroundColor: "#ff0000",
 			//tintColor: "#ff0000",
@@ -78,7 +79,15 @@ var app = {
 			//positiveButtonTitleColor: "#ff0000",
 			//negativeButtonBackgroundColor: "#ff0000",
 			//negativeButtonBorderColor: "#ff0000",
-			//negativeButtonTitleColor: "#ff0000"
+			//negativeButtonTitleColor: "#ff0000",
+			//scanOverlayStandardColor: "#ff0000",
+			//scanOverlayValidColor: "#ff0000",
+			//scanOverlayInvalidColor: "#ff0000",
+			//scanBackgroundColor: "#ff0000",
+			//faceOvalColor: "#ff0000",
+			//faceProgressColor: "#ff0000",
+			//faceFeedbackBackgroundColor: "#ff0000",
+			//faceFeedbackTextColor: "#ff0000"
 		});
 
 		Jumio.startNetverify(function(documentData) {
@@ -97,6 +106,21 @@ var app = {
 			//userReference: "UserReference",
 			//callbackUrl: "URL",
 			//authenticationTransactionReference: "AuthenticationTransactionReference"
+		}, {
+			// Customization iOS only
+			//disableBlur: true,
+			//enableDarkMode: true,
+			//backgroundColor: "#ff0000",
+			//tintColor: "#ff0000",
+			//barTintColor: "#ff0000",
+			//textTitleColor: "#ff0000",
+			//positiveButtonBackgroundColor: "#ff0000",
+			//positiveButtonBorderColor: "#ff0000",
+			//positiveButtonTitleColor: "#ff0000",
+			//faceOvalColor: "#ff0000",
+			//faceProgressColor: "#ff0000",
+			//faceFeedbackBackgroundColor: "#ff0000",
+			//faceFeedbackTextColor: "#ff0000"
 		});
 	},
 
@@ -124,7 +148,19 @@ var app = {
 			//cameraPosition: "back"
 		}, {
 			// Customization iOS only
-			// see Jumio.initNetverify above
+			//disableBlur: true,
+			//enableDarkMode: true,
+			//backgroundColor: "#ff0000",
+			//foregroundColor: "#ff0000",
+			//tintColor: "#ff0000",
+			//barTintColor: "#ff0000",
+			//textTitleColor: "#ff0000",
+			//positiveButtonBackgroundColor: "#ff0000",
+			//positiveButtonBorderColor: "#ff0000",
+			//positiveButtonTitleColor: "#ff0000",
+			//negativeButtonBackgroundColor: "#ff0000",
+			//negativeButtonBorderColor: "#ff0000",
+			//negativeButtonTitleColor: "#ff0000"
 		});
 
 		Jumio.startDocumentVerification(function(documentData) {
@@ -151,7 +187,7 @@ var app = {
 			//cameraPosition: "back",
 			//cardTypes: ["VISA", "MASTER_CARD", "AMERICAN_EXPRESS", "CHINA_UNIONPAY", "DINERS_CLUB", "DISCOVER", "JCB"]
 		}, {
-		 // Customization iOS only
+		 	// Customization iOS only
 			//disableBlur: true,
 			//backgroundColor: "#ff0000",
 			//foregroundColor: "#ff0000",

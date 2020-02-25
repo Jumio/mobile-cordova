@@ -10,6 +10,6 @@ cordova.define('cordova/plugin_list', function(require, exports, module) {
     }
   ];
   module.exports.metadata = {
-    "cordova-plugin-jumio-mobilesdk": "3.3.0"
+    "cordova-plugin-jumio-mobilesdk": "3.5.0"
   };
 });

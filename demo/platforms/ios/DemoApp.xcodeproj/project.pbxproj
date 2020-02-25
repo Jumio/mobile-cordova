@@ -8,14 +8,14 @@
 
 /* Begin PBXBuildFile section */
 		0207DA581B56EA530066E2B4 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0207DA571B56EA530066E2B4 /* Images.xcassets */; };
-		03E2D350438044DA8BF5A0AC /* JumioMobileSDK.m in Sources */ = {isa = PBXBuildFile; fileRef = 91C059E91AB3464A9F75595C /* JumioMobileSDK.m */; };
 		1D3623260D0F684500981E51 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 1D3623250D0F684500981E51 /* AppDelegate.m */; };
 		1D60589B0D05DD56006BFB54 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main.m */; };
 		301BF552109A68D80062928A /* libCordova.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 301BF535109A57CC0062928A /* libCordova.a */; settings = {ATTRIBUTES = (Required, ); }; };
 		302D95F114D2391D003F00A1 /* MainViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 302D95EF14D2391D003F00A1 /* MainViewController.m */; };
 		302D95F214D2391D003F00A1 /* MainViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 302D95F014D2391D003F00A1 /* MainViewController.xib */; };
+		63C02D6C1CE24B521134F5ED /* Pods_DemoApp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F7BAAA4B4E56F83992B68D20 /* Pods_DemoApp.framework */; };
 		6AFF5BF91D6E424B00AB3073 /* CDVLaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6AFF5BF81D6E424B00AB3073 /* CDVLaunchScreen.storyboard */; };
-		D28A59DB3F474557582EA18B /* libPods-DemoApp.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 009E85478203AD5500DC626B /* libPods-DemoApp.a */; };
+		CC469C626FB84EF6AD44CBF7 /* JumioMobileSDK.m in Sources */ = {isa = PBXBuildFile; fileRef = 683E7271C428404D8A746C26 /* JumioMobileSDK.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -43,11 +43,12 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		009E85478203AD5500DC626B /* libPods-DemoApp.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-DemoApp.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		0207DA571B56EA530066E2B4 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = DemoApp/Images.xcassets; sourceTree = SOURCE_ROOT; };
 		1D3623240D0F684500981E51 /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		1D3623250D0F684500981E51 /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		1D6058910D05DD3D006BFB54 /* DemoApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DemoApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		22437AF9BB63848AF16B5F9A /* Pods-DemoApp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DemoApp.debug.xcconfig"; path = "Target Support Files/Pods-DemoApp/Pods-DemoApp.debug.xcconfig"; sourceTree = "<group>"; };
+		27D1924766E9EB797F810E2E /* Pods-DemoApp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DemoApp.release.xcconfig"; path = "Target Support Files/Pods-DemoApp/Pods-DemoApp.release.xcconfig"; sourceTree = "<group>"; };
 		29B97316FDCFA39411CA2CEA /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		301BF52D109A57CC0062928A /* CordovaLib.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; path = CordovaLib/CordovaLib.xcodeproj; sourceTree = "<group>"; };
 		301BF56E109A69640062928A /* www */ = {isa = PBXFileReference; lastKnownFileType = folder; path = www; sourceTree = SOURCE_ROOT; };
@@ -58,15 +59,14 @@
 		3047A5101AB8059700498E2A /* build-release.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "build-release.xcconfig"; path = "cordova/build-release.xcconfig"; sourceTree = SOURCE_ROOT; };
 		3047A5111AB8059700498E2A /* build.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = build.xcconfig; path = cordova/build.xcconfig; sourceTree = SOURCE_ROOT; };
 		32CA4F630368D1EE00C91783 /* DemoApp-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "DemoApp-Prefix.pch"; sourceTree = "<group>"; };
+		3C12989C1870453A89AEC5E8 /* JumioMobileSDK.h */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = sourcecode.c.h; name = JumioMobileSDK.h; path = "cordova-plugin-jumio-mobilesdk/JumioMobileSDK.h"; sourceTree = "<group>"; };
+		683E7271C428404D8A746C26 /* JumioMobileSDK.m */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = sourcecode.c.objc; name = JumioMobileSDK.m; path = "cordova-plugin-jumio-mobilesdk/JumioMobileSDK.m"; sourceTree = "<group>"; };
 		6AFF5BF81D6E424B00AB3073 /* CDVLaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = CDVLaunchScreen.storyboard; path = DemoApp/CDVLaunchScreen.storyboard; sourceTree = SOURCE_ROOT; };
-		6CD587100DA66AAB2B967F06 /* Pods-DemoApp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DemoApp.debug.xcconfig"; path = "Target Support Files/Pods-DemoApp/Pods-DemoApp.debug.xcconfig"; sourceTree = "<group>"; };
 		8D1107310486CEB800E47090 /* DemoApp-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "DemoApp-Info.plist"; path = "DemoApp/DemoApp-Info.plist"; plistStructureDefinitionIdentifier = "com.apple.xcode.plist.structure-definition.iphone.info-plist"; sourceTree = SOURCE_ROOT; };
-		91C059E91AB3464A9F75595C /* JumioMobileSDK.m */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = sourcecode.c.objc; name = JumioMobileSDK.m; path = "cordova-plugin-jumio-mobilesdk/JumioMobileSDK.m"; sourceTree = "<group>"; };
-		BCAFC70EB37F463AA0883B0E /* JumioMobileSDK.h */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = sourcecode.c.h; name = JumioMobileSDK.h; path = "cordova-plugin-jumio-mobilesdk/JumioMobileSDK.h"; sourceTree = "<group>"; };
-		D719E3A9DA6DC8F7FF4C8E22 /* Pods-DemoApp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DemoApp.release.xcconfig"; path = "Target Support Files/Pods-DemoApp/Pods-DemoApp.release.xcconfig"; sourceTree = "<group>"; };
 		EB87FDF31871DA8E0020F90C /* www */ = {isa = PBXFileReference; lastKnownFileType = folder; name = www; path = ../../www; sourceTree = "<group>"; };
 		EB87FDF41871DAF40020F90C /* config.xml */ = {isa = PBXFileReference; lastKnownFileType = text.xml; name = config.xml; path = ../../config.xml; sourceTree = "<group>"; };
 		ED33DF2A687741AEAF9F8254 /* Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "Bridging-Header.h"; path = "Bridging-Header.h"; sourceTree = "<group>"; };
+		F7BAAA4B4E56F83992B68D20 /* Pods_DemoApp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_DemoApp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		F840E1F0165FE0F500CFE078 /* config.xml */ = {isa = PBXFileReference; lastKnownFileType = text.xml; name = config.xml; path = DemoApp/config.xml; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -76,7 +76,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				301BF552109A68D80062928A /* libCordova.a in Frameworks */,
-				D28A59DB3F474557582EA18B /* libPods-DemoApp.a in Frameworks */,
+				63C02D6C1CE24B521134F5ED /* Pods_DemoApp.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -104,6 +104,16 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		1FB685F4CCC455D754CC785F /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				22437AF9BB63848AF16B5F9A /* Pods-DemoApp.debug.xcconfig */,
+				27D1924766E9EB797F810E2E /* Pods-DemoApp.release.xcconfig */,
+			);
+			name = Pods;
+			path = Pods;
+			sourceTree = "<group>";
+		};
 		29B97314FDCFA39411CA2CEA = {
 			isa = PBXGroup;
 			children = (
@@ -117,7 +127,7 @@
 				29B97317FDCFA39411CA2CEA /* Resources */,
 				29B97323FDCFA39411CA2CEA /* Frameworks */,
 				19C28FACFE9D520D11CA2CBB /* Products */,
-				680B13306382566F7945E438 /* Pods */,
+				1FB685F4CCC455D754CC785F /* Pods */,
 			);
 			name = CustomTemplate;
 			sourceTree = "<group>";
@@ -148,7 +158,7 @@
 		29B97323FDCFA39411CA2CEA /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				009E85478203AD5500DC626B /* libPods-DemoApp.a */,
+				F7BAAA4B4E56F83992B68D20 /* Pods_DemoApp.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -175,22 +185,12 @@
 		307C750510C5A3420062BCA9 /* Plugins */ = {
 			isa = PBXGroup;
 			children = (
-				91C059E91AB3464A9F75595C /* JumioMobileSDK.m */,
-				BCAFC70EB37F463AA0883B0E /* JumioMobileSDK.h */,
+				683E7271C428404D8A746C26 /* JumioMobileSDK.m */,
+				3C12989C1870453A89AEC5E8 /* JumioMobileSDK.h */,
 			);
 			name = Plugins;
 			path = DemoApp/Plugins;
 			sourceTree = SOURCE_ROOT;
-		};
-		680B13306382566F7945E438 /* Pods */ = {
-			isa = PBXGroup;
-			children = (
-				6CD587100DA66AAB2B967F06 /* Pods-DemoApp.debug.xcconfig */,
-				D719E3A9DA6DC8F7FF4C8E22 /* Pods-DemoApp.release.xcconfig */,
-			);
-			name = Pods;
-			path = Pods;
-			sourceTree = "<group>";
 		};
 		EB87FDF11871DA420020F90C /* Staging */ = {
 			isa = PBXGroup;
@@ -208,12 +208,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 1D6058960D05DD3E006BFB54 /* Build configuration list for PBXNativeTarget "DemoApp" */;
 			buildPhases = (
-				39A6CD46553E61FE851461D1 /* [CP] Check Pods Manifest.lock */,
+				3129C2E3F6E9D6B33C15F08D /* [CP] Check Pods Manifest.lock */,
 				304B58A110DAC018002A0835 /* Copy www directory */,
 				1D60588D0D05DD3D006BFB54 /* Resources */,
 				1D60588E0D05DD3D006BFB54 /* Sources */,
 				1D60588F0D05DD3D006BFB54 /* Frameworks */,
-				DB29A4D4F073C4701B0229FB /* [CP] Embed Pods Frameworks */,
+				E887307E62745CFC84A45200 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -304,7 +304,7 @@
 			shellScript = "\"$SRCROOT/DemoApp/Scripts/copy-www-build-step.sh\"";
 			showEnvVarsInLog = 0;
 		};
-		39A6CD46553E61FE851461D1 /* [CP] Check Pods Manifest.lock */ = {
+		3129C2E3F6E9D6B33C15F08D /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -326,20 +326,21 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		DB29A4D4F073C4701B0229FB /* [CP] Embed Pods Frameworks */ = {
+		E887307E62745CFC84A45200 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-DemoApp/Pods-DemoApp-frameworks.sh",
-				"${PODS_ROOT}/JumioMobileSDK/JumioMobileSDK-3.3.0/JumioCore.framework",
-				"${PODS_ROOT}/JumioMobileSDK/JumioMobileSDK-3.3.0/BAMCheckout.framework",
-				"${PODS_ROOT}/JumioMobileSDK/JumioMobileSDK-3.3.0/Netverify.framework",
-				"${PODS_ROOT}/JumioMobileSDK/JumioMobileSDK-3.3.0/NetverifyBarcode.framework",
-				"${PODS_ROOT}/JumioMobileSDK/JumioMobileSDK-3.3.0/MicroBlink.framework",
-				"${PODS_ROOT}/JumioMobileSDK/JumioMobileSDK-3.3.0/NetverifyFace.framework",
-				"${PODS_ROOT}/JumioMobileSDK/JumioMobileSDK-3.3.0/ZoomAuthenticationHybrid.framework",
+				"${PODS_ROOT}/JumioMobileSDK/JumioMobileSDK-3.5.0/JumioCore.framework",
+				"${PODS_ROOT}/JumioMobileSDK/JumioMobileSDK-3.5.0/BAMCheckout.framework",
+				"${PODS_ROOT}/JumioMobileSDK/JumioMobileSDK-3.5.0/Netverify.framework",
+				"${PODS_ROOT}/JumioMobileSDK/JumioMobileSDK-3.5.0/NetverifyBarcode.framework",
+				"${PODS_ROOT}/JumioMobileSDK/JumioMobileSDK-3.5.0/MicroBlink.framework",
+				"${PODS_ROOT}/JumioMobileSDK/JumioMobileSDK-3.5.0/NetverifyFace.framework",
+				"${PODS_ROOT}/JumioMobileSDK/JumioMobileSDK-3.5.0/ZoomAuthentication.framework",
+				"${PODS_ROOT}/JumioMobileSDK/JumioMobileSDK-3.5.0/DocumentVerification.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
@@ -349,7 +350,8 @@
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/NetverifyBarcode.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/MicroBlink.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/NetverifyFace.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ZoomAuthenticationHybrid.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ZoomAuthentication.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/DocumentVerification.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -366,7 +368,7 @@
 				1D60589B0D05DD56006BFB54 /* main.m in Sources */,
 				1D3623260D0F684500981E51 /* AppDelegate.m in Sources */,
 				302D95F114D2391D003F00A1 /* MainViewController.m in Sources */,
-				03E2D350438044DA8BF5A0AC /* JumioMobileSDK.m in Sources */,
+				CC469C626FB84EF6AD44CBF7 /* JumioMobileSDK.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -464,6 +466,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = com.jumio.cordova.demo;
 				SDKROOT = iphoneos;
@@ -505,6 +508,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.jumio.cordova.demo;
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = NO;

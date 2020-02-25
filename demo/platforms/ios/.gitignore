@@ -3,3 +3,6 @@
 *.pbxuser
 .DS_Store
 build/
+cordova/
+CordovaLib/
+Pods/

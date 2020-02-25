@@ -1,11 +1,20 @@
 {
-    "declarations": {},
-    "sources": {},
+    "declarations": {
+        "use_frameworks!": {
+            "declaration": "use_frameworks!",
+            "count": 1
+        }
+    },
+    "sources": {
+        "https://github.com/CocoaPods/Specs.git": {
+            "source": "https://github.com/CocoaPods/Specs.git",
+            "count": 1
+        }
+    },
     "libraries": {
         "JumioMobileSDK": {
             "name": "JumioMobileSDK",
-            "type": "podspec",
-            "spec": "3.3.0",
+            "spec": "3.5.0",
             "count": 1
         }
     }

@@ -8,6 +8,7 @@
 @import Netverify;
 @import NetverifyFace;
 @import BAMCheckout;
+@import DocumentVerification;
 
 @interface JumioMobileSDK : CDVPlugin <NetverifyViewControllerDelegate, AuthenticationControllerDelegate, BAMCheckoutViewControllerDelegate, DocumentVerificationViewControllerDelegate>
 

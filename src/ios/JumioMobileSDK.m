@@ -32,15 +32,22 @@
         NSString *apiToken = [command.arguments objectAtIndex: 0];
         NSString *apiSecret = [command.arguments objectAtIndex: 1];
         NSString *dataCenterString = [command.arguments objectAtIndex: 2];
+        
+        JumioDataCenter jumioDataCenter = JumioDataCenterUS;
         NSString *dataCenterLowercase = [dataCenterString lowercaseString];
-        JumioDataCenter dataCenter = ([dataCenterLowercase isEqualToString: @"us"]) ? JumioDataCenterUS : JumioDataCenterEU;
+        
+        if ([dataCenterLowercase isEqualToString: @"eu"]) {
+          jumioDataCenter = JumioDataCenterEU;
+        } else if ([dataCenterLowercase isEqualToString: @"sg"]) {
+          jumioDataCenter = JumioDataCenterSG;
+        }
         
         // Initialization
         self.bamConfiguration = [BAMCheckoutConfiguration new];
         self.bamConfiguration.delegate = self;
         self.bamConfiguration.apiToken = apiToken;
         self.bamConfiguration.apiSecret = apiSecret;
-        self.bamConfiguration.dataCenter = dataCenter;
+        self.bamConfiguration.dataCenter = jumioDataCenter;
         
         // Configuration
         NSDictionary *options = [command.arguments objectAtIndex: 3];
@@ -107,7 +114,8 @@
         if (![customization isEqual:[NSNull null]]) {
             for (NSString *key in customization) {
                 if ([key isEqualToString: @"disableBlur"]) {
-                    [[BAMCheckoutBaseView jumioAppearance] setDisableBlur: @YES];
+                    BOOL disableBlur = [self getBoolValue:[customization objectForKey: key]];
+                    [[BAMCheckoutBaseView jumioAppearance] setDisableBlur: disableBlur ? @YES : @NO];
                 } else {
                     UIColor *color = [self colorWithHexString: [customization objectForKey: key]];
                     
@@ -178,15 +186,22 @@
         NSString *apiToken = [command.arguments objectAtIndex: 0];
         NSString *apiSecret = [command.arguments objectAtIndex: 1];
         NSString *dataCenterString = [command.arguments objectAtIndex: 2];
+
+        JumioDataCenter jumioDataCenter = JumioDataCenterUS;
         NSString *dataCenterLowercase = [dataCenterString lowercaseString];
-        JumioDataCenter dataCenter = ([dataCenterLowercase isEqualToString: @"us"]) ? JumioDataCenterUS : JumioDataCenterEU;
+        
+        if ([dataCenterLowercase isEqualToString: @"eu"]) {
+          jumioDataCenter = JumioDataCenterEU;
+        } else if ([dataCenterLowercase isEqualToString: @"sg"]) {
+          jumioDataCenter = JumioDataCenterSG;
+        }
         
         // Initialization
         self.netverifyConfiguration = [NetverifyConfiguration new];
         self.netverifyConfiguration.delegate = self;
         self.netverifyConfiguration.apiToken = apiToken;
         self.netverifyConfiguration.apiSecret = apiSecret;
-        self.netverifyConfiguration.dataCenter = dataCenter;
+        self.netverifyConfiguration.dataCenter = jumioDataCenter;
         
         // Configuration
         NSDictionary *options = [command.arguments objectAtIndex: 3];
@@ -260,7 +275,12 @@
         if (![customization isEqual:[NSNull null]]) {
             for (NSString *key in customization) {
                 if ([key isEqualToString: @"disableBlur"]) {
-                    [[NetverifyBaseView jumioAppearance] setDisableBlur: @YES];
+                    BOOL disableBlur = [self getBoolValue:[customization objectForKey: key]];
+                    [[NetverifyBaseView jumioAppearance] setDisableBlur: disableBlur ? @YES : @NO];
+
+                } else if ([key isEqualToString: @"enableDarkMode"]) {
+                    BOOL enableDarkMode = [self getBoolValue:[customization objectForKey: key]];
+                    [[NetverifyBaseView jumioAppearance] setEnableDarkMode: enableDarkMode ? @YES : @NO];
                 } else {
                     UIColor *color = [self colorWithHexString: [customization objectForKey: key]];
                     
@@ -312,6 +332,14 @@
                         [[NetverifyScanOverlayView jumioAppearance] setColorOverlayInvalid: color];
                     } else if ([key isEqualToString: @"scanBackgroundColor"]) {
                         [[NetverifyScanOverlayView jumioAppearance] setScanBackgroundColor: color];
+                    } else if ([key isEqualToString: @"faceOvalColor"]) {
+                        [[NetverifyScanOverlayView jumioAppearance] setFaceOvalColor: color];
+                    } else if ([key isEqualToString: @"faceProgressColor"]) {
+                         [[NetverifyScanOverlayView jumioAppearance] setFaceProgressColor: color];
+                    } else if ([key isEqualToString: @"faceFeedbackBackgroundColor"]) {
+                         [[NetverifyScanOverlayView jumioAppearance] setFaceFeedbackBackgroundColor: color];
+                    } else if ([key isEqualToString: @"faceFeedbackTextColor"]) {
+                         [[NetverifyScanOverlayView jumioAppearance] setFaceFeedbackTextColor: color];
                     }
                 }
             }
@@ -356,15 +384,22 @@
     NSString *apiToken = [command.arguments objectAtIndex: 0];
     NSString *apiSecret = [command.arguments objectAtIndex: 1];
     NSString *dataCenterString = [command.arguments objectAtIndex: 2];
+
+    JumioDataCenter jumioDataCenter = JumioDataCenterUS;
     NSString *dataCenterLowercase = [dataCenterString lowercaseString];
-    JumioDataCenter dataCenter = ([dataCenterLowercase isEqualToString: @"us"]) ? JumioDataCenterUS : JumioDataCenterEU;
+    
+    if ([dataCenterLowercase isEqualToString: @"eu"]) {
+      jumioDataCenter = JumioDataCenterEU;
+    } else if ([dataCenterLowercase isEqualToString: @"sg"]) {
+      jumioDataCenter = JumioDataCenterSG;
+    }
     
     // Initialization
     self.authenticationConfiguration = [AuthenticationConfiguration new];
     self.authenticationConfiguration.delegate = self;
     self.authenticationConfiguration.apiToken = apiToken;
     self.authenticationConfiguration.apiSecret = apiSecret;
-    self.authenticationConfiguration.dataCenter = dataCenter;
+    self.authenticationConfiguration.dataCenter = jumioDataCenter;
 
     // Configuration
     NSString *enrollmentTransactionReference = nil;
@@ -381,6 +416,48 @@
                 self.authenticationConfiguration.callbackUrl = [configuration objectForKey: key];
             } else if ([key isEqualToString:@"userReference"]) {
                 self.authenticationConfiguration.userReference = [configuration objectForKey:key];
+            }
+        }
+    }
+    
+    // Customization
+    NSDictionary *customization = [command.arguments objectAtIndex: 4];
+    if (![customization isEqual:[NSNull null]]) {
+        for (NSString *key in customization) {
+            if ([key isEqualToString: @"disableBlur"]) {
+                BOOL disableBlur = [self getBoolValue:[customization objectForKey: key]];
+                [[JumioBaseView jumioAppearance] setDisableBlur: disableBlur ? @YES : @NO];
+            } else if ([key isEqualToString: @"enableDarkMode"]) {
+                BOOL enableDarkMode = [self getBoolValue:[customization objectForKey: key]];
+                [[JumioBaseView jumioAppearance] setEnableDarkMode: enableDarkMode ? @YES : @NO];
+            } else {
+                UIColor *color = [self colorWithHexString: [customization objectForKey: key]];
+                
+                if ([key isEqualToString: @"backgroundColor"]) {
+                    [[JumioBaseView jumioAppearance] setBackgroundColor: color];
+                } else if ([key isEqualToString: @"tintColor"]) {
+                    [[UINavigationBar jumioAppearance] setTintColor: color];
+                } else if ([key isEqualToString: @"barTintColor"]) {
+                    [[UINavigationBar jumioAppearance] setBarTintColor: color];
+                } else if ([key isEqualToString: @"textTitleColor"]) {
+                    [[UINavigationBar jumioAppearance] setTitleTextAttributes: @{NSForegroundColorAttributeName: color}];
+                } else if ([key isEqualToString: @"foregroundColor"]) {
+                    [[JumioBaseView jumioAppearance] setForegroundColor: color];
+                } else if ([key isEqualToString: @"positiveButtonBackgroundColor"]) {
+                    [[JumioPositiveButton jumioAppearance] setBackgroundColor: color forState:UIControlStateNormal];
+                } else if ([key isEqualToString: @"positiveButtonBorderColor"]) {
+                    [[JumioPositiveButton jumioAppearance] setBorderColor: color];
+                } else if ([key isEqualToString: @"positiveButtonTitleColor"]) {
+                    [[JumioPositiveButton jumioAppearance] setTitleColor: color forState:UIControlStateNormal];
+                } else if ([key isEqualToString: @"faceOvalColor"]) {
+                    [[JumioScanOverlayView jumioAppearance] setFaceOvalColor: color];
+                } else if ([key isEqualToString: @"faceProgressColor"]) {
+                     [[JumioScanOverlayView jumioAppearance] setFaceProgressColor: color];
+                } else if ([key isEqualToString: @"faceFeedbackBackgroundColor"]) {
+                     [[JumioScanOverlayView jumioAppearance] setFaceFeedbackBackgroundColor: color];
+                } else if ([key isEqualToString: @"faceFeedbackTextColor"]) {
+                     [[JumioScanOverlayView jumioAppearance] setFaceFeedbackTextColor: color];
+                }
             }
         }
     }
@@ -428,15 +505,22 @@
         NSString *apiToken = [command.arguments objectAtIndex: 0];
         NSString *apiSecret = [command.arguments objectAtIndex: 1];
         NSString *dataCenterString = [command.arguments objectAtIndex: 2];
+
+        JumioDataCenter jumioDataCenter = JumioDataCenterUS;
         NSString *dataCenterLowercase = [dataCenterString lowercaseString];
-        JumioDataCenter dataCenter = ([dataCenterLowercase isEqualToString: @"us"]) ? JumioDataCenterUS : JumioDataCenterEU;
+        
+        if ([dataCenterLowercase isEqualToString: @"eu"]) {
+          jumioDataCenter = JumioDataCenterEU;
+        } else if ([dataCenterLowercase isEqualToString: @"sg"]) {
+          jumioDataCenter = JumioDataCenterSG;
+        }
         
         // Initialization
         self.documentVerifcationConfiguration = [DocumentVerificationConfiguration new];
         self.documentVerifcationConfiguration.delegate = self;
         self.documentVerifcationConfiguration.apiToken = apiToken;
         self.documentVerifcationConfiguration.apiSecret = apiSecret;
-        self.documentVerifcationConfiguration.dataCenter = dataCenter;
+        self.documentVerifcationConfiguration.dataCenter = jumioDataCenter;
         
         // Configuration
         NSDictionary *options = [command.arguments objectAtIndex: 3];
@@ -473,12 +557,16 @@
         if (![customization isEqual:[NSNull null]]) {
             for (NSString *key in customization) {
                 if ([key isEqualToString: @"disableBlur"]) {
-                    [[NetverifyBaseView jumioAppearance] setDisableBlur: @YES];
+                    BOOL disableBlur = [self getBoolValue:[customization objectForKey: key]];
+                    [[DocumentVerificationBaseView jumioAppearance] setDisableBlur: disableBlur ? @YES : @NO];
+                } else if ([key isEqualToString: @"enableDarkMode"]) {
+                    BOOL enableDarkMode = [self getBoolValue:[customization objectForKey: key]];
+                    [[DocumentVerificationBaseView jumioAppearance] setEnableDarkMode: enableDarkMode ? @YES : @NO];
                 } else {
                     UIColor *color = [self colorWithHexString: [customization objectForKey: key]];
                     
                     if ([key isEqualToString: @"backgroundColor"]) {
-                        [[NetverifyBaseView jumioAppearance] setBackgroundColor: color];
+                        [[DocumentVerificationBaseView jumioAppearance] setBackgroundColor: color];
                     } else if ([key isEqualToString: @"tintColor"]) {
                         [[UINavigationBar jumioAppearance] setTintColor: color];
                     } else if ([key isEqualToString: @"barTintColor"]) {
@@ -486,19 +574,19 @@
                     } else if ([key isEqualToString: @"textTitleColor"]) {
                         [[UINavigationBar jumioAppearance] setTitleTextAttributes: @{NSForegroundColorAttributeName: color}];
                     } else if ([key isEqualToString: @"foregroundColor"]) {
-                        [[NetverifyBaseView jumioAppearance] setForegroundColor: color];
+                        [[DocumentVerificationBaseView jumioAppearance] setForegroundColor: color];
                     } else if ([key isEqualToString: @"positiveButtonBackgroundColor"]) {
-                        [[NetverifyPositiveButton jumioAppearance] setBackgroundColor: color forState:UIControlStateNormal];
+                        [[DocumentVerificationPositiveButton jumioAppearance] setBackgroundColor: color forState:UIControlStateNormal];
                     } else if ([key isEqualToString: @"positiveButtonBorderColor"]) {
-                        [[NetverifyPositiveButton jumioAppearance] setBorderColor: color];
+                        [[DocumentVerificationPositiveButton jumioAppearance] setBorderColor: color];
                     } else if ([key isEqualToString: @"positiveButtonTitleColor"]) {
-                        [[NetverifyPositiveButton jumioAppearance] setTitleColor: color forState:UIControlStateNormal];
+                        [[DocumentVerificationPositiveButton jumioAppearance] setTitleColor: color forState:UIControlStateNormal];
                     } else if ([key isEqualToString: @"negativeButtonBackgroundColor"]) {
-                        [[NetverifyNegativeButton jumioAppearance] setBackgroundColor: color forState:UIControlStateNormal];
+                        [[DocumentVerificationNegativeButton jumioAppearance] setBackgroundColor: color forState:UIControlStateNormal];
                     } else if ([key isEqualToString: @"negativeButtonBorderColor"]) {
-                        [[NetverifyNegativeButton jumioAppearance] setBorderColor: color];
+                        [[DocumentVerificationNegativeButton jumioAppearance] setBorderColor: color];
                     } else if ([key isEqualToString: @"negativeButtonTitleColor"]) {
-                        [[NetverifyNegativeButton jumioAppearance] setTitleColor: color forState:UIControlStateNormal];
+                        [[DocumentVerificationNegativeButton jumioAppearance] setTitleColor: color forState:UIControlStateNormal];
                     }
                 }
             }

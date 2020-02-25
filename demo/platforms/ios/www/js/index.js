@@ -25,6 +25,9 @@ var app = {
 		document.getElementById("startAuthentication").addEventListener("click", this.startAuthentication);
 		document.getElementById("startBAM").addEventListener("click", this.startBAM);
 		document.getElementById("startDocumentVerification").addEventListener("click", this.startDocumentVerification);
+		document.getElementById("log").addEventListener("change",function unhide() {
+			document.getElementById("logtitle").hidden = true
+		})			
     },
 
     // deviceready Event Handler
@@ -33,7 +36,7 @@ var app = {
     // 'pause', 'resume', etc.
     onDeviceReady: function() {
 		
-    },
+	},
 
 	startNetverify: function() {
 		// Netverify / Fastfill
@@ -50,10 +53,13 @@ var app = {
 			//cameraPosition: "back",
 			//preselectedDocumentVariant: "plastic",
 			//documentTypes: ["PASSPORT", "DRIVER_LICENSE", "IDENTITY_CARD", "VISA"],
+			//enableWatchlistScreening: ["enabled", "disabled" || "default"],
+			//watchlistSearchProfile: "YOURPROFILENAME"
             //offlineToken: ""
 		}, {
 			// Customization iOS only
 			//disableBlur: true,
+			//enableDarkMode: true,
 			//backgroundColor: "#ff0000",
 			//foregroundColor: "#ff0000",
 			//tintColor: "#ff0000",
@@ -73,31 +79,58 @@ var app = {
 			//positiveButtonTitleColor: "#ff0000",
 			//negativeButtonBackgroundColor: "#ff0000",
 			//negativeButtonBorderColor: "#ff0000",
-			//negativeButtonTitleColor: "#ff0000"
+			//negativeButtonTitleColor: "#ff0000",
+			//scanOverlayStandardColor: "#ff0000",
+			//scanOverlayValidColor: "#ff0000",
+			//scanOverlayInvalidColor: "#ff0000",
+			//scanBackgroundColor: "#ff0000",
+			//faceOvalColor: "#ff0000",
+			//faceProgressColor: "#ff0000",
+			//faceFeedbackBackgroundColor: "#ff0000",
+			//faceFeedbackTextColor: "#ff0000"
 		});
 
 		Jumio.startNetverify(function(documentData) {
-			alert(JSON.stringify(documentData));
+			// alert(JSON.stringify(documentData));
+			document.getElementById("log").textContent = JSON.stringify(documentData);
 		}, function(error) {
-		    alert(JSON.stringify(error));
+			// alert(JSON.stringify(error));
+			document.getElementById("log").textContent = JSON.stringify(error);
 		});
 	},
 
-	initAuthentication: function() {
-    	// Authentication
-    	Jumio.initAuthentication('API_TOKEN', 'API_SECRET', 'DATACENTER', {
+    initAuthentication: function() {
+		// Authentication
+		Jumio.initAuthentication('API_TOKEN', 'API_SECRET', 'DATACENTER', {
     		enrollmentTransactionReference: "EnrollmentTransactionReference",
-    		//userReference: "UserReference",
-    		//callbackUrl: "URL"
-    	});
-    },
+			//userReference: "UserReference",
+			//callbackUrl: "URL",
+			//authenticationTransactionReference: "AuthenticationTransactionReference"
+		}, {
+			// Customization iOS only
+			//disableBlur: true,
+			//enableDarkMode: true,
+			//backgroundColor: "#ff0000",
+			//tintColor: "#ff0000",
+			//barTintColor: "#ff0000",
+			//textTitleColor: "#ff0000",
+			//positiveButtonBackgroundColor: "#ff0000",
+			//positiveButtonBorderColor: "#ff0000",
+			//positiveButtonTitleColor: "#ff0000",
+			//faceOvalColor: "#ff0000",
+			//faceProgressColor: "#ff0000",
+			//faceFeedbackBackgroundColor: "#ff0000",
+			//faceFeedbackTextColor: "#ff0000"
+		});
+	},
 
-    startAuthentication: function() {
+	startAuthentication: function() {
+		
     	Jumio.startAuthentication(function(documentData) {
-    			alert(JSON.stringify(documentData));
-    		}, function(error) {
-    			alert(JSON.stringify(error));
-    	});
+			document.getElementById("log").textContent = JSON.stringify(documentData);
+		}, function(error) {
+			document.getElementById("log").textContent = JSON.stringify(error);
+		});
     },
 	
 	startDocumentVerification: function() {
@@ -119,9 +152,9 @@ var app = {
 		});
 
 		Jumio.startDocumentVerification(function(documentData) {
-			alert(JSON.stringify(documentData));
+			document.getElementById("log").textContent = JSON.stringify(documentData);
 		}, function(error) {
-			alert(JSON.stringify(error));
+			document.getElementById("log").textContent = JSON.stringify(error);
 		});
 	},
 	
@@ -142,7 +175,7 @@ var app = {
 			//cameraPosition: "back",
 			//cardTypes: ["VISA", "MASTER_CARD", "AMERICAN_EXPRESS", "CHINA_UNIONPAY", "DINERS_CLUB", "DISCOVER", "JCB"]
 		}, {
-		 // Customization iOS only
+		 	// Customization iOS only
 			//disableBlur: true,
 			//backgroundColor: "#ff0000",
 			//foregroundColor: "#ff0000",
@@ -167,9 +200,9 @@ var app = {
 		});
 
 		Jumio.startBAM(function(cardInformation) {
-			alert(JSON.stringify(cardInformation));
+			document.getElementById("log").textContent = JSON.stringify(documentData);
 		}, function(error) {
-			alert(JSON.stringify(error));
+			document.getElementById("log").textContent = JSON.stringify(error);
 		});
 	}
 };

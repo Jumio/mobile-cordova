@@ -144,7 +144,13 @@ public class JumioMobileSDK extends CordovaPlugin {
 
 				String apiToken = data.getString(0);
 				String apiSecret = data.getString(1);
-				JumioDataCenter dataCenter = (data.getString(2).toLowerCase().equalsIgnoreCase("us")) ? JumioDataCenter.US : JumioDataCenter.EU;
+
+				JumioDataCenter dataCenter = null;
+				try {
+					dataCenter = JumioDataCenter.valueOf(data.getString(2).toUpperCase());
+				} catch (Exception e) {
+					throw new JSONException("Datacenter not valid: "+dataCenter);            
+				}
 
 				bamSDK = BamSDK.create(cordova.getActivity(), apiToken, apiSecret, dataCenter);
 			}
@@ -258,7 +264,13 @@ public class JumioMobileSDK extends CordovaPlugin {
 
 			String apiToken = data.getString(0);
 			String apiSecret = data.getString(1);
-			JumioDataCenter dataCenter = (data.getString(2).toLowerCase().equalsIgnoreCase("us")) ? JumioDataCenter.US : JumioDataCenter.EU;
+
+			JumioDataCenter dataCenter = null;
+			try {
+				dataCenter = JumioDataCenter.valueOf(data.getString(2).toUpperCase());
+			} catch (Exception e) {
+				throw new JSONException("Datacenter not valid: "+dataCenter);            
+			}
 
 			netverifySDK = NetverifySDK.create(cordova.getActivity(), apiToken, apiSecret, dataCenter);
 
@@ -379,7 +391,13 @@ public class JumioMobileSDK extends CordovaPlugin {
 
 			String apiToken = data.getString(0);
 			String apiSecret = data.getString(1);
-			JumioDataCenter dataCenter = (data.getString(2).toLowerCase().equalsIgnoreCase("us")) ? JumioDataCenter.US : JumioDataCenter.EU;
+
+			JumioDataCenter dataCenter = null;
+			try {
+				dataCenter = JumioDataCenter.valueOf(data.getString(2).toUpperCase());
+			} catch (Exception e) {
+				throw new JSONException("Datacenter not valid: "+dataCenter);            
+			}
 
 			authenticationSDK = AuthenticationSDK.create(cordova.getActivity(), apiToken, apiSecret, dataCenter);
 
@@ -472,7 +490,13 @@ public class JumioMobileSDK extends CordovaPlugin {
 
 			String apiToken = data.getString(0);
 			String apiSecret = data.getString(1);
-			JumioDataCenter dataCenter = (data.getString(2).toLowerCase().equalsIgnoreCase("us")) ? JumioDataCenter.US : JumioDataCenter.EU;
+
+			JumioDataCenter dataCenter = null;
+			try {
+				dataCenter = JumioDataCenter.valueOf(data.getString(2).toUpperCase());
+			} catch (Exception e) {
+				throw new JSONException("Datacenter not valid: "+dataCenter);            
+			}
 
 			documentVerificationSDK = DocumentVerificationSDK.create(cordova.getActivity(), apiToken, apiSecret, dataCenter);
 

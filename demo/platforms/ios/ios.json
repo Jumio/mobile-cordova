@@ -45,6 +45,6 @@
     }
   ],
   "plugin_metadata": {
-    "cordova-plugin-jumio-mobilesdk": "3.3.0"
+    "cordova-plugin-jumio-mobilesdk": "3.5.0"
   }
 }

@@ -26,14 +26,13 @@ function Jumio () {
 		exec(success, error, "JumioMobileSDK", "startNetverify", []);
 	};
 	
-	this.initAuthentication = function(token, secret, datacenter, options) {
+	this.initAuthentication = function(token, secret, datacenter, options, customization) {
 		exec(function(success) { console.log("Authentication::init Success: " + success) },
 			 function(error) { console.log("Authentication::init Error: " + error) },
 			 "JumioMobileSDK",
 			 "initAuthentication",
-			 [token, secret, datacenter, options]);
+			 [token, secret, datacenter, options, customization]);
 	};
-	
 	
 	this.startAuthentication = function(success, error) {
 		exec(success, error, "JumioMobileSDK", "startAuthentication", []);
