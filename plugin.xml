@@ -12,12 +12,12 @@
         </config-file>
         <header-file src="src/ios/JumioMobileSDK.h" />
         <source-file src="src/ios/JumioMobileSDK.m" />
-        
+
         <preference name="CAMERA_USAGE_DESCRIPTION" default="This will allow ${PRODUCT_NAME} to take photos of your credentials."/>
         <config-file target="*-Info.plist" parent="NSCameraUsageDescription">
             <string>$CAMERA_USAGE_DESCRIPTION</string>
         </config-file>
-        
+
         <podspec>
             <config>
                 <source url="https://github.com/CocoaPods/Specs.git"/>
@@ -27,7 +27,7 @@
             </pods>
         </podspec>
     </platform>
-    
+
     <platform name="android">
         <config-file target="AndroidManifest.xml" parent="/*">
             <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
@@ -88,6 +88,7 @@
 			-dontwarn com.microblink.**
 			-dontwarn javax.annotation.Nullable
         </proguard-config>
+        <framework src="src/android/plugin.gradle" custom="true" type="gradleReference"/>
         <source-file src="src/android/JumioMobileSDK.java" target-dir="src/com/jumio/mobilesdk" />
     </platform>
 </plugin>
