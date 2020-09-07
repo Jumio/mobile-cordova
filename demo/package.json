@@ -23,7 +23,6 @@
     ]
   },
   "devDependencies": {
-    "cordova-android": "^9.0.0",
-    "cordova-plugin-jumio-mobilesdk": "file:.."
+    "cordova-android": "^9.0.0"
   }
 }
