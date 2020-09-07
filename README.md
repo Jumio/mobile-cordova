@@ -2,13 +2,13 @@
 
 Official Jumio Mobile SDK plugin for Apache Cordova
 
-This plugin is compatible with version 3.5.0 of the Jumio SDK. If you have questions, please reach out to your Account Manager or contact Jumio Support at support@jumio.com or https://support.jumio.com
+This plugin is compatible with version 3.7.1 of the Jumio SDK. If you have questions, please reach out to your Account Manager or contact Jumio Support at support@jumio.com or https://support.jumio.com
 
 ## Compatibility
 With this release, we only ensure compatibility with the latest Cordova versions and plugins.
 At the time of this release, the following minimum versions are supported:
-* Cordova: 9.0.0
-* Cordova Android: 8.1.0
+* Cordova: 10.0.0
+* Cordova Android: 9.0.0
 * Cordova iOS: 5.0.1
 
 ## Setup
@@ -19,44 +19,26 @@ cordova create MyProject com.my.project "MyProject"
 cd MyProject
 cordova platform add ios
 cordova platform add android
-cordova plugin add https://github.com/Jumio/mobile-cordova.git#v3.5.0
+cordova plugin add https://github.com/Jumio/mobile-cordova.git#v3.7.1
 ```
 
 ## Integration
 
 ### iOS
 
-Manual integration or dependency management via cocoapods possible, please see [the official documentation of the Jumio Mobile SDK for iOS](https://github.com/Jumio/mobile-sdk-ios/tree/v3.4.2#basic-setup)
+Manual integration or dependency management via cocoapods possible, please see [the official documentation of the Jumio Mobile SDK for iOS](https://github.com/Jumio/mobile-sdk-ios/tree/v3.7.1#basic-setup)
 
 ### Android
 
-Add the Jumio repository:
+Add required permissions for the products as described in chapter [Permissions](https://github.com/Jumio/mobile-sdk-android/blob/v3.7.2/README.md#permissions)
 
-```
-repositories {
-    maven { url 'http://mobile-sdk.jumio.com' }
-    maven { url 'https://maven.google.com/' }
-}
-```
+To use the native Jumio Android component, your App needs to support AndroidX. This can be enabled by adding the following preference to your config.xml:
 
-Add a parameter for your SDK_VERSION into the ext-section:
-
-```
-ext {
-    SDK_VERSION = "3.5.0"
-}
+```xml
+<preference name="AndroidXEnabled" value="true" />
 ```
 
-Add required permissions for the products as described in chapter [Permissions](https://github.com/Jumio/mobile-sdk-android/blob/v3.5.0/README.md#permissions)
-
-Open the android project of your cordova project located in */platforms/android* and insert the dependencies from the products you require to your **build.gradle** file. (Module: android)
-
-* [Netverify & Fastfill](https://github.com/Jumio/mobile-sdk-android/blob/v3.5.0/docs/integration_netverify-fastfill.md#dependencies)
-* [Document Verification](https://github.com/Jumio/mobile-sdk-android/blob/v3.5.0/docs/integration_document-verification.md#dependencies)
-* [BAM Checkout](https://github.com/Jumio/mobile-sdk-android/blob/v3.5.0/docs/integration_bam-checkout.md#dependencies)
-
-Due to the outdated Cordova platform that is not yet updated for Android API version 28 and AndroidX, it's necessary to adapt your project to support the proper build environment for the native Jumio Android component. Take a look at the [Demo App build.gradle](https://github.com/Jumio/mobile-cordova/blob/master/demo/platforms/android/build.gradle) how to upgrade to API level 28. The [FAQ section](#faq) at the bottom covers common build issues and how to fix them.
-Open your Cordova Android project in Android Studio to get IDE auto-suggestions and support for all the required changes.
+For other build issues, refer to the The [FAQ section](#faq) at the bottom.
 
 ## Usage
 
@@ -122,7 +104,7 @@ If you are using eMRTD scanning, following lines are needed in your Manifest fil
 -dontwarn org.bouncycastle.**
 ```
 
-Add the needed dependencies following [this chapter](https://github.com/Jumio/mobile-sdk-android/blob/master/docs/integration_netverify-fastfill.md#dependencies) of the android integration guide.
+Add the needed dependencies following [this chapter](https://github.com/Jumio/mobile-sdk-android/blob/master/docs/integration_id-verification-fastfill.md#dependencies) of the android integration guide.
 
 Enable eMRTD by using the following method in your native android code:
 
@@ -339,13 +321,13 @@ Jumio.startBAM(function(cardInformation) {
 ### Android
 
 #### Netverify
-The Netverify SDK can be customized to the respective needs by following this [customization chapter](https://github.com/Jumio/mobile-sdk-android/blob/v3.5.0/docs/integration_netverify-fastfill.md#customization).
+The Netverify SDK can be customized to the respective needs by following this [customization chapter](https://github.com/Jumio/mobile-sdk-android/blob/v3.7.2/docs/integration_id-verification-fastfill.md#customization).
 
 #### BAM Checkout
-The Netverify SDK can be customized to the respective needs by following this [customization chapter](https://github.com/Jumio/mobile-sdk-android/blob/v3.5.0/docs/integration_bam-checkout.md#customization).
+The Netverify SDK can be customized to the respective needs by following this [customization chapter](https://github.com/Jumio/mobile-sdk-android/blob/v3.7.2/docs/integration_bam-checkout.md#customization).
 
 #### Document Verification
-The Netverify SDK can be customized to the respective needs by following this [customization chapter](https://github.com/Jumio/mobile-sdk-android/blob/v3.5.0/docs/integration_document-verification.md#customization).
+The Netverify SDK can be customized to the respective needs by following this [customization chapter](https://github.com/Jumio/mobile-sdk-android/blob/v3.7.2/docs/integration_document-verification.md#customization).
 
 ### iOS
 The SDK can be customized to the respective needs. You can pass the following customization options to the initializer:

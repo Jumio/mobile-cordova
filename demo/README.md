@@ -1,20 +1,19 @@
 # Cordova Demo-App
 
+## Prerequisites
+
+* Cordova CLI 10.0.0
+* NodeJS 10+
+
 ## Usage
 
 Update your SDK credentials in www/js/index.js and run the following commands.
 
-### iOS
-
 ```
-cd platforms/ios
-pod install
-cd ../..
-cordova run ios
-```
+cordova plugin add --link ../
+cordova prepare
 
-### Android
-
-```
 cordova run android
+# OR 
+cordova run ios
 ```

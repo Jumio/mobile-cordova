@@ -1,7 +1,7 @@
 {
   "name": "com.jumio.cordova.demo",
   "displayName": "DemoApp",
-  "version": "3.5.0",
+  "version": "3.7.0",
   "description": "A sample Apache Cordova application that responds to the deviceready event.",
   "main": "index.js",
   "scripts": {
@@ -10,19 +10,20 @@
   "author": "Apache Cordova Team",
   "license": "Apache-2.0",
   "dependencies": {
-    "cordova-android": "^8.1.0",
-    "cordova-ios": "^5.0.1",
-    "cordova-plugin-jumio-mobilesdk": "git+https://github.com/Jumio/mobile-cordova.git#v3.5.0"
+    "cordova-ios": "^5.0.1"
   },
   "cordova": {
     "plugins": {
-      "cordova-plugin-jumio-mobilesdk": {
-        "CAMERA_USAGE_DESCRIPTION": "This will allow ${PRODUCT_NAME} to take photos of your credentials."
-      }
+      "cordova-plugin-enable-multidex": {},
+      "cordova-plugin-jumio-mobilesdk": {}
     },
     "platforms": [
       "ios",
       "android"
     ]
+  },
+  "devDependencies": {
+    "cordova-android": "^9.0.0",
+    "cordova-plugin-jumio-mobilesdk": "file:.."
   }
 }

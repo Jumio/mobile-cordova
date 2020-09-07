@@ -16,6 +16,14 @@
  * specific language governing permissions and limitations
  * under the License.
  */
+
+const API_TOKEN = 'YOUR_API_KEY';
+const API_SECRET = 'YOUR_API_SECRET';
+const DATACENTER = 'YOUR_DATACENTER';
+const BAM_API_TOKEN = 'YOUR_BAM_API_TOKEN';
+const BAM_API_SECRET = 'YOUR_BAM_API_SECRET';
+const BAM_DATACENTER = 'YOUR_BAME_DATACENTER';
+
 var app = {
     // Application Constructor
     initialize: function() {
@@ -40,7 +48,7 @@ var app = {
 
 	startNetverify: function() {
 		// Netverify / Fastfill
-		Jumio.initNetverify('API_TOKEN', 'API_SECRET', 'DATACENTER', {
+		Jumio.initNetverify(API_TOKEN, API_SECRET, DATACENTER, {
 			enableVerification: true,
 			//callbackUrl: "URL",
 			//enableIdentityVerification: true,
@@ -101,7 +109,7 @@ var app = {
 
     initAuthentication: function() {
 		// Authentication
-		Jumio.initAuthentication('API_TOKEN', 'API_SECRET', 'DATACENTER', {
+		Jumio.initAuthentication(API_TOKEN, API_SECRET, DATACENTER, {
     		enrollmentTransactionReference: "EnrollmentTransactionReference",
 			//userReference: "UserReference",
 			//callbackUrl: "URL",
@@ -135,7 +143,7 @@ var app = {
 	
 	startDocumentVerification: function() {
 		// Document Verification
-		Jumio.initDocumentVerification('API_TOKEN', 'API_SECRET', 'DATACENTER', {
+		Jumio.initDocumentVerification(API_TOKEN, API_SECRET, DATACENTER, {
 			type: "BS",
 			userReference: "123456789",
 			country: "USA",
@@ -172,7 +180,7 @@ var app = {
 	
 	startBAM: function() {
 		// BAM Checkout
-		Jumio.initBAM('API_TOKEN', 'API_SECRET', 'DATACENTER', {
+		Jumio.initBAM(BAM_API_TOKEN, BAM_API_SECRET, BAM_DATACENTER, {
 			cardHolderNameRequired: true,
 			//sortCodeAndAccountNumberRequired: false,
 			//expiryRequired: true,
