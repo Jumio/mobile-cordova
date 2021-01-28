@@ -3,7 +3,7 @@
 ## Prerequisites
 
 * Cordova CLI 10.0.0
-* NodeJS 10+
+* NodeJS 14.15.4
 
 ## Usage
 

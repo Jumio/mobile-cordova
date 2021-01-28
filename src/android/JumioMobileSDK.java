@@ -12,9 +12,6 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.jumio.MobileSDK;
-import com.jumio.auth.AuthenticationCallback;
-import com.jumio.auth.AuthenticationResult;
-import com.jumio.auth.AuthenticationSDK;
 import com.jumio.bam.BamCardInformation;
 import com.jumio.bam.BamSDK;
 import com.jumio.bam.enums.CreditCardType;
@@ -48,20 +45,16 @@ public class JumioMobileSDK extends CordovaPlugin {
 	private static final int PERMISSION_REQUEST_CODE_BAM = 300;
 	private static final int PERMISSION_REQUEST_CODE_NETVERIFY = 301;
 	private static final int PERMISSION_REQUEST_CODE_DOCUMENT_VERIFICATION = 303;
-	private static final int PERMISSION_REQUEST_CODE_AUTHENTICATION = 304;
 
 	private static final String ACTION_BAM_INIT = "initBAM";
 	private static final String ACTION_BAM_START = "startBAM";
 	private static final String ACTION_NV_INIT = "initNetverify";
 	private static final String ACTION_NV_START = "startNetverify";
-	private static final String ACTION_AUTH_INIT = "initAuthentication";
-	private static final String ACTION_AUTH_START = "startAuthentication";
 	private static final String ACTION_DV_INIT = "initDocumentVerification";
 	private static final String ACTION_DV_START = "startDocumentVerification";
 
 	private BamSDK bamSDK;
 	private NetverifySDK netverifySDK;
-	private AuthenticationSDK authenticationSDK;
 	private DocumentVerificationSDK documentVerificationSDK;
 	private CallbackContext callbackContext;
 	private boolean initiateSuccessful = false;
@@ -88,16 +81,6 @@ public class JumioMobileSDK extends CordovaPlugin {
 			return true;
 		} else if (action.equals(ACTION_NV_START)) {
 			startNetverify(args);
-			result = new PluginResult(Status.NO_RESULT);
-			result.setKeepCallback(true);
-			return true;
-		} else if (action.equals(ACTION_AUTH_INIT)) {
-			initAuthentication(args);
-			result = new PluginResult(Status.NO_RESULT);
-			result.setKeepCallback(false);
-			return true;
-		} else if (action.equals(ACTION_AUTH_START)) {
-			startAuthentication();
 			result = new PluginResult(Status.NO_RESULT);
 			result.setKeepCallback(true);
 			return true;
@@ -375,105 +358,6 @@ public class JumioMobileSDK extends CordovaPlugin {
 		this.cordova.getActivity().runOnUiThread(runnable);
 	}
 
-	// Authentication
-
-	private void initAuthentication(JSONArray data){
-		if (!AuthenticationSDK.isSupportedPlatform(cordova.getActivity())){
-			showErrorMessage("This platform is not supported.");
-			return;
-		}
-
-		try{
-			if (data.isNull(0) || data.isNull(1) || data.isNull(2) || data.isNull(3)){
-				showErrorMessage("Missing required parameters apiToken, apiSecret or dataCenter.");
-				return;
-			}
-
-			String apiToken = data.getString(0);
-			String apiSecret = data.getString(1);
-
-			JumioDataCenter dataCenter = null;
-			try {
-				dataCenter = JumioDataCenter.valueOf(data.getString(2).toUpperCase());
-			} catch (Exception e) {
-				throw new JSONException("Datacenter not valid: "+dataCenter);            
-			}
-
-			authenticationSDK = AuthenticationSDK.create(cordova.getActivity(), apiToken, apiSecret, dataCenter);
-
-			// Configuration options
-			String enrollmentTransactionReference = null;
-			String authenticationTransactionReference = null;
-			if (!data.isNull(3)){
-				JSONObject options = data.getJSONObject(3);
-				Iterator<String> keys = options.keys();
-				while (keys.hasNext()){
-					String key = keys.next();
-
-					if (key.equalsIgnoreCase("userReference")){
-						authenticationSDK.setUserReference(options.getString(key));
-					}else if (key.equalsIgnoreCase("enrollmentTransactionReference")){
-						enrollmentTransactionReference = options.getString(key);
-					}else if (key.equalsIgnoreCase("authenticationTransactionReference")){
-						authenticationTransactionReference = options.getString(key);
-					}else if (key.equalsIgnoreCase("callbackUrl")) {
-						authenticationSDK.setCallbackUrl(options.getString(key));
-					}
-				}
-			}
-
-			if (enrollmentTransactionReference != null || authenticationTransactionReference != null){
-				if (authenticationTransactionReference != null) {
-					authenticationSDK.setAuthenticationTransactionReference(authenticationTransactionReference);
-				} else {
-					authenticationSDK.setEnrollmentTransactionReference(enrollmentTransactionReference);
-				}
-
-				authenticationSDK.initiate(new AuthenticationCallback(){
-					@Override
-					public void onAuthenticationInitiateSuccess(){
-						initiateSuccessful = true;
-						callbackContext.success("Authentication SDK initialized successfully");
-					}
-
-					@Override
-					public void onAuthenticationInitiateError(String errorCode, String errorMessage, boolean retryPossible){
-						initiateSuccessful = false;
-						showErrorMessage("Authentication initiate failed - " + errorCode + ": " + errorMessage);
-					}
-				});
-			}
-		} catch (JSONException e) {
-			showErrorMessage("Invalid parameters: " + e.getLocalizedMessage());
-		} catch (PlatformNotSupportedException e) {
-			showErrorMessage("Error initializing the Authentication SDK: " + e.getLocalizedMessage());
-		} catch (MissingPermissionException e) {
-			showErrorMessage("Missing permission: " + e.getLocalizedMessage());
-		}
-	}
-
-
-	private void startAuthentication() {
-		if (authenticationSDK == null || !initiateSuccessful) {
-			showErrorMessage("The Authentication SDK has not been initialized with a valid transaction reference.");
-			return;
-		}
-
-		Runnable runnable = new Runnable() {
-			@Override
-			public void run() {
-				try {
-					checkPermissionsAndStart(authenticationSDK);
-				} catch (Exception e) {
-					showErrorMessage("Error starting the Authentication SDK: " + e.getLocalizedMessage());
-				}
-			}
-		};
-
-		this.cordova.setActivityResultCallback(this);
-		this.cordova.getActivity().runOnUiThread(runnable);
-	}
-
 	// Document Verification
 
 	private void initDocumentVerification(JSONArray data) {
@@ -581,8 +465,6 @@ public class JumioMobileSDK extends CordovaPlugin {
 			int code;
 			if (sdk instanceof BamSDK){
 				code = PERMISSION_REQUEST_CODE_BAM;
-			} else if (sdk instanceof AuthenticationSDK){
-				code = PERMISSION_REQUEST_CODE_AUTHENTICATION;
 			} else if (sdk instanceof NetverifySDK){
 				code = PERMISSION_REQUEST_CODE_NETVERIFY;
 			} else if (sdk instanceof DocumentVerificationSDK){
@@ -613,8 +495,6 @@ public class JumioMobileSDK extends CordovaPlugin {
 				startSdk(this.bamSDK);
 			} else if (requestCode == JumioMobileSDK.PERMISSION_REQUEST_CODE_NETVERIFY) {
 				startSdk(this.netverifySDK);
-			} else if (requestCode == JumioMobileSDK.PERMISSION_REQUEST_CODE_AUTHENTICATION) {
-				startSdk(this.authenticationSDK);
 			} else if (requestCode == JumioMobileSDK.PERMISSION_REQUEST_CODE_DOCUMENT_VERIFICATION) {
 				startSdk(this.documentVerificationSDK);
 			}
@@ -742,35 +622,6 @@ public class JumioMobileSDK extends CordovaPlugin {
 			if (netverifySDK != null){
 				netverifySDK.destroy();
 				netverifySDK = null;
-			}
-
-			// Authentication results
-		} else if (requestCode == AuthenticationSDK.REQUEST_CODE) {
-			if (intent == null)
-				return;
-			if (resultCode == Activity.RESULT_OK) {
-				String transactionReference = intent.getStringExtra(AuthenticationSDK.EXTRA_TRANSACTION_REFERENCE);
-				AuthenticationResult authenticationResult = (AuthenticationResult) intent.getSerializableExtra(AuthenticationSDK.EXTRA_SCAN_DATA);
-				try {
-					JSONObject result = new JSONObject();
-					result.put("transactionReference", transactionReference);
-					result.put("authenticationResult", authenticationResult.toString());
-					callbackContext.success(result);
-				} catch (JSONException e) {
-					showErrorMessage("Result could not be sent: " + e.getLocalizedMessage());
-				}
-			} else if (resultCode == Activity.RESULT_CANCELED) {
-				String errorMessage = intent.getStringExtra(AuthenticationSDK.EXTRA_ERROR_MESSAGE);
-				String errorCode = intent.getStringExtra(AuthenticationSDK.EXTRA_ERROR_CODE);
-				Log.e(TAG, errorCode != null ? errorCode : "" + " " + errorMessage);
-				sendErrorObject(errorCode, errorMessage, null);
-			}
-
-			//At this point, the SDK is not needed anymore. It is highly advisable to call destroy(), so that
-			//internal resources can be freed.
-			if (authenticationSDK != null) {
-				authenticationSDK.destroy();
-				authenticationSDK = null;
 			}
 
 			// Document Verification Results

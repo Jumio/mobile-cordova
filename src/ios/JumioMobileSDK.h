@@ -10,13 +10,10 @@
 @import BAMCheckout;
 @import DocumentVerification;
 
-@interface JumioMobileSDK : CDVPlugin <NetverifyViewControllerDelegate, AuthenticationControllerDelegate, BAMCheckoutViewControllerDelegate, DocumentVerificationViewControllerDelegate>
+@interface JumioMobileSDK : CDVPlugin <NetverifyViewControllerDelegate, BAMCheckoutViewControllerDelegate, DocumentVerificationViewControllerDelegate>
 
 @property (strong) NetverifyViewController* netverifyViewController;
 @property (strong) NetverifyConfiguration* netverifyConfiguration;
-@property (strong) AuthenticationController* authenticationController;
-@property (strong) AuthenticationConfiguration* authenticationConfiguration;
-@property (strong) UIViewController *authenticationScanViewController;
 @property (strong) BAMCheckoutViewController* bamViewController;
 @property (strong) BAMCheckoutConfiguration* bamConfiguration;
 @property (strong) DocumentVerificationConfiguration* documentVerifcationConfiguration;

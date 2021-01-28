@@ -2,14 +2,14 @@
 
 Official Jumio Mobile SDK plugin for Apache Cordova
 
-This plugin is compatible with version 3.7.1 of the Jumio SDK. If you have questions, please reach out to your Account Manager or contact Jumio Support at support@jumio.com or https://support.jumio.com
+This plugin is compatible with version 3.8.0 of the Jumio SDK. If you have questions, please reach out to your Account Manager or contact Jumio Support at support@jumio.com or https://support.jumio.com
 
 ## Compatibility
 With this release, we only ensure compatibility with the latest Cordova versions and plugins.
 At the time of this release, the following minimum versions are supported:
 * Cordova: 10.0.0
 * Cordova Android: 9.0.0
-* Cordova iOS: 5.0.1
+* Cordova iOS: 6.1.1
 
 ## Setup
 
@@ -19,18 +19,18 @@ cordova create MyProject com.my.project "MyProject"
 cd MyProject
 cordova platform add ios
 cordova platform add android
-cordova plugin add https://github.com/Jumio/mobile-cordova.git#v3.7.1
+cordova plugin add https://github.com/Jumio/mobile-cordova.git#v3.8.0
 ```
 
 ## Integration
 
 ### iOS
 
-Manual integration or dependency management via cocoapods possible, please see [the official documentation of the Jumio Mobile SDK for iOS](https://github.com/Jumio/mobile-sdk-ios/tree/v3.7.1#basic-setup)
+Manual integration or dependency management via cocoapods possible, please see [the official documentation of the Jumio Mobile SDK for iOS](https://github.com/Jumio/mobile-sdk-ios/tree/v3.8.0#basic-setup)
 
 ### Android
 
-Add required permissions for the products as described in chapter [Permissions](https://github.com/Jumio/mobile-sdk-android/blob/v3.7.2/README.md#permissions)
+Add required permissions for the products as described in chapter [Permissions](https://github.com/Jumio/mobile-sdk-android/blob/v3.8.0/README.md#permissions)
 
 To use the native Jumio Android component, your App needs to support AndroidX. This can be enabled by adding the following preference to your config.xml:
 
@@ -128,54 +128,6 @@ Jumio.startNetverify(function(documentData) {
     // YOUR CODE
 });
 ```
-
-### Authentication
-
-To initialize the SDK, perform the following call.
-```javascript
-  Jumio.initAuthentication(<API_TOKEN>, <API_SECRET>, <DATACENTER>, {configuration});
-```
-
-To start the SDK, perform the following call.
-
-```javascript
-Jumio.startAuthentication();
-```
-
-Datacenter can either be **US**, **EU** or **SG**.
-
-Configure the SDK with the *configuration*-Object. **(configuration marked with * are mandatory)**
-
-In order to connect the Authentication transaction to a specific Netverify user identity the parameter `enrollmentTransactionReference` must be set. In case an Authentication transaction has been created via the facemap server to server API `authenticationTransactionReference` should be used. Therefore `enrollmentTransactionReference` should not be set.
-
-| Configuration | Datatype | Description |
-| ------ | -------- | ----------- |
-| **enrollmentTransactionReference*** | String | The reference of the enrollment scan to authenticate for |
-| **authenticationTransactionReference*** | String | The reference of the authentication scan to authenticate for |
-| **userReference*** | String | Set a customer identifier (max. 100 characters) |
-| callbackUrl | String | Specify an URL for callback |
-
-Initialization example with configuration:
-```javascript
-    initAuthentication: function() {
-      // Authentication
-      Jumio.initAuthentication(<API_TOKEN>, <API_SECRET>, <DATACENTER>, {
-        enrollmentTransactionReference: "EnrollmentTransactionReference",
-        //authenticationTransactionReference: "AuthenticationTransactionReference",
-        userReference: "UserReference"
-        callbackUrl: "URL"
-      });
-    }
-
-    startAuthentication: function() {
-      Jumio.startAuthentication(function(result) {
-          alert(JSON.stringify(result));
-        }, function(error) {
-          alert(JSON.stringify(error));
-      });
-    }
-```
-
 ### Document Verification
 
 To initialize the SDK, perform the following call.
@@ -321,13 +273,13 @@ Jumio.startBAM(function(cardInformation) {
 ### Android
 
 #### Netverify
-The Netverify SDK can be customized to the respective needs by following this [customization chapter](https://github.com/Jumio/mobile-sdk-android/blob/v3.7.2/docs/integration_id-verification-fastfill.md#customization).
+The Netverify SDK can be customized to the respective needs by following this [customization chapter](https://github.com/Jumio/mobile-sdk-android/blob/v3.8.0/docs/integration_id-verification-fastfill.md#customization).
 
 #### BAM Checkout
-The Netverify SDK can be customized to the respective needs by following this [customization chapter](https://github.com/Jumio/mobile-sdk-android/blob/v3.7.2/docs/integration_bam-checkout.md#customization).
+The Netverify SDK can be customized to the respective needs by following this [customization chapter](https://github.com/Jumio/mobile-sdk-android/blob/v3.8.0/docs/integration_bam-checkout.md#customization).
 
 #### Document Verification
-The Netverify SDK can be customized to the respective needs by following this [customization chapter](https://github.com/Jumio/mobile-sdk-android/blob/v3.7.2/docs/integration_document-verification.md#customization).
+The Netverify SDK can be customized to the respective needs by following this [customization chapter](https://github.com/Jumio/mobile-sdk-android/blob/v3.8.0/docs/integration_document-verification.md#customization).
 
 ### iOS
 The SDK can be customized to the respective needs. You can pass the following customization options to the initializer:
@@ -452,22 +404,9 @@ No data returned.
 
 This is a list of common Android build issues and how to resolve them:
 * Gradle plugin 4.X not supported, please install 5.X
-
 	-> Change the version in the gradle-wrapper.properties file
-* MinSdkVersion/TargetSdkVersion not supported in AndroidManifest.xml
 
-	-> Remove both versions from AndroidManifest.xml as suggested by Android Studio (as they are taken from build.gradle only since Gradle 5)
-* Command "compile" is obsolete, use implementation instead
-
-	-> Change all dependency declarations to use "implementation" instead of "compile" to support the latest gradle changes - https://github.com/Jumio/mobile-cordova/blob/master/demo/platforms/android/build.gradle#L291
-* Theme.Netverify/Bam/DocumentVerification/Authentication cannot be resolved
-
-	-> Add the Jumio dependencies as proposed here: https://github.com/Jumio/mobile-cordova/blob/master/demo/platforms/android/build.gradle#L95
-* Ressources from styles.xml "cornerRadius" and others not found
-
-  -> Build tools and support library are not at version 28. Change compileSdk and buildToolsVersion as described here -> https://github.com/Jumio/mobile-cordova/blob/master/demo/platforms/android/build.gradle#L222
 * Device-ready not fired after X seconds
-
   -> The plugin definition in "YOURPROJECT/platforms/android/platform_www/plugins/cordova-plugin-jumio-mobilesdk/www" might be duplicated/corrupted due to the issue mentioned in this Stackoverflow post - https://stackoverflow.com/questions/28017540/cordova-plugin-javascript-gets-corrupted-when-added-to-project/28264312#28264312 , please fix the duplicated "cordova.define()" call in these files as mentioned in the post.
 
 # Support

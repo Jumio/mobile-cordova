@@ -1,0 +1,14 @@
+{
+  "ios": {
+    "debug": {
+      "buildFlag": [
+        "BUILD_LIBRARY_FOR_DISTRIBUTION=YES"
+      ]
+    },
+    "release": {
+      "buildFlag": [
+        "BUILD_LIBRARY_FOR_DISTRIBUTION=YES"
+      ]
+    }
+  }
+}
