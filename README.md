@@ -40,7 +40,7 @@ cordova plugin add https://github.com/Jumio/mobile-cordova.git#v3.8.0
 ## Integration
 
 ### iOS
-Manual integration or dependency management via cocoapods possible, please see [the official documentation of the Jumio Mobile SDK for iOS](https://github.com/Jumio/mobile-sdk-ios/tree/v3.8.0#basic-setup)
+Manual integration or dependency management via cocoapods possible, please see [the official documentation of the Jumio Mobile SDK for iOS](https://github.com/Jumio/mobile-sdk-ios/tree/v3.8.0#basics)
 
 ### Android
 Add required permissions for the products as described in chapter [Permissions](https://github.com/Jumio/mobile-sdk-android/blob/v3.8.0/README.md#permissions)
