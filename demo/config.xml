@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="com.jumio.cordova.demo" version="3.8.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget id="com.jumio.cordova.demo" version="3.9.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <name>DemoApp</name>
     <description>
         A sample Apache Cordova application that responds to the deviceready event.
@@ -21,7 +21,7 @@
     <platform name="ios">
         <allow-intent href="itms:*" />
         <allow-intent href="itms-apps:*" />
-        <preference name="deployment-target" value="10.0" />
+        <preference name="deployment-target" value="11.0" />
     </platform>
     <engine name="ios" spec="^5.0.1" />
     <preference name="AndroidXEnabled" value="true" />

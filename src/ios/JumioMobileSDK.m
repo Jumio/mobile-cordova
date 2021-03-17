@@ -539,7 +539,7 @@
     
 #pragma mark - Netverify Delegates
     
-- (void)netverifyViewController:(NetverifyViewController *)netverifyViewController didFinishWithDocumentData:(NetverifyDocumentData *)documentData scanReference:(NSString *)scanReference {
+- (void)netverifyViewController:(NetverifyViewController *)netverifyViewController didFinishWithDocumentData:(NetverifyDocumentData *)documentData scanReference:(NSString *)scanReference accountId:(NSString* _Nullable)accountId authenticationResult:(BOOL)authenticationResult {
     self.initiateSuccessfulNetverify = NO;
 
     NSDictionary *result = [[NSMutableDictionary alloc] init];
@@ -589,6 +589,10 @@
     } else if (documentData.extractionMethod == NetverifyExtractionMethodNone) {
         [result setValue: @"NONE" forKey: @"extractionMethod"];
     }
+    if (accountId) {
+        [result setValue: accountId forKey: @"accountId"];
+    }
+    [result setValue: [NSNumber numberWithBool: authenticationResult] forKey: @"authenticationResult"];
     
     // MRZ data if available
     if (documentData.mrzData != nil) {
@@ -632,16 +636,16 @@
     
 - (void)netverifyViewController:(NetverifyViewController *)netverifyViewController didFinishInitializingWithError:(NetverifyError *)error {
     if (error != nil) {
-        [self sendNetverifyError: error scanReference: nil];
+        [self sendNetverifyError: error scanReference: nil accountId: nil];
         return;
     }
 
     self.initiateSuccessfulNetverify = YES;
 }
     
-- (void)netverifyViewController:(NetverifyViewController *)netverifyViewController didCancelWithError:(NetverifyError *)error scanReference:(NSString *)scanReference {
+- (void)netverifyViewController:(NetverifyViewController *)netverifyViewController didCancelWithError:(NetverifyError *)error scanReference:(NSString *)scanReference accountId:(NSString* _Nullable)accountId {
     self.initiateSuccessfulNetverify = NO;
-    [self sendNetverifyError: error scanReference: scanReference];
+    [self sendNetverifyError: error scanReference: scanReference accountId: accountId];
     [self.viewController dismissViewControllerAnimated: YES completion: nil];
 }
 
@@ -685,12 +689,15 @@
     [self.viewController dismissViewControllerAnimated: YES completion: nil];
 }
 
-- (void)sendNetverifyError:(NetverifyError *)error scanReference:(NSString *)scanReference {
+- (void)sendNetverifyError:(NetverifyError *)error scanReference:(NSString *)scanReference accountId:(NSString* _Nullable)accountId {
     NSMutableDictionary *result = [[NSMutableDictionary alloc] init];
     [result setValue: error.code forKey: @"errorCode"];
     [result setValue: error.message forKey: @"errorMessage"];
     if (scanReference) {
         [result setValue: scanReference forKey: @"scanReference"];
+    }
+    if (accountId) {
+        [result setValue: accountId forKey: @"accountId"];
     }
     
     CDVPluginResult *pluginResult = [CDVPluginResult resultWithStatus: CDVCommandStatus_ERROR messageAsDictionary: result];

@@ -12,7 +12,36 @@ Update your SDK credentials in www/js/index.js and run the following commands.
 ```
 cordova plugin add --link ../
 cordova prepare
+```
+## Android specific
 
+Navigate to platforms/android/build.gradle and replace the generated buildscript with the following.
+
+```
+buildscript {
+    ext.kotlin_version = '1.4.30'
+    repositories {
+        google()
+        jcenter()
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:4.1.2'
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+        // NOTE: Do not place your application dependencies here; they belong
+        // in the individual module build.gradle files
+    }
+}
+```
+
+Navigate to platforms/android/gradle.properties and add the following line.
+
+```
+android.jetifier.blacklist=bcprov-jdk15on
+```
+
+## Run the application
+
+```
 cordova run android
 # OR 
 cordova run ios

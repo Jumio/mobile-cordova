@@ -278,8 +278,6 @@ public class JumioMobileSDK extends CordovaPlugin {
 						netverifySDK.setReportingCriteria(options.getString(key));
 					} else if (key.equalsIgnoreCase("userReference")) {
 						netverifySDK.setUserReference(options.getString(key));
-					} else if (key.equalsIgnoreCase("enableEpassport")) {
-						netverifySDK.setEnableEMRTD(options.getBoolean(key));
 					} else if (key.equalsIgnoreCase("enableWatchlistScreening")) {
 						NVWatchlistScreening watchlistScreeningState;
 						switch (options.getString(key).toLowerCase()) {
