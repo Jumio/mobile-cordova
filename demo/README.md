@@ -1,4 +1,5 @@
 # Cordova Demo-App
+Demonstrates how to use the JumioMobileSDK plugin.
 
 ## Prerequisites
 
@@ -7,15 +8,15 @@
 
 ## Usage
 
-Update your SDK credentials in www/js/index.js and run the following commands.
+Update your SDK credentials in `www/js/index.js` and run the following commands:
 
 ```
 cordova plugin add --link ../
 cordova prepare
 ```
-## Android specific
+### Android-specific
 
-Navigate to platforms/android/build.gradle and replace the generated buildscript with the following.
+Navigate to `platforms/android/build.gradle` and replace the generated buildscript with the following.
 
 ```
 buildscript {
@@ -33,16 +34,15 @@ buildscript {
 }
 ```
 
-Navigate to platforms/android/gradle.properties and add the following line.
+Navigate to `platforms/android/gradle.properties` and add the following line.
 
 ```
 android.jetifier.blacklist=bcprov-jdk15on
 ```
 
 ## Run the application
-
 ```
 cordova run android
-# OR 
+# OR
 cordova run ios
 ```

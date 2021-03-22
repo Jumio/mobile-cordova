@@ -2,7 +2,22 @@
 
 Official Jumio Mobile SDK plugin for Apache Cordova
 
-This plugin is compatible with version 3.9.1 of the Jumio SDK. If you have questions, please reach out to your Account Manager or contact Jumio Support at support@jumio.com or https://support.jumio.com
+This plugin is compatible with version 3.9.1 of the Jumio SDK. If you have questions, please reach out to your Account Manager or contact [Jumio Support](#support).
+
+# Table of Contents
+- [Compatibility](#compatibility)
+- [Setup](#setup)
+- [Integration](#integration)
+  - [iOS](#ios)
+  - [Android](#android)
+- [Usage](#usage)
+    - [Netverify & Fastfill](#Netverify-&-Fastfill)
+    - [Document Verification](#document-verification)
+    - [BAM Checkout](#bam-checkout)
+- [Customization](#customization)
+- [Callbacks](#callbacks)
+- [FAQ](#faq)
+- [Support](#support)
 
 ## Compatibility
 With this release, we only ensure compatibility with the latest Cordova versions and plugins.
@@ -12,7 +27,6 @@ At the time of this release, the following minimum versions are supported:
 * Cordova iOS: 6.2.0
 
 ## Setup
-
 Create Cordova project and add our plugin
 ```
 cordova create MyProject com.my.project "MyProject"
@@ -25,11 +39,9 @@ cordova plugin add https://github.com/Jumio/mobile-cordova.git#v3.9.1
 ## Integration
 
 ### iOS
-
-Manual integration or dependency management via cocoapods possible, please see [the official documentation of the Jumio Mobile SDK for iOS](https://github.com/Jumio/mobile-sdk-ios/tree/v3.9.0#basic-setup)
+Manual integration or dependency management via cocoapods possible, please see [the official documentation of the Jumio Mobile SDK for iOS](https://github.com/Jumio/mobile-sdk-ios/tree/v3.9.0#basics)
 
 ### Android
-
 Add required permissions for the products as described in chapter [Permissions](https://github.com/Jumio/mobile-sdk-android/blob/v3.9.1/README.md#permissions)
 
 To use the native Jumio Android component, your App needs to support AndroidX. This can be enabled by adding the following preference to your config.xml:
@@ -42,8 +54,7 @@ For other build issues, refer to the The [FAQ section](#faq) at the bottom.
 
 ## Usage
 
-### Netverify / Fastfill
-
+### Netverify & Fastfill
 To initialize the SDK, perform the following call.
 
 ```javascript
@@ -73,7 +84,7 @@ Configure the SDK with the *configuration*-Object.
 | watchlistSearchProfile | String | Specifies specific profile of watchlist |
 
 
-Initialization example with configuration.
+Initialization example with your configuration:
 
 ```javascript
 Jumio.initNetverify("API_TOKEN", "API_SECRET", "US", {
@@ -176,7 +187,7 @@ Possible types:
 *  WWCC (Working with children check)
 *  SS (Superannuation statement)
 *  TAC (Trade association card)
-*  SEL (School enrolment letter)
+*  SEL (School enrollment letter)
 *  PB (Phone bill)
 *  USSS (US social security card)
 *  SSC (Social security card)
@@ -329,14 +340,13 @@ Jumio.initNetverify("API_TOKEN", "API_SECRET", "US", {
 ```
 
 ## Callback
-
 To get information about callbacks, Netverify Retrieval API, Netverify Delete API and Global Netverify settings and more, please read our [page with server related information](https://github.com/Jumio/implementation-guides/blob/master/netverify/callback.md).
 
 The JSONObject with all the extracted data that is returned for the specific products is described in the following subchapters:
 
 ### Netverify & Fastfill
 
-*NetverifyDocumentData:*
+*NetverifyDocumentData*
 
 | Parameter | Type | Max. length | Description  |
 |:-------------------|:----------- 	|:-------------|:-----------------|
@@ -397,22 +407,23 @@ The JSONObject with all the extracted data that is returned for the specific pro
 | cardAccountNumberValid | BOOL |  | True if account number code valid, otherwise false |
 
 ### Document Verification
-
 No data returned.
 
 # FAQ
+This is a list of common __Android build issues__ and how to resolve them:
+* Gradle plugin 4.X not supported, please install 5.X    
+	--> Change the version in the `gradle-wrapper.properties` file
 
-This is a list of common Android build issues and how to resolve them:
-* Gradle plugin 4.X not supported, please install 5.X
-	-> Change the version in the gradle-wrapper.properties file
+* Device-ready not fired after X seconds    
+  --> The plugin definition in "YOURPROJECT/platforms/android/platform_www/plugins/cordova-plugin-jumio-mobilesdk/www" might be duplicated/corrupted due to the issue mentioned [in this Stackoverflow post](https://stackoverflow.com/questions/28017540/cordova-plugin-javascript-gets-corrupted-when-added-to-project/28264312#28264312). Please fix the duplicated `cordova.define()` call in these files as mentioned in the post.
 
-* Device-ready not fired after X seconds
-  -> The plugin definition in "YOURPROJECT/platforms/android/platform_www/plugins/cordova-plugin-jumio-mobilesdk/www" might be duplicated/corrupted due to the issue mentioned in this Stackoverflow post - https://stackoverflow.com/questions/28017540/cordova-plugin-javascript-gets-corrupted-when-added-to-project/28264312#28264312 , please fix the duplicated "cordova.define()" call in these files as mentioned in the post.
+In case there are __cocoapods adjustments__ that need to be made, please refer to your `podfile` under `platforms/ios/Podfile`.
+
+In case there are __iOS Localization updates__ that need to be made, please refer to your  `Localizations` folder under `platforms/ios/Pods/JumioMobileSDK/Localizations`.
 
 # Support
 
 ## Contact
-
 If you have any questions regarding our implementation guide please contact Jumio Customer Service at support@jumio.com or https://support.jumio.com. The Jumio online helpdesk contains a wealth of information regarding our service including demo videos, product descriptions, FAQs and other things that may help to get you started with Jumio. Check it out at: https://support.jumio.com.
 
 ## Licenses
