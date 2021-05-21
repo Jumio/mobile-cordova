@@ -17,6 +17,7 @@ This plugin is compatible with version 3.9.1 of the Jumio SDK. If you have quest
 - [Customization](#customization)
 - [Callbacks](#callbacks)
 - [FAQ](#faq)
+  - [Framework not found iProov.xcframework](#framework-not-found-iproov.xcframework)
 - [Support](#support)
 
 ## Compatibility
@@ -417,9 +418,24 @@ This is a list of common __Android build issues__ and how to resolve them:
 * Device-ready not fired after X seconds    
   --> The plugin definition in "YOURPROJECT/platforms/android/platform_www/plugins/cordova-plugin-jumio-mobilesdk/www" might be duplicated/corrupted due to the issue mentioned [in this Stackoverflow post](https://stackoverflow.com/questions/28017540/cordova-plugin-javascript-gets-corrupted-when-added-to-project/28264312#28264312). Please fix the duplicated `cordova.define()` call in these files as mentioned in the post.
 
-In case there are __cocoapods adjustments__ that need to be made, please refer to your `podfile` under `platforms/ios/Podfile`.
+In case there are __cocoapods adjustments__ that need to be made, please refer to your `Podfile` under `platforms/ios/Podfile`.
+In case there are __iOS Localization updates__ that need to be made, please refer to your  `Localizations` folder under `platforms/ios/Pods/JumioMobileSDK/Localizations` after running `pod install`.
 
-In case there are __iOS Localization updates__ that need to be made, please refer to your  `Localizations` folder under `platforms/ios/Pods/JumioMobileSDK/Localizations`.
+## Framework not found iProov.xcframework
+If iOS application build is failing with `ld: framework not found iProov.xcframework` or `dyld: Symbol not found: ... Referenced from: /.../Frameworks/iProov.frameworks/iProov`, please make sure the necessary post install-hook has been included in your `Podfile`:
+```
+post_install do |installer|
+  installer.pods_project.targets.each do |target|
+    if ['iProov', 'Socket.IO-Client-Swift', 'Starscream'].include? target.name
+      target.build_configurations.each do |config|
+          config.build_settings['BUILD_LIBRARY_FOR_DISTRIBUTION'] = 'YES'
+      end
+    end
+  end
+end
+```
+
+For more information, please refer to our [iOS guides](https://github.com/Jumio/mobile-sdk-ios#certified-liveness-vendor).
 
 # Support
 
