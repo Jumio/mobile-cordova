@@ -21,6 +21,14 @@ function Jumio () {
 			 "initNetverify", 
 			 [token, secret, datacenter, options, customization]);
 	};
+
+	this.initSingleSessionNetverify = function(authorizationToken, datacenter, options, customization) {
+    	exec(function(success) { console.log("Netverify::init Success: " + success) },
+            function(error) { console.log("Netverify::init Error: " + JSON.stringify(error)) },
+    		"JumioMobileSDK",
+    		"initSingleSessionNetverify",
+    		[authorizationToken, datacenter, options, customization]);
+    };
 	
 	this.startNetverify = function(success, error) {
 		exec(success, error, "JumioMobileSDK", "startNetverify", []);

@@ -6,7 +6,6 @@
 #import "Cordova/CDVPlugin.h"
 @import JumioCore;
 @import Netverify;
-@import NetverifyFace;
 @import BAMCheckout;
 @import DocumentVerification;
 

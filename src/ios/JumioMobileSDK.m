@@ -205,143 +205,13 @@
         // Configuration
         NSDictionary *options = [command.arguments objectAtIndex: 3];
         if (![options isEqual:[NSNull null]]) {
-            for (NSString *key in options) {
-                if ([key isEqualToString: @"enableVerification"]) {
-                    self.netverifyConfiguration.enableVerification = [self getBoolValue: [options objectForKey: key]];
-                } else if ([key isEqualToString: @"callbackUrl"]) {
-                    self.netverifyConfiguration.callbackUrl = [options objectForKey: key];
-                } else if ([key isEqualToString: @"enableIdentityVerification"]) {
-                    self.netverifyConfiguration.enableIdentityVerification = [self getBoolValue: [options objectForKey: key]];
-                } else if ([key isEqualToString: @"preselectedCountry"]) {
-                    self.netverifyConfiguration.preselectedCountry = [options objectForKey: key];
-                } else if ([key isEqualToString: @"customerInternalReference"]) {
-                    self.netverifyConfiguration.customerInternalReference = [options objectForKey: key];
-                } else if ([key isEqualToString: @"enableWatchlistScreening"]) {
-                    NSString* watchlistScreeningValue = [[options objectForKey: key] lowercaseString];
-                    if ([watchlistScreeningValue isEqualToString:@"enabled"]) {
-                        self.netverifyConfiguration.watchlistScreening = NetverifyWatchlistScreeningEnabled;
-                    } else if ([watchlistScreeningValue isEqualToString:@"disabled"]) {
-                        self.netverifyConfiguration.watchlistScreening = NetverifyWatchlistScreeningDisabled;
-                    } else {
-                        self.netverifyConfiguration.watchlistScreening = NetverifyWatchlistScreeningDefault;
-                    }
-                } else if ([key isEqualToString: @"watchlistSearchProfile"]) {
-                    self.netverifyConfiguration.watchlistSearchProfile = [options objectForKey: key];
-                } else if ([key isEqualToString: @"reportingCriteria"]) {
-                    self.netverifyConfiguration.reportingCriteria = [options objectForKey: key];
-                } else if ([key isEqualToString: @"userReference"]) {
-                    self.netverifyConfiguration.userReference = [options objectForKey: key];
-                } else if ([key isEqualToString: @"sendDebugInfoToJumio"]) {
-                    self.netverifyConfiguration.sendDebugInfoToJumio = [self getBoolValue: [options objectForKey: key]];
-                } else if ([key isEqualToString: @"dataExtractionOnMobileOnly"]) {
-                    self.netverifyConfiguration.dataExtractionOnMobileOnly = [self getBoolValue:[options objectForKey: key]];
-                } else if ([key isEqualToString: @"cameraPosition"]) {
-                    NSString *cameraString = [[options objectForKey: key] lowercaseString];
-                    JumioCameraPosition cameraPosition = ([cameraString isEqualToString: @"front"]) ? JumioCameraPositionFront : JumioCameraPositionBack;
-                    self.netverifyConfiguration.cameraPosition = cameraPosition;
-                } else if ([key isEqualToString: @"preselectedDocumentVariant"]) {
-                    NSString *variantString = [[options objectForKey: key] lowercaseString];
-                    NetverifyDocumentVariant variant = ([variantString isEqualToString: @"paper"]) ? NetverifyDocumentVariantPaper : NetverifyDocumentVariantPlastic;
-                    self.netverifyConfiguration.preselectedDocumentVariant = variant;
-                } else if ([key isEqualToString: @"documentTypes"]) {
-                    NSMutableArray *jsonTypes = [options objectForKey: key];
-                    NetverifyDocumentType documentTypes = 0;
-                    
-                    int i;
-                    for (i = 0; i < [jsonTypes count]; i++) {
-                        id type = [jsonTypes objectAtIndex: i];
-                        
-                        if ([[type lowercaseString] isEqualToString: @"passport"]) {
-                            documentTypes = documentTypes | NetverifyDocumentTypePassport;
-                        } else if ([[type lowercaseString] isEqualToString: @"driver_license"]) {
-                            documentTypes = documentTypes | NetverifyDocumentTypeDriverLicense;
-                        } else if ([[type lowercaseString] isEqualToString: @"identity_card"]) {
-                            documentTypes = documentTypes | NetverifyDocumentTypeIdentityCard;
-                        } else if ([[type lowercaseString] isEqualToString: @"visa"]) {
-                            documentTypes = documentTypes | NetverifyDocumentTypeVisa;
-                        }
-                    }
-                    
-                    self.netverifyConfiguration.preselectedDocumentTypes = documentTypes;
-                } else if ([key isEqualToString: @"offlineToken"]) {
-                    self.netverifyConfiguration.offlineToken = [options objectForKey: key];
-                }
-            }
+           [self setupConfiguration: options];
         }
         
         // Customization
         NSDictionary *customization = [command.arguments objectAtIndex: 4];
         if (![customization isEqual:[NSNull null]]) {
-            for (NSString *key in customization) {
-                if ([key isEqualToString: @"disableBlur"]) {
-                    BOOL disableBlur = [self getBoolValue:[customization objectForKey: key]];
-                    [[NetverifyBaseView jumioAppearance] setDisableBlur: disableBlur ? @YES : @NO];
-
-                } else if ([key isEqualToString: @"enableDarkMode"]) {
-                    BOOL enableDarkMode = [self getBoolValue:[customization objectForKey: key]];
-                    [[NetverifyBaseView jumioAppearance] setEnableDarkMode: enableDarkMode ? @YES : @NO];
-                } else {
-                    UIColor *color = [self colorWithHexString: [customization objectForKey: key]];
-                    
-                    if ([key isEqualToString: @"backgroundColor"]) {
-                        [[NetverifyBaseView jumioAppearance] setBackgroundColor: color];
-                    } else if ([key isEqualToString: @"tintColor"]) {
-                        [[UINavigationBar jumioAppearance] setTintColor: color];
-                    } else if ([key isEqualToString: @"barTintColor"]) {
-                        [[UINavigationBar jumioAppearance] setBarTintColor: color];
-                    } else if ([key isEqualToString: @"textTitleColor"]) {
-                        [[UINavigationBar jumioAppearance] setTitleTextAttributes: @{NSForegroundColorAttributeName: color}];
-                    } else if ([key isEqualToString: @"foregroundColor"]) {
-                        [[NetverifyBaseView jumioAppearance] setForegroundColor: color];
-                    } else if ([key isEqualToString: @"documentSelectionHeaderBackgroundColor"]) {
-                        [[NetverifyDocumentSelectionHeaderView jumioAppearance] setBackgroundColor: color];
-                    } else if ([key isEqualToString: @"documentSelectionHeaderTitleColor"]) {
-                        [[NetverifyDocumentSelectionHeaderView jumioAppearance] setTitleColor: color];
-                    } else if ([key isEqualToString: @"documentSelectionHeaderIconColor"]) {
-                        [[NetverifyDocumentSelectionHeaderView jumioAppearance] setIconColor: color];
-                    } else if ([key isEqualToString: @"documentSelectionButtonBackgroundColor"]) {
-                        [[NetverifyDocumentSelectionButton jumioAppearance] setBackgroundColor: color forState: UIControlStateNormal];
-                    } else if ([key isEqualToString: @"documentSelectionButtonTitleColor"]) {
-                        [[NetverifyDocumentSelectionButton jumioAppearance] setTitleColor: color forState: UIControlStateNormal];
-                    } else if ([key isEqualToString: @"documentSelectionButtonIconColor"]) {
-                        [[NetverifyDocumentSelectionButton jumioAppearance] setIconColor: color forState: UIControlStateNormal];
-                    } else if ([key isEqualToString: @"fallbackButtonBackgroundColor"]) {
-                        [[NetverifyFallbackButton jumioAppearance] setBackgroundColor: color forState:UIControlStateNormal];
-                    } else if ([key isEqualToString: @"fallbackButtonBorderColor"]) {
-                        [[NetverifyFallbackButton jumioAppearance] setBorderColor: color];
-                    } else if ([key isEqualToString: @"fallbackButtonTitleColor"]) {
-                        [[NetverifyFallbackButton jumioAppearance] setTitleColor: color forState:UIControlStateNormal];
-                    } else if ([key isEqualToString: @"positiveButtonBackgroundColor"]) {
-                        [[NetverifyPositiveButton jumioAppearance] setBackgroundColor: color forState:UIControlStateNormal];
-                    } else if ([key isEqualToString: @"positiveButtonBorderColor"]) {
-                        [[NetverifyPositiveButton jumioAppearance] setBorderColor: color];
-                    } else if ([key isEqualToString: @"positiveButtonTitleColor"]) {
-                        [[NetverifyPositiveButton jumioAppearance] setTitleColor: color forState:UIControlStateNormal];
-                    } else if ([key isEqualToString: @"negativeButtonBackgroundColor"]) {
-                        [[NetverifyNegativeButton jumioAppearance] setBackgroundColor: color forState:UIControlStateNormal];
-                    } else if ([key isEqualToString: @"negativeButtonBorderColor"]) {
-                        [[NetverifyNegativeButton jumioAppearance] setBorderColor: color];
-                    } else if ([key isEqualToString: @"negativeButtonTitleColor"]) {
-                        [[NetverifyNegativeButton jumioAppearance] setTitleColor: color forState:UIControlStateNormal];
-                    } else if ([key isEqualToString: @"scanOverlayStandardColor"]) {
-                        [[NetverifyScanOverlayView jumioAppearance] setColorOverlayStandard: color];
-                    } else if ([key isEqualToString: @"scanOverlayValidColor"]) {
-                        [[NetverifyScanOverlayView jumioAppearance] setColorOverlayValid: color];
-                    } else if ([key isEqualToString: @"scanOverlayInvalidColor"]) {
-                        [[NetverifyScanOverlayView jumioAppearance] setColorOverlayInvalid: color];
-                    } else if ([key isEqualToString: @"scanBackgroundColor"]) {
-                        [[NetverifyScanOverlayView jumioAppearance] setScanBackgroundColor: color];
-                    } else if ([key isEqualToString: @"faceOvalColor"]) {
-                        [[NetverifyScanOverlayView jumioAppearance] setFaceOvalColor: color];
-                    } else if ([key isEqualToString: @"faceProgressColor"]) {
-                         [[NetverifyScanOverlayView jumioAppearance] setFaceProgressColor: color];
-                    } else if ([key isEqualToString: @"faceFeedbackBackgroundColor"]) {
-                         [[NetverifyScanOverlayView jumioAppearance] setFaceFeedbackBackgroundColor: color];
-                    } else if ([key isEqualToString: @"faceFeedbackTextColor"]) {
-                         [[NetverifyScanOverlayView jumioAppearance] setFaceFeedbackTextColor: color];
-                    }
-                }
-            }
+            [self setupCustomization: customization];
         }
 
         @try {
@@ -349,6 +219,200 @@
         } @catch (NSException *exception) {
             NSString *msg = [NSString stringWithFormat: @"Cancelled with exception %@: %@", exception.name, exception.reason];
             [self sendErrorMessage: msg];
+        }
+    }
+
+- (void)initSingleSessionNetverify:(CDVInvokedUrlCommand*)command {
+        self.callbackId = command.callbackId;
+        self.initiateSuccessfulNetverify = NO;
+        
+        NSUInteger argc = [command.arguments count];
+        if (argc < 3) {
+            [self sendErrorMessage: @"Missing required parameters one-time session authorization token, or dataCenter."];
+            return;
+        }
+        
+        NSString *authorizationToken = [command.arguments objectAtIndex: 0];
+        NSString *dataCenterString = [command.arguments objectAtIndex: 1];
+
+        JumioDataCenter jumioDataCenter = JumioDataCenterUS;
+        NSString *dataCenterLowercase = [dataCenterString lowercaseString];
+        
+        if ([dataCenterLowercase isEqualToString: @"eu"]) {
+          jumioDataCenter = JumioDataCenterEU;
+        } else if ([dataCenterLowercase isEqualToString: @"sg"]) {
+          jumioDataCenter = JumioDataCenterSG;
+        }
+        
+        // Initialization
+        self.netverifyConfiguration = [NetverifyConfiguration new];
+        self.netverifyConfiguration.delegate = self;
+        self.netverifyConfiguration.authorizationToken = authorizationToken;
+        self.netverifyConfiguration.dataCenter = jumioDataCenter;
+        
+        // Configuration
+        NSDictionary *options = [command.arguments objectAtIndex: 2];
+        if (![options isEqual:[NSNull null]]) {
+            [self setupConfiguration: options];
+        }
+        
+        // Customization
+        NSDictionary *customization = [command.arguments objectAtIndex: 3];
+        if (![customization isEqual:[NSNull null]]) {
+            [self setupCustomization: customization];
+        }
+
+        @try {
+            self.netverifyViewController = [[NetverifyViewController alloc] initWithConfiguration: self.netverifyConfiguration];
+        } @catch (NSException *exception) {
+            NSString *msg = [NSString stringWithFormat: @"Cancelled with exception %@: %@", exception.name, exception.reason];
+            [self sendErrorMessage: msg];
+        }
+    }
+
+- (void)setupConfiguration:(NSDictionary*)options
+    {
+        for (NSString *key in options) {
+            if ([key isEqualToString: @"enableVerification"]) {
+                self.netverifyConfiguration.enableVerification = [self getBoolValue: [options objectForKey: key]];
+            } else if ([key isEqualToString: @"callbackUrl"]) {
+                self.netverifyConfiguration.callbackUrl = [options objectForKey: key];
+            } else if ([key isEqualToString: @"enableIdentityVerification"]) {
+                self.netverifyConfiguration.enableIdentityVerification = [self getBoolValue: [options objectForKey: key]];
+            } else if ([key isEqualToString: @"preselectedCountry"]) {
+                self.netverifyConfiguration.preselectedCountry = [options objectForKey: key];
+            } else if ([key isEqualToString: @"customerInternalReference"]) {
+                self.netverifyConfiguration.customerInternalReference = [options objectForKey: key];
+            } else if ([key isEqualToString: @"enableWatchlistScreening"]) {
+                NSString* watchlistScreeningValue = [[options objectForKey: key] lowercaseString];
+                if ([watchlistScreeningValue isEqualToString:@"enabled"]) {
+                    self.netverifyConfiguration.watchlistScreening = NetverifyWatchlistScreeningEnabled;
+                } else if ([watchlistScreeningValue isEqualToString:@"disabled"]) {
+                    self.netverifyConfiguration.watchlistScreening = NetverifyWatchlistScreeningDisabled;
+                } else {
+                    self.netverifyConfiguration.watchlistScreening = NetverifyWatchlistScreeningDefault;
+                }
+            } else if ([key isEqualToString: @"watchlistSearchProfile"]) {
+                self.netverifyConfiguration.watchlistSearchProfile = [options objectForKey: key];
+            } else if ([key isEqualToString: @"reportingCriteria"]) {
+                self.netverifyConfiguration.reportingCriteria = [options objectForKey: key];
+            } else if ([key isEqualToString: @"userReference"]) {
+                self.netverifyConfiguration.userReference = [options objectForKey: key];
+            } else if ([key isEqualToString: @"sendDebugInfoToJumio"]) {
+                self.netverifyConfiguration.sendDebugInfoToJumio = [self getBoolValue: [options objectForKey: key]];
+            } else if ([key isEqualToString: @"dataExtractionOnMobileOnly"]) {
+                self.netverifyConfiguration.dataExtractionOnMobileOnly = [self getBoolValue:[options objectForKey: key]];
+            } else if ([key isEqualToString: @"cameraPosition"]) {
+                NSString *cameraString = [[options objectForKey: key] lowercaseString];
+                JumioCameraPosition cameraPosition = ([cameraString isEqualToString: @"front"]) ? JumioCameraPositionFront : JumioCameraPositionBack;
+                self.netverifyConfiguration.cameraPosition = cameraPosition;
+            } else if ([key isEqualToString: @"preselectedDocumentVariant"]) {
+                NSString *variantString = [[options objectForKey: key] lowercaseString];
+                NetverifyDocumentVariant variant = ([variantString isEqualToString: @"paper"]) ? NetverifyDocumentVariantPaper : NetverifyDocumentVariantPlastic;
+                self.netverifyConfiguration.preselectedDocumentVariant = variant;
+            } else if ([key isEqualToString: @"documentTypes"]) {
+                NSMutableArray *jsonTypes = [options objectForKey: key];
+                NetverifyDocumentType documentTypes = 0;
+                
+                int i;
+                for (i = 0; i < [jsonTypes count]; i++) {
+                    id type = [jsonTypes objectAtIndex: i];
+                    
+                    if ([[type lowercaseString] isEqualToString: @"passport"]) {
+                        documentTypes = documentTypes | NetverifyDocumentTypePassport;
+                    } else if ([[type lowercaseString] isEqualToString: @"driver_license"]) {
+                        documentTypes = documentTypes | NetverifyDocumentTypeDriverLicense;
+                    } else if ([[type lowercaseString] isEqualToString: @"identity_card"]) {
+                        documentTypes = documentTypes | NetverifyDocumentTypeIdentityCard;
+                    } else if ([[type lowercaseString] isEqualToString: @"visa"]) {
+                        documentTypes = documentTypes | NetverifyDocumentTypeVisa;
+                    }
+                }
+                
+                self.netverifyConfiguration.preselectedDocumentTypes = documentTypes;
+            } else if ([key isEqualToString: @"offlineToken"]) {
+                self.netverifyConfiguration.offlineToken = [options objectForKey: key];
+            }
+        }
+    }
+
+- (void)setupCustomization:(NSDictionary*)customization
+    {
+        for (NSString *key in customization) {
+            if ([key isEqualToString: @"disableBlur"]) {
+                BOOL disableBlur = [self getBoolValue:[customization objectForKey: key]];
+                [[NetverifyBaseView jumioAppearance] setDisableBlur: disableBlur ? @YES : @NO];
+
+            } else if ([key isEqualToString: @"enableDarkMode"]) {
+                BOOL enableDarkMode = [self getBoolValue:[customization objectForKey: key]];
+                [[NetverifyBaseView jumioAppearance] setEnableDarkMode: enableDarkMode ? @YES : @NO];
+            } else {
+                UIColor *color = [self colorWithHexString: [customization objectForKey: key]];
+                
+                if ([key isEqualToString: @"backgroundColor"]) {
+                    [[NetverifyBaseView jumioAppearance] setBackgroundColor: color];
+                } else if ([key isEqualToString: @"tintColor"]) {
+                    [[UINavigationBar jumioAppearance] setTintColor: color];
+                } else if ([key isEqualToString: @"barTintColor"]) {
+                    [[UINavigationBar jumioAppearance] setBarTintColor: color];
+                } else if ([key isEqualToString: @"textTitleColor"]) {
+                    [[UINavigationBar jumioAppearance] setTitleTextAttributes: @{NSForegroundColorAttributeName: color}];
+                } else if ([key isEqualToString: @"foregroundColor"]) {
+                    [[NetverifyBaseView jumioAppearance] setForegroundColor: color];
+                } else if ([key isEqualToString: @"documentSelectionHeaderBackgroundColor"]) {
+                    [[NetverifyDocumentSelectionHeaderView jumioAppearance] setBackgroundColor: color];
+                } else if ([key isEqualToString: @"documentSelectionHeaderTitleColor"]) {
+                    [[NetverifyDocumentSelectionHeaderView jumioAppearance] setTitleColor: color];
+                } else if ([key isEqualToString: @"documentSelectionHeaderIconColor"]) {
+                    [[NetverifyDocumentSelectionHeaderView jumioAppearance] setIconColor: color];
+                } else if ([key isEqualToString: @"documentSelectionButtonBackgroundColor"]) {
+                    [[NetverifyDocumentSelectionButton jumioAppearance] setBackgroundColor: color forState: UIControlStateNormal];
+                } else if ([key isEqualToString: @"documentSelectionButtonTitleColor"]) {
+                    [[NetverifyDocumentSelectionButton jumioAppearance] setTitleColor: color forState: UIControlStateNormal];
+                } else if ([key isEqualToString: @"documentSelectionButtonIconColor"]) {
+                    [[NetverifyDocumentSelectionButton jumioAppearance] setIconColor: color forState: UIControlStateNormal];
+                } else if ([key isEqualToString: @"fallbackButtonBackgroundColor"]) {
+                    [[NetverifyFallbackButton jumioAppearance] setBackgroundColor: color forState:UIControlStateNormal];
+                } else if ([key isEqualToString: @"fallbackButtonBorderColor"]) {
+                    [[NetverifyFallbackButton jumioAppearance] setBorderColor: color];
+                } else if ([key isEqualToString: @"fallbackButtonTitleColor"]) {
+                    [[NetverifyFallbackButton jumioAppearance] setTitleColor: color forState:UIControlStateNormal];
+                } else if ([key isEqualToString: @"positiveButtonBackgroundColor"]) {
+                    [[NetverifyPositiveButton jumioAppearance] setBackgroundColor: color forState:UIControlStateNormal];
+                } else if ([key isEqualToString: @"positiveButtonBorderColor"]) {
+                    [[NetverifyPositiveButton jumioAppearance] setBorderColor: color];
+                } else if ([key isEqualToString: @"positiveButtonTitleColor"]) {
+                    [[NetverifyPositiveButton jumioAppearance] setTitleColor: color forState:UIControlStateNormal];
+                } else if ([key isEqualToString: @"negativeButtonBackgroundColor"]) {
+                    [[NetverifyNegativeButton jumioAppearance] setBackgroundColor: color forState:UIControlStateNormal];
+                } else if ([key isEqualToString: @"negativeButtonBorderColor"]) {
+                    [[NetverifyNegativeButton jumioAppearance] setBorderColor: color];
+                } else if ([key isEqualToString: @"negativeButtonTitleColor"]) {
+                    [[NetverifyNegativeButton jumioAppearance] setTitleColor: color forState:UIControlStateNormal];
+                } else if ([key isEqualToString: @"scanOverlayStandardColor"]) {
+                    [[NetverifyScanOverlayView jumioAppearance] setColorOverlayStandard: color];
+                } else if ([key isEqualToString: @"scanOverlayValidColor"]) {
+                    [[NetverifyScanOverlayView jumioAppearance] setColorOverlayValid: color];
+                } else if ([key isEqualToString: @"scanOverlayInvalidColor"]) {
+                    [[NetverifyScanOverlayView jumioAppearance] setColorOverlayInvalid: color];
+                } else if ([key isEqualToString: @"scanBackgroundColor"]) {
+                    [[NetverifyScanOverlayView jumioAppearance] setScanBackgroundColor: color];
+                } else if ([key isEqualToString: @"iProovHeaderTextColor"]) {
+                    [[NetverifyIProovScanView jumioAppearance] setIProovHeaderTextColor: color];
+                } else if ([key isEqualToString: @"iProovHeaderBackgroundColor"]) {
+                     [[NetverifyIProovScanView jumioAppearance] setIProovHeaderBackgroundColor: color];
+                } else if ([key isEqualToString: @"iProovCloseButtonTintColor"]) {
+                     [[NetverifyIProovScanView jumioAppearance] setIProovCloseButtonTintColor: color];
+                } else if ([key isEqualToString: @"iProovFooterTextColor"]) {
+                     [[NetverifyIProovScanView jumioAppearance] setIProovFooterTextColor: color];
+                } else if ([key isEqualToString: @"iProovFooterBackgroundColor"]) {
+                    [[NetverifyIProovScanView jumioAppearance] setIProovFooterBackgroundColor: color];
+                } else if ([key isEqualToString: @"iProovLivenessScanningTintColor"]) {
+                    [[NetverifyIProovScanView jumioAppearance] setIProovLivenessScanningTintColor: color];
+                } else if ([key isEqualToString: @"iProovProgressBarColor"]) {
+                    [[NetverifyIProovScanView jumioAppearance] setIProovProgressBarColor: color];
+                }
+            }
         }
     }
     

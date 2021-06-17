@@ -1,7 +1,7 @@
 {
   "name": "com.jumio.cordova.demo",
   "displayName": "DemoApp",
-  "version": "3.9.1",
+  "version": "3.9.2",
   "description": "A sample Apache Cordova application that responds to the deviceready event.",
   "main": "index.js",
   "scripts": {
@@ -23,7 +23,7 @@
     ]
   },
   "devDependencies": {
-    "cordova-android": "^9.0.0",
+    "cordova-android": "^9.1.0",
     "cordova-plugin-jumio-mobilesdk": "file:.."
   }
 }

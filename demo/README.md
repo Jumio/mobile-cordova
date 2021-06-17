@@ -4,7 +4,7 @@ Demonstrates how to use the JumioMobileSDK plugin.
 ## Prerequisites
 
 * Cordova CLI 10.0.0
-* NodeJS 14.15.4
+* NodeJS 14.17.0
 
 ## Usage
 
@@ -16,7 +16,7 @@ cordova prepare
 ```
 ### Android-specific
 
-Navigate to `platforms/android/build.gradle` and replace the generated buildscript with the following.
+Navigate to `platforms/android/build.gradle` and replace the generated buildscript with the following:
 
 ```
 buildscript {
@@ -34,10 +34,31 @@ buildscript {
 }
 ```
 
-Navigate to `platforms/android/gradle.properties` and add the following line.
+Navigate to `platforms/android/gradle.properties` and add the following line:
 
 ```
 android.jetifier.blacklist=bcprov-jdk15on
+```
+
+### iOS-specific
+
+In the project root folder create a build.json file and add the following:
+
+```
+{
+  "ios": {
+    "debug": {
+      "buildFlag": [
+        "BUILD_LIBRARY_FOR_DISTRIBUTION=YES"
+      ]
+    },
+    "release": {
+      "buildFlag": [
+        "BUILD_LIBRARY_FOR_DISTRIBUTION=YES"
+      ]
+    }
+  }
+}
 ```
 
 ## Run the application
