@@ -2,7 +2,7 @@
 
 Official Jumio Mobile SDK plugin for Apache Cordova
 
-This plugin is compatible with version 3.9.2 of the Jumio SDK. If you have questions, please reach out to your Account Manager or contact [Jumio Support](#support).
+This plugin is compatible with version 4.0.0 of the Jumio SDK. If you have questions, please reach out to your Account Manager or contact [Jumio Support](#support).
 
 # Table of Contents
 - [Compatibility](#compatibility)
@@ -11,20 +11,18 @@ This plugin is compatible with version 3.9.2 of the Jumio SDK. If you have quest
   - [iOS](#ios)
   - [Android](#android)
 - [Usage](#usage)
-    - [Netverify & Fastfill](#Netverify-&-Fastfill)
-    - [Document Verification](#document-verification)
-    - [BAM Checkout](#bam-checkout)
 - [Customization](#customization)
+- [Configuration](#configuration)
 - [Callbacks](#callbacks)
 - [FAQ](#faq)
-  - [Framework not found iProov.xcframework](#framework-not-found-iproov.xcframework)
+  - [Framework not found iProov.xcframework](#framework-not-found-iproovxcframework)
 - [Support](#support)
 
 ## Compatibility
 With this release, we only ensure compatibility with the latest Cordova versions and plugins.
 At the time of this release, the following minimum versions are supported:
 * Cordova: 10.0.0
-* Cordova Android: 9.1.0
+* Cordova Android: 10.1.1
 * Cordova iOS: 6.2.0
 
 ## Setup
@@ -34,16 +32,16 @@ cordova create MyProject com.my.project "MyProject"
 cd MyProject
 cordova platform add ios
 cordova platform add android
-cordova plugin add https://github.com/Jumio/mobile-cordova.git#v3.9.2
+cordova plugin add https://github.com/Jumio/mobile-cordova.git#v4.0.0
 ```
 
 ## Integration
 
 ### iOS
-Manual integration or dependency management via cocoapods possible, please see [the official documentation of the Jumio Mobile SDK for iOS](https://github.com/Jumio/mobile-sdk-ios/tree/v3.9.1#basics)
+Manual integration or dependency management via cocoapods possible, please see [the official documentation of the Jumio Mobile SDK for iOS](https://github.com/Jumio/mobile-sdk-ios/tree/v4.0.0#basics)
 
 ### Android
-Add required permissions for the products as described in chapter [Permissions](https://github.com/Jumio/mobile-sdk-android/blob/v3.9.2/README.md#permissions)
+Add required permissions for the products as described in chapter [Permissions](https://github.com/Jumio/mobile-sdk-android/blob/v4.0.0/README.md#permissions)
 
 To use the native Jumio Android component, your App needs to support AndroidX. This can be enabled by adding the following preference to your config.xml:
 
@@ -51,303 +49,43 @@ To use the native Jumio Android component, your App needs to support AndroidX. T
 <preference name="AndroidXEnabled" value="true" />
 ```
 
+***Proguard Rules***    
+For information on Android Proguard Rules concerning the Jumio SDK, please refer to our [Android Guides](https://github.com/Jumio/mobile-sdk-android#proguard).
+
 For other build issues, refer to the The [FAQ section](#faq) at the bottom.
 
 ## Usage
-
-### Netverify & Fastfill
-To initialize the SDK, perform the following call.
+1. To initialize the SDK, perform the following call.
 
 ```javascript
-Jumio.initNetverify(<API_TOKEN>, <API_SECRET>, <DATACENTER>, {configuration});
+Jumio.initialize(<AUTHORIZATION_TOKEN>, <DATACENTER>);
 ```
 
 Datacenter can either be **US**, **EU** or **SG**.
 
+For more information about how to obtain an AUTHORIZATION_TOKEN, please refer to our [API Guide](https://github.com/Jumio/implementation-guides/blob/master/api-guide/api_guide.md).
 
-Configure the SDK with the *configuration*-Object.
-
-| Configuration | Datatype | Description |
-| ------ | -------- | ----------- |
-| enableVerification | Boolean | Enable ID verification |
-| callbackUrl | String | Specify an URL for individual transactions |
-| enableIdentityVerification | Boolean | Enable face match during the ID verification for a specific transaction |
-| preselectedCountry | Boolean | Specify the issuing country (ISO 3166-1 alpha-3 country code) |
-| customerInternalReference | String | Allows you to identify the scan (max. 100 characters) |
-| reportingCriteria | String | Use this option to identify the scan in your reports (max. 100 characters) |
-| userReference | String | Set a customer identifier (max. 100 characters) |
-| sendDebugInfoToJumio | Boolean | Send debug information to Jumio. |
-| dataExtractionOnMobileOnly | Boolean | Limit data extraction to be done on device only |
-| cameraPosition | String | Which camera is used by default. Can be **FRONT** or **BACK**. |
-| preselectedDocumentVariant | String | Which types of document variants are available. Can be **PAPER** or **PLASTIC** |
-| documentTypes | String-Array | An array of accepted document types: Available document types: **PASSPORT**, **DRIVER_LICENSE**, **IDENTITY_CARD**, **VISA** |
-| enableWatchlistScreening | String | Enables [Jumio Screening](https://www.jumio.com/screening/). Can be **ENABLED**, **DISABLED** or **DEFAULT** (when not specified reverts to **DEFAULT**) |
-| watchlistSearchProfile | String | Specifies specific profile of watchlist |
-
-
-Initialization example with your configuration:
+2. As soon as the SDK is initialized, the sdk is started by the following call.
 
 ```javascript
-Jumio.initNetverify("API_TOKEN", "API_SECRET", "US", {
-    requireVerification: false,
-    userReference: "USERREFERENCE",
-    preselectedCountry: "USA",
-    cameraPosition: "BACK",
-    documentTypes: ["DRIVER_LICENSE", "PASSPORT", "IDENTITY_CARD", "VISA"],
-    enableWatchlistScreening: "ENABLED",
-    watchlistSearchProfile: "YOURPROFILENAME"
-});
+Jumio.start(successCallback, errorCallback);
 ```
 
-***Android eMRTD scanning***
-
-If you are using eMRTD scanning, following lines are needed in your Manifest file:
-
-```javascript
--keep class net.sf.scuba.smartcards.IsoDepCardService {*;}
--keep class org.jmrtd.** { *; }
--keep class net.sf.scuba.** {*;}
--keep class org.bouncycastle.** {*;}
--keep class org.ejbca.** {*;}
-
--dontwarn java.nio.**
--dontwarn org.codehaus.**
--dontwarn org.ejbca.**
--dontwarn org.bouncycastle.**
-```
-
-Add the needed dependencies following [this chapter](https://github.com/Jumio/mobile-sdk-android/blob/master/docs/integration_id-verification-fastfill.md#dependencies) of the android integration guide.
-
-Enable eMRTD by using the following method in your native android code:
-
-```javascript
-netverifySDK.setEnableEMRTD(true);
-```
-
-
-As soon as the sdk is initialized, the sdk is started by the following call.
-
-```javascript
-Jumio.startNetverify(successCallback, errorCallback);
-```
-
-Example
-
-```javascript
-Jumio.startNetverify(function(documentData) {
-    // YOUR CODE
-}, function(error) {
-    // YOUR CODE
-});
-```
-### Document Verification
-
-To initialize the SDK, perform the following call.
-
-```javascript
-Jumio.initDocumentVerification(<API_TOKEN>, <API_SECRET>, <DATACENTER>, {configuration});
-```
-
-Datacenter can either be **US**, **EU** or **SG**.
-
-Configure the SDK with the *configuration*-Object. **(configuration marked with * are mandatory)**
-
-| Configuration | Datatype | Description |
-| ------ | -------- | ----------- |
-| **type*** | String | See the list below |
-| **userReference*** | String | Set a customer identifier (max. 100 characters) |
-| **country*** | String | Set the country (ISO-3166-1 alpha-3 code) |
-| **customerInternalReference*** | String | Allows you to identify the scan (max. 100 characters) |
-| reportingCriteria | String | Use this option to identify the scan in your reports (max. 100 characters) |
-| callbackUrl | String | Specify an URL for individual transactions |
-| documentName | String | Override the document label on the help screen |
-| customDocumentCode | String | Set your custom document code (set in the merchant backend under "Settings" - "Multi Documents" - "Custom" |
-| cameraPosition | String | Which camera is used by default. Can be **FRONT** or **BACK**. |
-| enableExtraction | bool | Enable/disable data extraction for documents. |
-
-Possible types:
-
-*  BS (Bank statement)
-*  IC (Insurance card)
-*  UB (Utility bill, front side)
-*  CAAP (Cash advance application)
-*  CRC (Corporate resolution certificate)
-*  CCS (Credit card statement)
-*  LAG (Lease agreement)
-*  LOAP (Loan application)
-*  MOAP (Mortgage application)
-*  TR (Tax return)
-*  VT (Vehicle title)
-*  VC (Voided check)
-*  STUC (Student card)
-*  HCC (Health care card)
-*  CB (Council bill)
-*  SENC (Seniors card)
-*  MEDC (Medicare card)
-*  BC (Birth certificate)
-*  WWCC (Working with children check)
-*  SS (Superannuation statement)
-*  TAC (Trade association card)
-*  SEL (School enrollment letter)
-*  PB (Phone bill)
-*  USSS (US social security card)
-*  SSC (Social security card)
-*  CUSTOM (Custom document type)
-
-Initialization example with configuration.
-
-```javascript
-Jumio.initDocumentVerification("API_TOKEN", "API_SECRET", "US", {
-    type: "BC",
-    userReference: "USERREFERENCE",
-    country: "USA",
-    customerInternalReference: "YOURSCANREFERENCE",
-    cameraPosition: "BACK"
-});
-```
-
-As soon as the SDK is initialized, the SDK is started by the following call.
-
-```javascript
-Jumio.startDocumentVerification(successCallback, errorCallback);
-```
-
-Example
-
-```javascript
-Jumio.startDocumentVerification(function(documentData) {
-    // YOUR CODE
-}, function(error) {
-    // YOUR CODE
-});
-```
-
-### BAM Checkout
-
-To Initialize the SDK, perform the following call.
-
-```javascript
-Jumio.initBAM(<API_TOKEN>, <API_SECRET>, <DATACENTER>, {configuration});
-```
-
-Datacenter can either be **US**, **EU** or **SG**.
-
-
-
-Configure the SDK with the *configuration*-Object.
-
-| Configuration | Datatype | Description |
-| ------ | -------- | ----------- |
-| cardHolderNameRequired | Boolean |
-| sortCodeAndAccountNumberRequired | Boolean |
-| expiryRequired | Boolean |
-| cvvRequired | Boolean |
-| expiryEditable | Boolean |
-| cardHolderNameEditable | Boolean |
-| merchantReportingCriteria | String | Overwrite your specified reporting criteria to identify each scan attempt in your reports (max. 100 characters)
-| vibrationEffectEnabled | Boolean |
-| enableFlashOnScanStart | Boolean |
-| cardNumberMaskingEnabled | Boolean |
-| offlineToken | String | In your Jumio merchant backend on the "Settings" page under "API credentials" you can find your Offline token. In case you use your offline token, you must not set the API token and secret|
-| cameraPosition | String | Which camera is used by default. Can be **FRONT** or **BACK**. |
-| cardTypes | String-Array | An array of accepted card types. Available card types: **VISA**, **MASTER_CARD**, **AMERICAN_EXPRESS**, **CHINA_UNIONPAY**, **DINERS_CLUB**, **DISCOVER**, **JCB** |
-
-Initialization example with configuration.
-
-```javascript
-Jumio.initBAM("API_TOKEN", "API_SECRET", "US", {
-    cardHolderNameRequired: false,
-    cvvRequired: true,
-    cameraPosition: "BACK",
-    cardTypes: ["VISA", "MASTER_CARD"]
-});
-```
-
-
-As soon as the sdk is initialized, the sdk is started by the following call.
-
-```javascript
-Jumio.startBAM(successCallback, errorCallback);
-```
-
-Example
-
-```javascript
-Jumio.startBAM(function(cardInformation) {
-    // YOUR CODE
-}, function(error) {
-    // YOUR CODE
-});
-```
 
 ## Customization
-
 ### Android
+The JumioSDK colors can be customized by overriding the custom theme `AppThemeCustomJumio`. The styles-file for Android is automatically copied to your app by the rule in the `plugin.xml`. An example customization of all values that can be found in the [jumio-styles.xml of the plugin](src/android/res/values/jumio-styles.xml) 
 
-#### Netverify
-The Netverify SDK can be customized to the respective needs by following this [customization chapter](https://github.com/Jumio/mobile-sdk-android/blob/v3.9.2/docs/integration_id-verification-fastfill.md#customization).
-
-#### BAM Checkout
-The Netverify SDK can be customized to the respective needs by following this [customization chapter](https://github.com/Jumio/mobile-sdk-android/blob/v3.9.2/docs/integration_bam-checkout.md#customization).
-
-#### Document Verification
-The Netverify SDK can be customized to the respective needs by following this [customization chapter](https://github.com/Jumio/mobile-sdk-android/blob/v3.9.2/docs/integration_document-verification.md#customization).
-
-### iOS
-The SDK can be customized to the respective needs. You can pass the following customization options to the initializer:
-
-| Customization key | Type | Description |
-|:------------------|:-----|:------------|
-| disableBlur       | BOOL | Deactivate the blur effect |
-| backgroundColor   | STRING | Change base view's background color |
-| foregroundColor   | STRING | Change base view's foreground color |
-| tintColor         | STRING | Change the tint color of the navigation bar |
-| barTintColor      | STRING | Change the bar tint color of the navigation bar |
-| textTitleColor    | STRING | Change the text title color of the navigation bar |
-| documentSelectionHeaderBackgroundColor | STRING | Change the background color of the document selection header |
-| documentSelectionHeaderTitleColor | STRING | Change the title color of the document selection header |
-| documentSelectionHeaderIconColor | STRING | Change the icon color of the document selection header |
-| documentSelectionButtonBackgroundColor | STRING | Change the background color of the document selection button |
-| documentSelectionButtonTitleColor | STRING | Change the title color of the document selection button |
-| documentSelectionButtonIconColor | STRING | Change the icon color of the document selection button |
-| fallbackButtonBackgroundColor | STRING | Change the background color of the fallback button |
-| fallbackButtonBorderColor | STRING | Change the border color of the fallback button |
-| fallbackButtonTitleColor | STRING | Change the title color of the fallback button |
-| positiveButtonBackgroundColor | STRING | Change the background color of the positive button |
-| positiveButtonBorderColor | STRING | Change the border color of the positive button |
-| positiveButtonTitleColor | STRING | Change the title color of the positive button |
-| negativeButtonBackgroundColor | STRING | Change the background color of the negative button |
-| negativeButtonBorderColor | STRING | Change the border color of the negative button |
-| negativeButtonTitleColor | STRING | Change the title color of the negative button |
-| scanBackgroundColor (NV only) | STRING | Change the background color of the scan overlay |
-| scanOverlayStandardColor (NV only) | STRING | Change the standard color of the scan overlay |
-| scanOverlayValidColor (NV only) | STRING | Change the valid color of the scan overlay |
-| scanOverlayInvalidColor (NV only) | STRING | Change the invalid color of the scan overlay |
-| scanOverlayTextColor (BAM only) | STRING | Change the text color of the scan overlay |
-| scanOverlayBorderColor (BAM only) | STRING | Change the border color of the scan overlay |
-
-All colors are provided with a HEX string with the following format: #ff00ff.
-
-**Customization example**
-```
-Jumio.initNetverify("API_TOKEN", "API_SECRET", "US", {
-    requireVerification: false,
-    ...
-}, {
-    disableBlur: true,
-    backgroundColor: "#ff00ff",
-    barTintColor: "#ff1298"
-);
-```
+## Configuration
+For more information about how to set specific SDK parameters (callbackUrl, userReference, country, ...), please refer to our [API Guide](https://github.com/Jumio/implementation-guides/blob/master/api-guide/api_guide.md#request-body).
 
 ## Callback
-To get information about callbacks, Netverify Retrieval API, Netverify Delete API and Global Netverify settings and more, please read our [page with server related information](https://github.com/Jumio/implementation-guides/blob/master/netverify/callback.md).
+To get information about callbacks, Netverify Retrieval API, Netverify Delete API and Global Netverify settings and more, please read our [page with server related information](https://github.com/Jumio/implementation-guides/blob/master/api-guide/api_guide.md#callback).
 
-The JSONObject with all the extracted data that is returned for the specific products is described in the following subchapters:
+## Result Objects
+JumioSDK will return a JSONObject `documentData` with all  extracted data in case of a successfully completed workflow and `error` in case of error. An error object always includes an error code and an error message.
 
-### Netverify & Fastfill
-
-*NetverifyDocumentData*
+### Result
 
 | Parameter | Type | Max. length | Description  |
 |:-------------------|:----------- 	|:-------------|:-----------------|
@@ -371,7 +109,6 @@ The JSONObject with all the extracted data that is returned for the specific pro
 | optionalData1 | String | 50 | Optional field of MRZ line 1 |
 | optionalData2 | String | 50 | Optional field of MRZ line 2 |
 | placeOfBirth | String | 255 | Place of Birth |
-| extractionMethod | String | 12| MRZ, OCR, BARCODE, BARCODE_OCR or NONE |
 
 *MRZ-Data*
 
@@ -387,31 +124,10 @@ The JSONObject with all the extracted data that is returned for the specific pro
 | personalNumberValid | BOOL | | True if personal number check digit is valid or not available, otherwise false |
 | compositeValid | BOOL | | True if composite check digit is valid, otherwise false |
 
-### BAM Checkout
-
-*BAMCardInformation*
-
-|Parameter | Type | Max. length | Description |
-|:---------------------------- 	|:-------------|:-----------------|:-------------|
-| cardType | String |  16| VISA, MASTER_CARD, AMERICAN_EXPRESS, CHINA_UNIONPAY, DINERS_CLUB, DISCOVER, JCB or STARBUCKS |
-| cardNumber | String | 16 | Full credit card number |
-| cardNumberGrouped | String | 19 | Grouped credit card number |
-| cardNumberMasked | String | 19 | First 6 and last 4 digits of the grouped credit card number, other digits are masked with "X" |
-| cardExpiryMonth | String | 2 | Month card expires if enabled and readable |
-| CardExpiryYear | String | 2 | Year card expires if enabled and readable |
-| cardExpiryDate | String | 5 | Date card expires in the format MM/yy if enabled and readable |
-| cardCVV | String | 4 | Entered CVV if enabled |
-| cardHolderName | String | 100 | Name of the card holder in capital letters if enabled and readable, or as entered if editable |
-| cardSortCode | String | 8 | Sort code in the format xx-xx-xx or xxxxxx if enabled, available and readable |
-| cardAccountNumber | String | 8 | Account number if enabled, available and readable |
-| cardSortCodeValid | BOOL |  | True if sort code valid, otherwise false |
-| cardAccountNumberValid | BOOL |  | True if account number code valid, otherwise false |
-
-### Document Verification
-No data returned.
-
 # FAQ
 This is a list of common __Android build issues__ and how to resolve them:
+* `AAPT: error: resource android:attr/lStar not found` is resolved [in this Stackoverflow post](https://stackoverflow.com/a/70492116/1297835)
+* `Build-tool 32.0.0 is missing DX` (on Windows) -  [in this Stackoverflow post](https://stackoverflow.com/a/68430992/1297835)
 * Gradle plugin 4.X not supported, please install 5.X    
 	--> Change the version in the `gradle-wrapper.properties` file
 
