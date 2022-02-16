@@ -5,8 +5,6 @@
 
 package com.jumio.mobilesdk;
 
-import com.jumio.cordova.demo.R;
-import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.util.Log;
@@ -14,7 +12,6 @@ import android.util.Log;
 import com.jumio.defaultui.JumioActivity;
 import com.jumio.sdk.JumioSDK;
 import com.jumio.sdk.credentials.JumioCredentialInfo;
-import com.jumio.sdk.exceptions.PlatformNotSupportedException;
 import com.jumio.sdk.result.JumioCredentialResult;
 import com.jumio.sdk.result.JumioFaceResult;
 import com.jumio.sdk.result.JumioIDResult;
@@ -41,10 +38,9 @@ public class JumioMobileSDK extends CordovaPlugin {
     private static final String ACTION_START = "start";
 
     private CallbackContext callbackContext;
-    private boolean initiateSuccessful = false;
 
     @Override
-    public boolean execute(String action, JSONArray args, CallbackContext callbackContext) throws JSONException {
+    public boolean execute(String action, JSONArray args, CallbackContext callbackContext) {
         PluginResult result = null;
         this.callbackContext = callbackContext;
 
@@ -54,7 +50,7 @@ public class JumioMobileSDK extends CordovaPlugin {
             result.setKeepCallback(false);
             return true;
         } else if (action.equals(ACTION_START)) {
-            start(args);
+            start();
             result = new PluginResult(Status.NO_RESULT);
             result.setKeepCallback(true);
             return true;
@@ -85,7 +81,7 @@ public class JumioMobileSDK extends CordovaPlugin {
             intent.putExtra(JumioActivity.EXTRA_DATACENTER, dataCenter);
 
             //The following intent extra can be used to customize the Theme of Default UI
-            intent.putExtra(JumioActivity.EXTRA_CUSTOM_THEME, R.style.AppThemeCustomJumio);
+//            intent.putExtra(JumioActivity.EXTRA_CUSTOM_THEME, R.style.AppThemeCustomJumio);
 
             cordova.getActivity().startActivityForResult(intent, REQUEST_CODE);
 
@@ -94,15 +90,12 @@ public class JumioMobileSDK extends CordovaPlugin {
         }
     }
 
-    private void start(JSONArray data) {
-        Runnable runnable = new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    checkPermissionsAndStart();
-                } catch (Exception e) {
-                    showErrorMessage("Error starting the Jumio SDK: " + e.getLocalizedMessage());
-                }
+    private void start() {
+        Runnable runnable = () -> {
+            try {
+                checkPermissionsAndStart();
+            } catch (Exception e) {
+                showErrorMessage("Error starting the Jumio SDK: " + e.getLocalizedMessage());
             }
         };
 
@@ -236,14 +229,13 @@ public class JumioMobileSDK extends CordovaPlugin {
         try {
             JSONObject errorResult = new JSONObject();
             errorResult.put("errorMessage", msg != null ? msg : "");
-            if(callbackContext != null) {
+            if (callbackContext != null) {
                 callbackContext.error(errorResult);
             }
-        } catch (JSONException e) {
-            Log.e(TAG, e.getLocalizedMessage());
-        } catch (NullPointerException e) {
+        } catch (JSONException | NullPointerException e) {
             Log.e(TAG, e.getLocalizedMessage());
         }
+    }
 
     private void sendErrorObject(String errorCode, String errorMsg) {
         try {
@@ -254,9 +246,7 @@ public class JumioMobileSDK extends CordovaPlugin {
             if(callbackContext != null) {
                 callbackContext.error(errorResult);
             }
-        } catch (JSONException e) {
-            showErrorMessage("Result could not be sent: " + e.getLocalizedMessage());
-        } catch (NullPointerException e) {
+        } catch (JSONException | NullPointerException e) {
             showErrorMessage("Result could not be sent: " + e.getLocalizedMessage());
         }
     }
