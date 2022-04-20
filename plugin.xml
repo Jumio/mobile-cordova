@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<plugin id="cordova-plugin-jumio-mobilesdk" version="4.0.0" xmlns="http://apache.org/cordova/ns/plugins/1.0"
+<plugin id="cordova-plugin-jumio-mobilesdk" version="4.1.0" xmlns="http://apache.org/cordova/ns/plugins/1.0"
         xmlns:android="http://schemas.android.com/apk/res/android">
     <name>JumioMobileSDK</name>
     <js-module name="JumioMobileSDK" src="www/JumioMobileSDK.js">
@@ -16,9 +16,15 @@
         <dependency id="cordova-plugin-add-swift-support" version="2.0.2"/>
 
         <preference name="CAMERA_USAGE_DESCRIPTION"
-                    default="This will allow ${PRODUCT_NAME} to take photos of your credentials."/>
+            default="This will allow ${PRODUCT_NAME} to take photos of your credentials."/>
         <config-file target="*-Info.plist" parent="NSCameraUsageDescription">
             <string>$CAMERA_USAGE_DESCRIPTION</string>
+        </config-file>
+
+        <preference name="NFC_USAGE_DESCRIPTION"
+            default="This will allow ${PRODUCT_NAME} to scan NFC-capable documents."/>
+        <config-file target="*-Info.plist" parent="NFCReaderUsageDescription">
+            <string>$NFC_USAGE_DESCRIPTION</string>
         </config-file>
 
         <podspec>
@@ -26,7 +32,7 @@
                 <source url="https://github.com/CocoaPods/Specs.git"/>
             </config>
             <pods use-frameworks="true">
-                <pod name="Jumio" spec="4.0.0"/>
+                <pod name="Jumio" spec="4.1.2"/>
             </pods>
         </podspec>
     </platform>
@@ -43,7 +49,7 @@
         <config-file target="config.xml" parent="/*">
             <feature name="JumioMobileSDK">
                 <param name="android-package"
-                       value="com.jumio.mobilesdk.JumioMobileSDK"/>
+                    value="com.jumio.mobilesdk.JumioMobileSDK"/>
             </feature>
         </config-file>
         <proguard-config>
@@ -68,7 +74,7 @@
             -dontwarn javax.annotation.Nullable
         </proguard-config>
         <framework src="src/android/plugin.gradle" custom="true" type="gradleReference"/>
-        <source-file src="src/android/JumioMobileSDK.java" target-dir="src/com/jumio/mobilesdk"/>
+        <source-file src="src/android/JumioMobileSDK.kt" target-dir="src/main/kotlin/com/jumio/mobilesdk"/>
 		<resource-file src="src/android/res/values/jumio-styles.xml" target="res/values/jumio-styles.xml"/>
 	</platform>
 </plugin>

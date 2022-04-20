@@ -24,9 +24,6 @@ var app = {
     initialize: function() {
         document.addEventListener('deviceready', this.onDeviceReady.bind(this), false);
 		document.getElementById("start").addEventListener("click", this.start);
-		document.getElementById("log").addEventListener("change",function unhide() {
-			document.getElementById("logtitle").hidden = true
-		})			
     },
 
     // deviceready Event Handler
@@ -38,15 +35,17 @@ var app = {
 	},
 
 	start: function() {
-    		var authorizationToken = document.getElementById("tokenInput").value;
+    		var authorizationToken = '...';
+            if(document.getElementById("tokenInput") && document.getElementById("tokenInput").value) {
+    		    authorizationToken = document.getElementById("tokenInput").value;
+    		}
+
     		Jumio.initialize(authorizationToken, DATACENTER);
 
     		Jumio.start(function(documentData) {
-    			// alert(JSON.stringify(documentData));
-    			document.getElementById("log").textContent = JSON.stringify(documentData);
+    			 alert(JSON.stringify(documentData));
     		}, function(error) {
-    			// alert(JSON.stringify(error));
-    			document.getElementById("log").textContent = JSON.stringify(error);
+    			 alert(JSON.stringify(error));
     		});
     }
 };
