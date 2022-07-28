@@ -22,8 +22,8 @@ function Jumio () {
     		[authorizationToken, datacenter]);
     };
 	
-	this.start = function(success, error) {
-		exec(success, error, "JumioMobileSDK", "start", []);
+	this.start = function(success, error, customizations) {
+		exec(success, error, "JumioMobileSDK", "start", [customizations]);
 	};
 }
 

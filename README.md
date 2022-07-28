@@ -2,7 +2,7 @@
 
 Official Jumio Mobile SDK plugin for Apache Cordova
 
-This plugin is compatible with version 4.1.0 of the Jumio SDK. If you have questions, please reach out to your Account Manager or contact [Jumio Support](#support).
+This plugin is compatible with version 4.2.0 of the Jumio SDK. If you have questions, please reach out to your Account Manager or contact [Jumio Support](#support).
 
 # Table of Contents
 - [Compatibility](#compatibility)
@@ -21,8 +21,8 @@ This plugin is compatible with version 4.1.0 of the Jumio SDK. If you have quest
 ## Compatibility
 With this release, we only ensure compatibility with the latest Cordova versions and plugins.
 At the time of this release, the following minimum versions are supported:
-* Cordova: 10.0.0
-* Cordova Android: 10.1.1
+* Cordova: 11.0.0
+* Cordova Android: 10.1.2
 * Cordova iOS: 6.2.0
 
 ## Setup
@@ -32,7 +32,7 @@ cordova create MyProject com.my.project "MyProject"
 cd MyProject
 cordova platform add ios
 cordova platform add android
-cordova plugin add https://github.com/Jumio/mobile-cordova.git#v4.1.0
+cordova plugin add https://github.com/Jumio/mobile-cordova.git#v4.2.0
 ```
 
 ## Integration
@@ -76,6 +76,88 @@ Jumio.start(successCallback, errorCallback);
 ### Android
 The JumioSDK colors can be customized by overriding the custom theme `AppThemeCustomJumio`. The styles-file for Android is automatically copied to your app by the rule in the `plugin.xml`. An example customization of all values that can be found in the [jumio-styles.xml of the plugin](src/android/res/values/jumio-styles.xml) 
 
+### iOS
+JumioSDK iOS appearance can be customized to your respective needs. You can customize each color based on the device's set appearance, for either Dark mode or Light mode, or you can set a single color for both appearances. Customization is optional and not required.
+
+You can pass the following customization options at [`Jumio.start`](demo/www/js/index.js#L45):
+
+| Customization key                               |
+|:------------------------------------------------|
+| iProovLineColor                                 |
+| iProovHeaderTextColor                           |
+| iProovHeaderBackgroundColor                     |
+| iProovPromptTextColor                           |
+| iProovFooterBackgroundColor                     |
+| iProovCloseButtonTintColor                      |
+| iProovLivenessAssurancePrimaryTintColor         |
+| iProovLivenessAssuranceSecondaryTintColor       |
+| iProovGenuinePresenceAssuranceProgressBarColor  |
+| iProovGenuinePresenceAssuranceNotReadyTintColor |
+| iProovGenuinePresenceAssuranceReadyTintColor    |
+| iProovAnimationForeground                       |
+| iProovAnimationBackground                       |
+| iProovFloatingPromptEnabled                     |
+| primaryButtonBackground                         |
+| primaryButtonBackgroundPressed                  |
+| primaryButtonBackgroundDisabled                 |
+| primaryButtonText                               |
+| secondaryButtonBackground                       |
+| secondaryButtonBackgroundPressed                |
+| secondaryButtonBackgroundDisabled               |
+| secondaryButtonText                             |
+| bubbleBackground                                |
+| bubbleForeground                                |
+| bubbleBackgroundSelected                        |
+| bubbleCircleItemForeground                      |
+| bubbleCircleItemBackground                      |
+| bubbleSelectionIconForeground                   |
+| loadingCirclePlain                              |
+| loadingCircleGradientStart                      |
+| loadingCircleGradientEnd                        |
+| loadingErrorCircleGradientStart                 |
+| loadingErrorCircleGradientEnd                   |
+| loadingCircleIcon                               |
+| scanOverlay                                     |
+| scanOverlayFill                                 |
+| scanOverlayTransparent                          |
+| scanOverlayBackground                           |
+| nfcPassportCover                                |
+| nfcPassportPageDark                             |
+| nfcPassportPageLight                            |
+| nfcPassportForeground                           |
+| nfcPhoneCover                                   |
+| scanViewBubbleForeground                        |
+| scanViewBubbleBackground                        |
+| scanViewForeground                              |
+| scanViewAnimationBackground                     |
+| scanViewAnimationShutter                        |
+| searchBubbleBackground                          |
+| searchBubbleForeground                          |
+| searchBubbleListItemSelected                    |
+| navigationIconColor                             |
+| textForegroundColor                             |
+| primaryColor                                    |
+
+All colors are provided with a HEX string with the following formats: `#ff00ff` or `#66ff00ff` if you want to set the alpha level.
+
+**Customization example**
+
+Example for setting color based on Dark or Light mode
+```
+Jumio.start(successCallback, errorCallback, {
+    primaryColor: { light:"ffffff", dark:"000000" }
+    primaryButtonBackground: { light:ffffff, dark:"000000" }
+});
+```
+
+Example for setting same color for both Dark and Light mode
+```
+Jumio.start(successCallback, errorCallback, {
+    primaryColor: "ffffff"
+    primaryButtonBackground: "ffffff"
+});
+```
+
 ## Configuration
 For more information about how to set specific SDK parameters (callbackUrl, userReference, country, ...), please refer to our [API Guide](https://github.com/Jumio/implementation-guides/blob/master/api-guide/api_guide.md#request-body).
 
@@ -87,42 +169,42 @@ JumioSDK will return a JSONObject `documentData` with all  extracted data in cas
 
 ### Result
 
-| Parameter | Type | Max. length | Description  |
-|:-------------------|:----------- 	|:-------------|:-----------------|
-| selectedCountry | String| 3| [ISO 3166-1 alpha-3](http://en.wikipedia.org/wiki/ISO_3166-1_alpha-3) country code as provided or selected |
-| selectedDocumentType | String | 16| PASSPORT, DRIVER_LICENSE, IDENTITY_CARD or VISA |
-| idNumber | String | 100 | Identification number of the document |
-| personalNumber | String | 14| Personal number of the document|
-| issuingDate | Date | | Date of issue |
-| expiryDate | Date | | Date of expiry |
-| issuingCountry | String | 3 | Country of issue as ([ISO 3166-1 alpha-3](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-3)) country code |
-| lastName | String | 100 | Last name of the customer|
-| firstName | String | 100 | First name of the customer|
-| dob | Date | | Date of birth |
-| gender | String | 1| m, f or x |
-| originatingCountry | String | 3|Country of origin as ([ISO 3166-1 alpha-3](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-3)) country code |
-| addressLine | String | 64 | Street name	|
-| city | String | 64 | City |
-| subdivision | String | 3 | Last three characters of [ISO 3166-2:US](http://en.wikipedia.org/wiki/ISO_3166-2:US) state code	|
-| postCode | String | 15 | Postal code |
-| mrzData |  MRZ-DATA | | MRZ data, see table below |
-| optionalData1 | String | 50 | Optional field of MRZ line 1 |
-| optionalData2 | String | 50 | Optional field of MRZ line 2 |
-| placeOfBirth | String | 255 | Place of Birth |
+| Parameter            | Type     | Max. length | Description                                                                                                |
+|:---------------------|:---------|:------------|:-----------------------------------------------------------------------------------------------------------|
+| selectedCountry      | String   | 3           | [ISO 3166-1 alpha-3](http://en.wikipedia.org/wiki/ISO_3166-1_alpha-3) country code as provided or selected |
+| selectedDocumentType | String   | 16          | PASSPORT, DRIVER_LICENSE, IDENTITY_CARD or VISA                                                            |
+| idNumber             | String   | 100         | Identification number of the document                                                                      |
+| personalNumber       | String   | 14          | Personal number of the document                                                                            |
+| issuingDate          | Date     |             | Date of issue                                                                                              |
+| expiryDate           | Date     |             | Date of expiry                                                                                             |
+| issuingCountry       | String   | 3           | Country of issue as ([ISO 3166-1 alpha-3](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-3)) country code  |
+| lastName             | String   | 100         | Last name of the customer                                                                                  |
+| firstName            | String   | 100         | First name of the customer                                                                                 |
+| dob                  | Date     |             | Date of birth                                                                                              |
+| gender               | String   | 1           | m, f or x                                                                                                  |
+| originatingCountry   | String   | 3           | Country of origin as ([ISO 3166-1 alpha-3](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-3)) country code |
+| addressLine          | String   | 64          | Street name	                                                                                               |
+| city                 | String   | 64          | City                                                                                                       |
+| subdivision          | String   | 3           | Last three characters of [ISO 3166-2:US](http://en.wikipedia.org/wiki/ISO_3166-2:US) state code	           |
+| postCode             | String   | 15          | Postal code                                                                                                |
+| mrzData              | MRZ-DATA |             | MRZ data, see table below                                                                                  |
+| optionalData1        | String   | 50          | Optional field of MRZ line 1                                                                               |
+| optionalData2        | String   | 50          | Optional field of MRZ line 2                                                                               |
+| placeOfBirth         | String   | 255         | Place of Birth                                                                                             |
 
 *MRZ-Data*
 
-| Parameter |Type | Max. length | Description |
-|:---------------|:------------- |:-------------|:-----------------|
-| format | String |  8| MRP, TD1, TD2, CNIS, MRVA, MRVB or UNKNOWN |
-| line1 | String | 50 | MRZ line 1 |
-| line2 | String | 50 | MRZ line 2 |
-| line3 | String | 50| MRZ line 3 |
-| idNumberValid | BOOL| | True if ID number check digit is valid, otherwise false |
-| dobValid | BOOL | | True if date of birth check digit is valid, otherwise false |
-| expiryDateValid |	BOOL| |	True if date of expiry check digit is valid or not available, otherwise false|
-| personalNumberValid | BOOL | | True if personal number check digit is valid or not available, otherwise false |
-| compositeValid | BOOL | | True if composite check digit is valid, otherwise false |
+| Parameter           | Type   | Max. length | Description                                                                    |
+|:--------------------|:-------|:------------|:-------------------------------------------------------------------------------|
+| format              | String | 8           | MRP, TD1, TD2, CNIS, MRVA, MRVB or UNKNOWN                                     |
+| line1               | String | 50          | MRZ line 1                                                                     |
+| line2               | String | 50          | MRZ line 2                                                                     |
+| line3               | String | 50          | MRZ line 3                                                                     |
+| idNumberValid       | BOOL   |             | True if ID number check digit is valid, otherwise false                        |
+| dobValid            | BOOL   |             | True if date of birth check digit is valid, otherwise false                    |
+| expiryDateValid     | BOOL   |             | True if date of expiry check digit is valid or not available, otherwise false  |
+| personalNumberValid | BOOL   |             | True if personal number check digit is valid or not available, otherwise false |
+| compositeValid      | BOOL   |             | True if composite check digit is valid, otherwise false                        |
 
 # FAQ
 This is a list of common __Android build issues__ and how to resolve them:

@@ -46,7 +46,17 @@ var app = {
     			 alert(JSON.stringify(documentData));
     		}, function(error) {
     			 alert(JSON.stringify(error));
-    		});
+    		},
+//    		{
+//    		    loadingCircleIcon: "#000000",
+//    		    loadingCirclePlain: "#000000",
+//    		    loadingCircleGradientStart: "#000000",
+//    		    loadingCircleGradientEnd: "#000000",
+//    		    loadingErrorCircleGradientStart: "#000000",
+//    		    loadingErrorCircleGradientEnd: "#000000",
+//              primaryButtonBackground: {"light": "#FFC0CB", "dark": "#FF1493"}
+//    		}
+    		);
     }
 };
 
