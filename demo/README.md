@@ -14,19 +14,12 @@ Add your data center in `www/js/index.js` and run the following commands:
 cordova plugin add --link ../
 cordova prepare
 ```
-### Android-specific
-
-Navigate to `platforms/android/gradle.properties` and add the following line:
-
-```
-android.jetifier.ignorelist=bcprov-jdk15on
-```
 
 ### iOS-specific
 
 Navigate to `platforms/ios/Podfile` and add the following:
 ```
-dynamic_frameworks = ['Socket.IO-Client-Swift', 'Starscream', 'iProov']
+dynamic_frameworks = ['Socket.IO-Client-Swift', 'Starscream', 'iProov', 'DatadogSDK']
 
 # make all the other frameworks into static frameworks by overriding the static_framework? function to return true
 pre_install do |installer|
@@ -49,6 +42,31 @@ post_install do |installer|
           config.build_settings['BUILD_LIBRARY_FOR_DISTRIBUTION'] = 'YES'
       end
     end
+    
+    # Add Localization to Resources group to make iProov work
+    destinationFolder = './DemoApp/Resources'
+    localizableName = 'Localizable-Jumio.strings'
+    project = installer.aggregate_targets[0].user_project
+    FileUtils.mkdir_p destinationFolder
+    FileUtils.cp_r './Pods/Jumio/Localization', destinationFolder
+    resourcesGroup = project.groups.find do |group|
+      group.name == 'Resources'
+    end
+    localizableGroup = resourcesGroup.children.select {|group|
+      group.name == localizableName
+    }[0]
+    if localizableGroup.nil?
+      localizableGroup = resourcesGroup.new_variant_group(localizableName)
+    end
+    Dir.foreach(destinationFolder + '/Localization') do |folder|
+      if folder.include? ".lproj"
+        localizableGroup.new_file('./Localization/' + folder + '/Localizable-Jumio.strings')
+      end
+    end
+    project.native_targets.each do |target|
+       target.add_resources([localizableGroup])
+    end
+    project.save
 end
 ```
 

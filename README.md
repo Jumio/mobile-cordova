@@ -2,7 +2,7 @@
 
 Official Jumio Mobile SDK plugin for Apache Cordova
 
-This plugin is compatible with version 4.2.0 of the Jumio SDK. If you have questions, please reach out to your Account Manager or contact [Jumio Support](#support).
+This plugin is compatible with version 4.3.0 of the Jumio SDK. If you have questions, please reach out to your Account Manager or contact [Jumio Support](#support).
 
 # Table of Contents
 - [Compatibility](#compatibility)
@@ -22,7 +22,7 @@ This plugin is compatible with version 4.2.0 of the Jumio SDK. If you have quest
 With this release, we only ensure compatibility with the latest Cordova versions and plugins.
 At the time of this release, the following minimum versions are supported:
 * Cordova: 11.0.0
-* Cordova Android: 10.1.2
+* Cordova Android: 11.0.0
 * Cordova iOS: 6.2.0
 
 ## Setup
@@ -32,7 +32,7 @@ cordova create MyProject com.my.project "MyProject"
 cd MyProject
 cordova platform add ios
 cordova platform add android
-cordova plugin add https://github.com/Jumio/mobile-cordova.git#v4.2.0
+cordova plugin add https://github.com/Jumio/mobile-cordova.git#v4.3.0
 ```
 
 ## Integration
@@ -224,7 +224,7 @@ If iOS application build is failing with `ld: framework not found iProov.xcframe
 ```
 post_install do |installer|
   installer.pods_project.targets.each do |target|
-    if ['iProov', 'Socket.IO-Client-Swift', 'Starscream'].include? target.name
+    if ['iProov', 'Socket.IO-Client-Swift', 'Starscream', 'DatadogSDK'].include? target.name
       target.build_configurations.each do |config|
           config.build_settings['BUILD_LIBRARY_FOR_DISTRIBUTION'] = 'YES'
       end

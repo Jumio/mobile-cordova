@@ -35,7 +35,7 @@ var app = {
 	},
 
 	start: function() {
-    		var authorizationToken = '...';
+    		var authorizationToken = '';
             if(document.getElementById("tokenInput") && document.getElementById("tokenInput").value) {
     		    authorizationToken = document.getElementById("tokenInput").value;
     		}

@@ -16,7 +16,7 @@ var exec = require('cordova/exec');
 function Jumio () {
 	this.initialize = function(authorizationToken, datacenter) {
     	exec(function(success) { console.log("Jumio::init Success: " + success) },
-            function(error) { console.log("Jumio::init Error: " + JSON.stringify(error)) },
+            function(error) { alert(JSON.stringify(error)) },
     		"JumioMobileSDK",
     		"initialize",
     		[authorizationToken, datacenter]);

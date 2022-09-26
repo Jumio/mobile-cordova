@@ -8,6 +8,7 @@ import com.jumio.defaultui.JumioActivity
 import com.jumio.sdk.JumioSDK
 import com.jumio.sdk.credentials.JumioCredentialCategory.FACE
 import com.jumio.sdk.credentials.JumioCredentialCategory.ID
+import com.jumio.sdk.enums.JumioDataCenter
 import com.jumio.sdk.result.JumioIDResult
 import com.jumio.sdk.result.JumioResult
 import org.apache.cordova.CallbackContext
@@ -79,31 +80,34 @@ class JumioMobileSDK : CordovaPlugin() {
     }
 
     private fun initialize(data: JSONArray) {
-        if (!JumioSDK.isSupportedPlatform(cordova.activity)) {
-            showErrorMessage("This platform is not supported.")
-            return
+        val authorizationToken = data.getString(0)
+        val dataCenter = data.getString(1)
+        val jumioDataCenter = getJumioDataCenter(dataCenter)
+
+        when {
+            !JumioSDK.isSupportedPlatform(cordova.activity) -> showErrorMessage("This platform is not supported.")
+            jumioDataCenter == null -> showErrorMessage("Invalid Datacenter value.")
+            authorizationToken == null || authorizationToken.isEmpty() -> showErrorMessage("Missing required parameters one-time session authorization token.")
+            else -> {
+                try {
+                    initSdk(dataCenter, authorizationToken)
+                } catch (e: JSONException) {
+                    showErrorMessage("Invalid parameters: " + e.localizedMessage)
+                }
+            }
+        }
+    }
+
+    private fun initSdk(dataCenter: String, authorizationToken: String) {
+        val intent = Intent(cordova.activity, JumioActivity::class.java).apply {
+            putExtra(JumioActivity.EXTRA_TOKEN, authorizationToken)
+            putExtra(JumioActivity.EXTRA_DATACENTER, dataCenter)
+
+            //The following intent extra can be used to customize the Theme of Default UI
+            putExtra(JumioActivity.EXTRA_CUSTOM_THEME, R.style.AppThemeCustomJumio)
         }
 
-        try {
-            if (data.isNull(0) || data.isNull(1)) {
-                showErrorMessage("Missing required parameters one-time session authorization token or dataCenter.")
-                return
-            }
-            val authorizationToken = data.getString(0)
-            val dataCenter = data.getString(1)
-
-            val intent = Intent(cordova.activity, JumioActivity::class.java).apply {
-                putExtra(JumioActivity.EXTRA_TOKEN, authorizationToken)
-                putExtra(JumioActivity.EXTRA_DATACENTER, dataCenter)
-
-                //The following intent extra can be used to customize the Theme of Default UI
-                //putExtra(JumioActivity.EXTRA_CUSTOM_THEME, R.style.AppThemeCustomJumio)
-            }
-
-            cordova.activity.startActivityForResult(intent, REQUEST_CODE)
-        } catch (e: JSONException) {
-            showErrorMessage("Invalid parameters: " + e.localizedMessage)
-        }
+        cordova.activity.startActivityForResult(intent, REQUEST_CODE)
     }
 
     private fun start() {
@@ -171,30 +175,30 @@ class JumioMobileSDK : CordovaPlugin() {
     }
 
     private fun handleIdResult(idResult: JumioIDResult, credentialMap: JSONObject) =
-        with(idResult) {
-            credentialMap.apply {
-                country?.let { put("selectedCountry", it) }
-                idType?.let { put("selectedDocumentType", it) }
-                documentNumber?.let { put("idNumber", it) }
-                personalNumber?.let { put("personalNumber", it) }
-                issuingDate?.let { put("issuingDate", it) }
-                expiryDate?.let { put("expiryDate", it) }
-                issuingCountry?.let { put("issuingCountry", it) }
-                lastName?.let { put("lastName", it) }
-                firstName?.let { put("firstName", it) }
-                gender?.let { put("gender", it) }
-                nationality?.let { put("nationality", it) }
-                dateOfBirth?.let { put("dateOfBirth", it) }
-                address?.let { put("addressLine", it) }
-                city?.let { put("city", it) }
-                subdivision?.let { put("subdivision", it) }
-                postalCode?.let { put("postCode", it) }
-                placeOfBirth?.let { put("placeOfBirth", it) }
-                mrzLine1?.let { put("mrzLine1", it) }
-                mrzLine2?.let { put("mrzLine2", it) }
-                mrzLine3?.let { put("mrzLine3", it) }
+            with(idResult) {
+                credentialMap.apply {
+                    country?.let { put("selectedCountry", it) }
+                    idType?.let { put("selectedDocumentType", it) }
+                    documentNumber?.let { put("idNumber", it) }
+                    personalNumber?.let { put("personalNumber", it) }
+                    issuingDate?.let { put("issuingDate", it) }
+                    expiryDate?.let { put("expiryDate", it) }
+                    issuingCountry?.let { put("issuingCountry", it) }
+                    lastName?.let { put("lastName", it) }
+                    firstName?.let { put("firstName", it) }
+                    gender?.let { put("gender", it) }
+                    nationality?.let { put("nationality", it) }
+                    dateOfBirth?.let { put("dateOfBirth", it) }
+                    address?.let { put("addressLine", it) }
+                    city?.let { put("city", it) }
+                    subdivision?.let { put("subdivision", it) }
+                    postalCode?.let { put("postCode", it) }
+                    placeOfBirth?.let { put("placeOfBirth", it) }
+                    mrzLine1?.let { put("mrzLine1", it) }
+                    mrzLine2?.let { put("mrzLine2", it) }
+                    mrzLine3?.let { put("mrzLine3", it) }
+                }
             }
-        }
 
 
     private fun sendCancelResult(jumioResult: JumioResult?) {
@@ -211,12 +215,10 @@ class JumioMobileSDK : CordovaPlugin() {
         Log.e(TAG, msg ?: "")
         try {
             val errorResult = JSONObject().apply {
-                put("errorMessage", msg)
+                put("errorMessage", msg ?: "")
             }
             callbackContext?.error(errorResult)
         } catch (e: JSONException) {
-            Log.e(TAG, e.localizedMessage)
-        } catch (e: NullPointerException) {
             Log.e(TAG, e.localizedMessage)
         }
     }
@@ -233,5 +235,11 @@ class JumioMobileSDK : CordovaPlugin() {
         } catch (e: NullPointerException) {
             showErrorMessage("Result could not be sent: " + e.localizedMessage)
         }
+    }
+
+    private fun getJumioDataCenter(dataCenter: String) = try {
+        JumioDataCenter.valueOf(dataCenter)
+    } catch (e: IllegalArgumentException) {
+        null
     }
 }
