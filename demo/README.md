@@ -19,7 +19,7 @@ cordova prepare
 
 Navigate to `platforms/ios/Podfile` and add the following:
 ```
-dynamic_frameworks = ['Socket.IO-Client-Swift', 'Starscream', 'iProov', 'DatadogSDK']
+dynamic_frameworks = ['Starscream', 'iProov', 'DatadogSDK', 'SwiftProtobuf']
 
 # make all the other frameworks into static frameworks by overriding the static_framework? function to return true
 pre_install do |installer|

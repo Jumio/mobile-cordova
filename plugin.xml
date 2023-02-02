@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<plugin id="cordova-plugin-jumio-mobilesdk" version="4.3.0" xmlns="http://apache.org/cordova/ns/plugins/1.0"
+<plugin id="cordova-plugin-jumio-mobilesdk" version="4.4.0" xmlns="http://apache.org/cordova/ns/plugins/1.0"
         xmlns:android="http://schemas.android.com/apk/res/android">
     <name>JumioMobileSDK</name>
     <js-module name="JumioMobileSDK" src="www/JumioMobileSDK.js">
@@ -21,6 +21,15 @@
             <string>$CAMERA_USAGE_DESCRIPTION</string>
         </config-file>
 
+        <config-file target="**/Entitlements-Debug.plist"
+                     parent="com.apple.developer.nfc.readersession.formats">
+            <array><string>TAG</string></array>
+        </config-file>
+        <config-file target="**/Entitlements-Release.plist"
+                     parent="com.apple.developer.nfc.readersession.formats">
+            <array><string>TAG</string></array>
+        </config-file>
+
         <preference name="NFC_USAGE_DESCRIPTION"
             default="This will allow ${PRODUCT_NAME} to scan NFC-capable documents."/>
         <config-file target="*-Info.plist" parent="NFCReaderUsageDescription">
@@ -32,7 +41,7 @@
                 <source url="https://github.com/CocoaPods/Specs.git"/>
             </config>
             <pods use-frameworks="true">
-                <pod name="Jumio" spec="4.3.0"/>
+                <pod name="Jumio" spec="4.4.0"/>
             </pods>
         </podspec>
     </platform>

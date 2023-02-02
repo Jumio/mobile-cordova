@@ -18,8 +18,8 @@ repositories {
 }
 
 ext {
-    SDK_VERSION = "4.3.0"
-    kotlin_version = "1.7.0"
+    SDK_VERSION = "4.4.1"
+    kotlin_version = "1.8.0"
 }
 
 dependencies {
@@ -34,7 +34,7 @@ dependencies {
     implementation "com.jumio.android:iproov:${SDK_VERSION}"
     implementation "com.jumio.android:defaultui:${SDK_VERSION}"
     implementation "com.jumio.android:datadog:${SDK_VERSION}"
-    implementation "com.jumio.android:devicerisk:${SDK_VERSION}"
+    implementation "com.iproov.sdk:iproov:8.1.0"
 
     //only for the sample code
     implementation "androidx.activity:activity-ktx:1.4.0"

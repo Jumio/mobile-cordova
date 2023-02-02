@@ -2,7 +2,7 @@
 
 Official Jumio Mobile SDK plugin for Apache Cordova
 
-This plugin is compatible with version 4.3.0 of the Jumio SDK. If you have questions, please reach out to your Account Manager or contact [Jumio Support](#support).
+This plugin is compatible with version 4.4.0 of the Jumio SDK (4.4.0 for iOS, 4.4.1 for Android). If you have questions, please reach out to your Account Manager or contact [Jumio Support](#support).
 
 # Table of Contents
 - [Compatibility](#compatibility)
@@ -15,13 +15,14 @@ This plugin is compatible with version 4.3.0 of the Jumio SDK. If you have quest
 - [Configuration](#configuration)
 - [Callbacks](#callbacks)
 - [FAQ](#faq)
+  - [iOS Localization](#ios-localization)
   - [Framework not found iProov.xcframework](#framework-not-found-iproovxcframework)
 - [Support](#support)
 
 ## Compatibility
 With this release, we only ensure compatibility with the latest Cordova versions and plugins.
 At the time of this release, the following minimum versions are supported:
-* Cordova: 11.0.0
+* Cordova: 11.1.0
 * Cordova Android: 11.0.0
 * Cordova iOS: 6.2.0
 
@@ -32,7 +33,7 @@ cordova create MyProject com.my.project "MyProject"
 cd MyProject
 cordova platform add ios
 cordova platform add android
-cordova plugin add https://github.com/Jumio/mobile-cordova.git#v4.3.0
+cordova plugin add https://github.com/Jumio/mobile-cordova.git#v4.4.0
 ```
 
 ## Integration
@@ -74,7 +75,7 @@ Jumio.start(successCallback, errorCallback);
 
 ## Customization
 ### Android
-The JumioSDK colors can be customized by overriding the custom theme `AppThemeCustomJumio`. The styles-file for Android is automatically copied to your app by the rule in the `plugin.xml`. An example customization of all values that can be found in the [jumio-styles.xml of the plugin](src/android/res/values/jumio-styles.xml) 
+The JumioSDK colors can be customized by overriding the custom theme `AppThemeCustomJumio`. The styles-file for Android is automatically copied to your app by the rule in the `plugin.xml`. An example customization of all values that can be found in the [jumio-styles.xml of the plugin](src/android/res/values/jumio-styles.xml)
 
 ### iOS
 JumioSDK iOS appearance can be customized to your respective needs. You can customize each color based on the device's set appearance, for either Dark mode or Light mode, or you can set a single color for both appearances. Customization is optional and not required.
@@ -83,20 +84,19 @@ You can pass the following customization options at [`Jumio.start`](demo/www/js/
 
 | Customization key                               |
 |:------------------------------------------------|
-| iProovLineColor                                 |
-| iProovHeaderTextColor                           |
-| iProovHeaderBackgroundColor                     |
-| iProovPromptTextColor                           |
-| iProovFooterBackgroundColor                     |
-| iProovCloseButtonTintColor                      |
-| iProovLivenessAssurancePrimaryTintColor         |
-| iProovLivenessAssuranceSecondaryTintColor       |
-| iProovGenuinePresenceAssuranceProgressBarColor  |
-| iProovGenuinePresenceAssuranceNotReadyTintColor |
-| iProovGenuinePresenceAssuranceReadyTintColor    |
 | iProovAnimationForeground                       |
 | iProovAnimationBackground                       |
-| iProovFloatingPromptEnabled                     |
+| iProovFilterForegroundColor                     |
+| iProovFilterBackgroundColor                     |
+| iProovTitleTextColor                            |
+| iProovCloseButtonTintColor                      |
+| iProovSurroundColor                             |
+| iProovPromptTextColor                           |
+| iProovPromptBackgroundColor                     |
+| genuinePresenceAssuranceReadyOvalStrokeColor    |
+| genuinePresenceAssuranceNotReadyOvalStrokeColor |
+| livenessAssuranceOvalStrokeColor                |
+| livenessAssuranceCompletedOvalStrokeColor       |
 | primaryButtonBackground                         |
 | primaryButtonBackgroundPressed                  |
 | primaryButtonBackgroundDisabled                 |
@@ -134,6 +134,11 @@ You can pass the following customization options at [`Jumio.start`](demo/www/js/
 | searchBubbleBackground                          |
 | searchBubbleForeground                          |
 | searchBubbleListItemSelected                    |
+| confirmationImageBackground                     |
+| confirmationImageBackgroundBorder               |
+| confirmationIndicatorActive                     |
+| confirmationIndicatorDefault                    |
+| background                                      |
 | navigationIconColor                             |
 | textForegroundColor                             |
 | primaryColor                                    |
@@ -216,15 +221,16 @@ This is a list of common __Android build issues__ and how to resolve them:
 * Device-ready not fired after X seconds    
   --> The plugin definition in "YOURPROJECT/platforms/android/platform_www/plugins/cordova-plugin-jumio-mobilesdk/www" might be duplicated/corrupted due to the issue mentioned [in this Stackoverflow post](https://stackoverflow.com/questions/28017540/cordova-plugin-javascript-gets-corrupted-when-added-to-project/28264312#28264312). Please fix the duplicated `cordova.define()` call in these files as mentioned in the post.
 
-In case there are __cocoapods adjustments__ that need to be made, please refer to your `Podfile` under `platforms/ios/Podfile`.
-In case there are __iOS Localization updates__ that need to be made, please refer to your  `Localizations` folder under `platforms/ios/Pods/JumioMobileSDK/Localizations` after running `pod install`.
+### iOS Localization
+After installing Cocoapods, please localize your iOS application using the languages provided at the following path:   
+`ios -> Pods -> Jumio -> Localizations -> xx.lproj`
 
 ## Framework not found iProov.xcframework
 If iOS application build is failing with `ld: framework not found iProov.xcframework` or `dyld: Symbol not found: ... Referenced from: /.../Frameworks/iProov.frameworks/iProov`, please make sure the necessary post install-hook has been included in your `Podfile`:
 ```
 post_install do |installer|
   installer.pods_project.targets.each do |target|
-    if ['iProov', 'Socket.IO-Client-Swift', 'Starscream', 'DatadogSDK'].include? target.name
+    if ['iProov', 'Starscream', 'DatadogSDK', 'SwiftProtobuf'].include? target.name
       target.build_configurations.each do |config|
           config.build_settings['BUILD_LIBRARY_FOR_DISTRIBUTION'] = 'YES'
       end
