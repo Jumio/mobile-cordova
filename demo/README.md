@@ -3,8 +3,8 @@ Demonstrates how to use the JumioMobileSDK plugin.
 
 ## Prerequisites
 
-* Cordova CLI 11.0.0
-* NodeJS 18.2.0
+* Cordova CLI 11.1.0
+* NodeJS 20.0.0
 
 ## Usage
 
@@ -67,6 +67,14 @@ post_install do |installer|
        target.add_resources([localizableGroup])
     end
     project.save
+    
+    installer.generated_projects.each do |project|
+        project.targets.each do |target|
+            target.build_configurations.each do |config|
+                config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '11.0'
+            end
+        end
+    end
 end
 ```
 

@@ -12,6 +12,10 @@ class JumioMobileSDK: CDVPlugin {
     fileprivate var jumio: Jumio.SDK?
     fileprivate var jumioVC: Jumio.ViewController?
     fileprivate var callbackId: String?
+    @objc public static let jumioMobileSDKInstance = JumioMobileSDK()
+    @objc class func jumioMobileSDK() -> JumioMobileSDK {
+        return jumioMobileSDKInstance
+    }
 
     @objc(initialize:) func initialize(_ command: CDVInvokedUrlCommand) {
         callbackId = command.callbackId
@@ -60,6 +64,13 @@ class JumioMobileSDK: CDVPlugin {
         else { return }
 
         rootViewController.present(jumioVC, animated: true)
+    }
+
+    @objc(handleDeepLink:) func handleDeepLink(url: NSURL) -> Bool {
+        guard Jumio.SDK.handleDeeplinkURL(url as URL) else {
+            return false
+        }
+        return true
     }
 
     private func getIDResult(idResult: Jumio.IDResult) -> [String: Any] {
@@ -447,12 +458,6 @@ extension JumioMobileSDK {
             customTheme.scanView.foreground = Jumio.Theme.Value(light: UIColor(hexString: light), dark: UIColor(hexString: dark))
         } else if let scanViewForeground = customizations["scanViewForeground"] as? String {
             customTheme.scanView.foreground = Jumio.Theme.Value(UIColor(hexString: scanViewForeground))
-        }
-
-        if let scanViewAnimationBackground = customizations["scanViewAnimationBackground"] as? [String: String?], let light = scanViewAnimationBackground["light"] as? String, let dark = scanViewAnimationBackground["dark"] as? String {
-            customTheme.scanView.animationBackground = Jumio.Theme.Value(light: UIColor(hexString: light), dark: UIColor(hexString: dark))
-        } else if let scanViewAnimationBackground = customizations["scanViewAnimationBackground"] as? String {
-            customTheme.scanView.animationBackground = Jumio.Theme.Value(UIColor(hexString: scanViewAnimationBackground))
         }
 
         if let scanViewAnimationShutter = customizations["scanViewAnimationShutter"] as? [String: String?], let light = scanViewAnimationShutter["light"] as? String, let dark = scanViewAnimationShutter["dark"] as? String {

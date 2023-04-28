@@ -18,7 +18,7 @@ repositories {
 }
 
 ext {
-    SDK_VERSION = "4.4.1"
+    SDK_VERSION = "4.5.0"
     kotlin_version = "1.8.0"
 }
 
@@ -34,10 +34,10 @@ dependencies {
     implementation "com.jumio.android:iproov:${SDK_VERSION}"
     implementation "com.jumio.android:defaultui:${SDK_VERSION}"
     implementation "com.jumio.android:datadog:${SDK_VERSION}"
-    implementation "com.iproov.sdk:iproov:8.1.0"
+    implementation "com.jumio.android:digital-identity:${SDK_VERSION}"
 
     //only for the sample code
-    implementation "androidx.activity:activity-ktx:1.4.0"
+    implementation "androidx.activity:activity-ktx:1.5.1"
 
     //Kotlin
     implementation "androidx.multidex:multidex:2.0.1"

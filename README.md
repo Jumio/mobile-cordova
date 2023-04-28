@@ -2,7 +2,7 @@
 
 Official Jumio Mobile SDK plugin for Apache Cordova
 
-This plugin is compatible with version 4.4.0 of the Jumio SDK (4.4.0 for iOS, 4.4.1 for Android). If you have questions, please reach out to your Account Manager or contact [Jumio Support](#support).
+This plugin is compatible with version 4.5.0 of the Jumio SDK. If you have questions, please reach out to your Account Manager or contact [Jumio Support](#support).
 
 # Table of Contents
 - [Compatibility](#compatibility)
@@ -24,7 +24,7 @@ With this release, we only ensure compatibility with the latest Cordova versions
 At the time of this release, the following minimum versions are supported:
 * Cordova: 11.1.0
 * Cordova Android: 11.0.0
-* Cordova iOS: 6.2.0
+* Cordova iOS: 6.3.0
 
 ## Setup
 Create Cordova project and add our plugin
@@ -33,7 +33,7 @@ cordova create MyProject com.my.project "MyProject"
 cd MyProject
 cordova platform add ios
 cordova platform add android
-cordova plugin add https://github.com/Jumio/mobile-cordova.git#v4.4.0
+cordova plugin add https://github.com/Jumio/mobile-cordova.git#v4.5.0
 ```
 
 ## Integration
@@ -129,7 +129,6 @@ You can pass the following customization options at [`Jumio.start`](demo/www/js/
 | scanViewBubbleForeground                        |
 | scanViewBubbleBackground                        |
 | scanViewForeground                              |
-| scanViewAnimationBackground                     |
 | scanViewAnimationShutter                        |
 | searchBubbleBackground                          |
 | searchBubbleForeground                          |
@@ -210,6 +209,22 @@ JumioSDK will return a JSONObject `documentData` with all  extracted data in cas
 | expiryDateValid     | BOOL   |             | True if date of expiry check digit is valid or not available, otherwise false  |
 | personalNumberValid | BOOL   |             | True if personal number check digit is valid or not available, otherwise false |
 | compositeValid      | BOOL   |             | True if composite check digit is valid, otherwise false                        |
+
+
+## Local Models for JumioDocfinder
+
+If you are using our JumioDocFinder module, you can download our encrypted models and add them to your bundle from [here](https://cdn.mobile.jumio.ai/model/classifier_on_device_ep_99_float16_quant.enc) and [here](https://cdn.mobile.jumio.ai/model/normalized_ensemble_passports_v2_float16_quant.enc).
+
+We recommend to download the files and add them to your project without changing their names (the same way you add Localization files). This will save two network requests on runtime to download these files.
+
+### iOS
+
+You also need to copy those files to the "ios/Assets" folder for Cordova to recognize them.
+
+### Android
+
+You need to copy those files to the assets folder of your Android project (Path: "app/src/main/assets/")
+
 
 # FAQ
 This is a list of common __Android build issues__ and how to resolve them:

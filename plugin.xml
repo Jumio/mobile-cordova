@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<plugin id="cordova-plugin-jumio-mobilesdk" version="4.4.0" xmlns="http://apache.org/cordova/ns/plugins/1.0"
+<plugin id="cordova-plugin-jumio-mobilesdk" version="4.5.0" xmlns="http://apache.org/cordova/ns/plugins/1.0"
         xmlns:android="http://schemas.android.com/apk/res/android">
     <name>JumioMobileSDK</name>
     <js-module name="JumioMobileSDK" src="www/JumioMobileSDK.js">
@@ -13,6 +13,8 @@
         </config-file>
         <header-file src="src/ios/JumioMobileSDK-Bridging-Header.h"/>
         <source-file src="src/ios/JumioMobileSDK.swift"/>
+        <header-file src="src/ios/AppDelegate+Deeplinking.h"/>
+        <source-file src="src/ios/AppDelegate+Deeplinking.m"/>
         <dependency id="cordova-plugin-add-swift-support" version="2.0.2"/>
 
         <preference name="CAMERA_USAGE_DESCRIPTION"
@@ -41,7 +43,7 @@
                 <source url="https://github.com/CocoaPods/Specs.git"/>
             </config>
             <pods use-frameworks="true">
-                <pod name="Jumio" spec="4.4.0"/>
+                <pod name="Jumio" spec="4.5.0"/>
             </pods>
         </podspec>
     </platform>
