@@ -15,6 +15,7 @@
     <allow-intent href="sms:*" />
     <allow-intent href="mailto:*" />
     <allow-intent href="geo:*" />
+    <hook type="after_prepare" src="scripts/podEdit.js" />
     <platform name="android">
         <allow-intent href="market:*" />
         <edit-config file="AndroidManifest.xml" mode="merge" parent="/*" target="/manifest/" xmlns:android="http://schemas.android.com/apk/res/android">
@@ -45,6 +46,8 @@
         <allow-intent href="itms:*" />
         <allow-intent href="itms-apps:*" />
         <preference name="deployment-target" value="11.0" />
+        <preference name="UseSwiftLanguageVersion" value="5.2" />
+        <hook type="before_run" src="scripts/podEdit.js" />
     </platform>
     <preference name="AndroidXEnabled" value="true" />
     <preference name="GradlePluginKotlinEnabled" value="false" />
@@ -53,5 +56,4 @@
     <preference name="android-minSdkVersion" value="21" />
     <preference name="android-maxSdkVersion" value="33" />
     <preference name="android-targetSdkVersion" value="33" />
-    <preference name="UseSwiftLanguageVersion" value="5.2" />
 </widget>

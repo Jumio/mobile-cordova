@@ -7,6 +7,7 @@
 <!--		<item name="jumio_background">#fffee0</item>-->
 <!--		<item name="jumio_text_foreground">#1361BD</item>-->
 <!--		<item name="jumio_navigation_icon">#EC407A</item>-->
+<!--		<item name="jumio_navigation_icon_dark">#EC407A</item>-->
 
 <!--		<item name="jumio_bubble_background">#bc2e41</item>-->
 <!--		<item name="jumio_bubble_background_selected">#57ffc7</item>-->
@@ -36,6 +37,8 @@
 
 <!--		<item name="jumio_scanview_shutter">#AC3D9A</item>-->
 <!--		<item name="jumio_scanview_shutter_pressed">#E0E011</item>-->
+<!--		<item name="jumio_scanview_shutter_dark">#AC3D9A</item>-->
+<!--		<item name="jumio_scanview_shutter_dark_pressed">#E0E011</item>-->
 
 <!--		<item name="jumio_loading_circle_plain">#FFCA28</item>-->
 <!--		<item name="jumio_loading_circle_gradient_start">#04A7F3</item>-->
@@ -44,10 +47,17 @@
 <!--		<item name="jumio_error_circle_gradient_end">#C31322</item>-->
 <!--		<item name="jumio_loading_circle_icon">#050202</item>-->
 
-		<!-- scan-overlay, iproov & nfc colors -->
+<!--		&lt;!&ndash; scan-overlay, iproov & nfc colors &ndash;&gt;-->
+<!--		<item name="jumio_face_animation_customization">@style/CustomFaceHelp</item>-->
 <!--		<item name="jumio_overlay_customization">@style/CustomOverlay</item>-->
 <!--		<item name="iproov_customization">@style/CustomIproov</item>-->
 <!--		<item name="nfc_customization">@style/CustomNfc</item>-->
+<!--	</style>-->
+
+<!--	<style name="CustomFaceHelp" parent="Jumio.Face.Animation.Customization">-->
+<!--		&lt;!&ndash;Help screen colors&ndash;&gt;-->
+<!--		<item name="jumio_face_animation_foreground">#C31322</item>-->
+<!--		<item name="jumio_face_animation_background">#EDED3B</item>-->
 <!--	</style>-->
 
 <!--	<style name="CustomOverlay" parent="Jumio.Overlay.Customization">-->
@@ -55,6 +65,10 @@
 <!--		<item name="jumio_scanOverlayFill">#60EDED3B</item>-->
 <!--		<item name="jumio_scanOverlayTransparent">#ff0000ff</item>-->
 <!--		<item name="jumio_scanBackground">#59FFFFFF</item>-->
+
+<!--		<item name="jumio_scanOverlay_livenessStroke">#EDED3B</item>-->
+<!--		<item name="jumio_scanOverlay_livenessStrokeAnimation">#FF5722</item>-->
+<!--		<item name="jumio_scanOverlay_livenessStrokeAnimationCompleted">#C31322</item>-->
 <!--	</style>-->
 
 <!--	<style name="CustomNfc" parent="Nfc.Customization">-->
@@ -66,13 +80,10 @@
 <!--	</style>-->
 
 <!--	<style name="CustomIproov" parent="Iproov.Customization">-->
-		<!--Help screen colors-->
-<!--		<item name="iproov_animation_foreground">#FF5722</item>-->
-<!--		<item name="iproov_animation_background">#ffff00</item>-->
-		<!--Animation colors-->
+<!--		&lt;!&ndash;Animation colors&ndash;&gt;-->
 <!--		<item name="iproov_filterForegroundColor">#3032b4</item>-->
 <!--		<item name="iproov_filterBackgroundColor">#B6FFFFFF</item>-->
-		<!--Iproov scan colors-->
+<!--		&lt;!&ndash;Iproov scan colors&ndash;&gt;-->
 <!--		<item name="iproov_titleTextColor">#FF5722</item>-->
 <!--		<item name="iproov_promptTextColor">#5C031D</item>-->
 <!--		<item name="iproov_promptBackgroundColor">#ffff00</item>-->
@@ -81,7 +92,7 @@
 <!--		<item name="iproov_closeButton_colorTint">#CC0000</item>-->
 <!--		<item name="iproov_livenessAssurance_ovalStrokeColor">#ff55a1</item>-->
 <!--		<item name="iproov_livenessAssurance_completedOvalStrokeColor">#FF5722</item>-->
-		<!--GPA specific colors-->
+<!--		&lt;!&ndash;GPA specific colors&ndash;&gt;-->
 <!--		<item name="iproov_genuinePresenceAssurance_notReadyOvalStrokeColor">#060668</item>-->
 <!--		<item name="iproov_genuinePresenceAssurance_readyOvalStrokeColor">#E91E63</item>-->
 	</style>

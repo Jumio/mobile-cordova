@@ -2,7 +2,7 @@
 
 Official Jumio Mobile SDK plugin for Apache Cordova
 
-This plugin is compatible with version 4.5.0 of the Jumio SDK. If you have questions, please reach out to your Account Manager or contact [Jumio Support](#support).
+This plugin is compatible with version 4.6.1 of the Jumio SDK. If you have questions, please reach out to your Account Manager or contact [Jumio Support](#support).
 
 # Table of Contents
 - [Compatibility](#compatibility)
@@ -10,6 +10,7 @@ This plugin is compatible with version 4.5.0 of the Jumio SDK. If you have quest
 - [Integration](#integration)
   - [iOS](#ios)
   - [Android](#android)
+    [Proguard](#proguard)
 - [Usage](#usage)
 - [Customization](#customization)
 - [Configuration](#configuration)
@@ -22,9 +23,9 @@ This plugin is compatible with version 4.5.0 of the Jumio SDK. If you have quest
 ## Compatibility
 With this release, we only ensure compatibility with the latest Cordova versions and plugins.
 At the time of this release, the following minimum versions are supported:
-* Cordova: 11.1.0
-* Cordova Android: 11.0.0
-* Cordova iOS: 6.3.0
+* Cordova: 12.0.0
+* Cordova Android: 12.0.1
+* Cordova iOS: 7.0.1
 
 ## Setup
 Create Cordova project and add our plugin
@@ -33,13 +34,17 @@ cordova create MyProject com.my.project "MyProject"
 cd MyProject
 cordova platform add ios
 cordova platform add android
-cordova plugin add https://github.com/Jumio/mobile-cordova.git#v4.5.0
+cordova plugin add https://github.com/Jumio/mobile-cordova.git#v4.6.1
+cd platforms/ios && pod install
 ```
 
 ## Integration
 
 ### iOS
 Manual integration or dependency management via cocoapods possible, please see [the official documentation of the Jumio Mobile SDK for iOS](https://github.com/Jumio/mobile-sdk-ios/tree/v4.0.0#basics)
+
+#### Device Risk
+To include Jumio's Device Risk functionality, you need to add `pod Jumio/DeviceRisk` to your Podfile.
 
 ### Android
 Add required permissions for the products as described in chapter [Permissions](https://github.com/Jumio/mobile-sdk-android/blob/v4.0.0/README.md#permissions)
@@ -50,7 +55,7 @@ To use the native Jumio Android component, your App needs to support AndroidX. T
 <preference name="AndroidXEnabled" value="true" />
 ```
 
-***Proguard Rules***    
+#### Proguard  
 For information on Android Proguard Rules concerning the Jumio SDK, please refer to our [Android Guides](https://github.com/Jumio/mobile-sdk-android#proguard).
 
 For other build issues, refer to the The [FAQ section](#faq) at the bottom.
@@ -235,6 +240,24 @@ This is a list of common __Android build issues__ and how to resolve them:
 
 * Device-ready not fired after X seconds    
   --> The plugin definition in "YOURPROJECT/platforms/android/platform_www/plugins/cordova-plugin-jumio-mobilesdk/www" might be duplicated/corrupted due to the issue mentioned [in this Stackoverflow post](https://stackoverflow.com/questions/28017540/cordova-plugin-javascript-gets-corrupted-when-added-to-project/28264312#28264312). Please fix the duplicated `cordova.define()` call in these files as mentioned in the post.
+  
+### iOS Simulator shows a white-screen, when the Jumio SDK is started
+The Jumio SDK does not support the iOS Simulator. Please run the Jumio SDK only on physical devices.
+
+### iOS Runs on Debug, Crashes on Release Build
+This happens due to Xcode 13 introducing a new option to their __App Store Distribution Options__:
+
+__"Manage Version and Build Number"__ (see image below)
+
+If checked, this option changes the version and build number of all content of your app to the overall application version, including third-party frameworks. __This option is enabled by default.__ Please make sure to disable this option when archiving / exporting your application to the App Store. Otherwise, the Jumio SDK version check, which ensures all bundled frameworks are up to date, will fail.
+
+![Xcode13 Issue](images/known_issues_xcode13.png)
+
+Alternatively, it is also possible to set the key `manageAppVersionAndBuildNumber` in the __exportOptions.plist__ to `false`:
+```
+<key>manageAppVersionAndBuildNumber</key>
+<false/>
+```
 
 ### iOS Localization
 After installing Cocoapods, please localize your iOS application using the languages provided at the following path:   
