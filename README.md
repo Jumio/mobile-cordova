@@ -18,7 +18,7 @@ This plugin is compatible with version 4.7.0 of the Jumio SDK. If you have quest
 - [FAQ](#faq)
   - [Android Issues](#android-issues)
   - [iOS Issues](#ios-issues)
-    - [Framework not found iProov.xcframework](#framework-not-found-iproovxcframework)
+    - [iOS Fails to Build, Framework or Symbol not found](#ios-fails-to-build-framework-or-symbol-not-found)
 - [Support](#support)
 
 ## Compatibility
@@ -268,21 +268,41 @@ Alternatively, it is also possible to set the key `manageAppVersionAndBuildNumbe
 After installing Cocoapods, please localize your iOS application using the languages provided at the following path:   
 `ios -> Pods -> Jumio -> Localizations -> xx.lproj`
 
-### Framework not found iProov.xcframework
-If iOS application build is failing with `ld: framework not found iProov.xcframework` or `dyld: Symbol not found: ... Referenced from: /.../Frameworks/iProov.frameworks/iProov`, please make sure the necessary post install-hook has been included in your `Podfile`:
+### iOS Fails to Build, Framework or Symbol not found
+If iOS application build is failing with `ld: framework not found` or `dyld: Symbol not found: ...`, please make sure the necessary `pre-install` and `post-install` hooks have been included in your `Podfile`.
+This is needed in order for dynamic frameworks to install correctly:
+
 ```
-post_install do |installer|
-  installer.pods_project.targets.each do |target|
-    if ['iProov', 'Starscream', 'DatadogSDK', 'SwiftProtobuf'].include? target.name
-      target.build_configurations.each do |config|
-          config.build_settings['BUILD_LIBRARY_FOR_DISTRIBUTION'] = 'YES'
+dynamic_frameworks = ['Starscream', 'iProov', 'DatadogCore', 'DatadogInternal', 'DatadogRUM']
+
+# make all the other frameworks into static frameworks by overriding the static_framework? function to return true
+pre_install do |installer|
+  installer.pod_targets.each do |pod|
+    if !dynamic_frameworks.include?(pod.name)
+      puts "Overriding the static_framework? method for #{pod.name}"
+      def pod.static_framework?;
+        true
+      end
+      def pod.build_type;
+        Pod::BuildType.static_library
       end
     end
   end
 end
 ```
 
-For more information, please refer to our [iOS guides](https://github.com/Jumio/mobile-sdk-ios#certified-liveness-vendor).
+```
+post_install do |installer|
+  installer.pods_project.targets.each do |target|
+    target.build_configurations.each do |config|
+        config.build_settings['BUILD_LIBRARY_FOR_DISTRIBUTION'] = 'YES'
+        config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '12.0'
+    end
+  end
+end
+```
+
+For more information, please refer to our [iOS guides](https://github.com/Jumio/mobile-sdk-ios/blob/master/docs/integration_guide.md#via-cocoapods).
 
 # Support
 
