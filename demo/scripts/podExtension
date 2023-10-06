@@ -1,5 +1,5 @@
 
-dynamic_frameworks = ['Starscream', 'iProov', 'DatadogSDK', 'SwiftProtobuf']
+dynamic_frameworks = ['Starscream', 'iProov', 'DatadogCore', 'DatadogInternal', 'DatadogRUM']
 
 # make all the other frameworks into static frameworks by overriding the static_framework? function to return true
 pre_install do |installer|
@@ -51,7 +51,7 @@ post_install do |installer|
     installer.generated_projects.each do |project|
         project.targets.each do |target|
             target.build_configurations.each do |config|
-                config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '11.0'
+                config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '12.0'
             end
         end
     end

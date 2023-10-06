@@ -17,13 +17,16 @@
  * under the License.
  */
 
-const DATACENTER = 'DATACENTER';
+var DATACENTER = 'DATACENTER';
 
 var app = {
     // Application Constructor
     initialize: function() {
         document.addEventListener('deviceready', this.onDeviceReady.bind(this), false);
-		document.getElementById("start").addEventListener("click", this.start);
+		document.getElementById('start').addEventListener('click', this.start);
+		document.getElementById('buttonUS').addEventListener('click', this.handleButtonUS);
+        document.getElementById('buttonEU').addEventListener('click', this.handleButtonEU);
+        document.getElementById('buttonSG').addEventListener('click', this.handleButtonSG);
     },
 
     // deviceready Event Handler
@@ -31,13 +34,13 @@ var app = {
     // Bind any cordova events here. Common events are:
     // 'pause', 'resume', etc.
     onDeviceReady: function() {
-		
+
 	},
 
 	start: function() {
     		var authorizationToken = '';
-            if(document.getElementById("tokenInput") && document.getElementById("tokenInput").value) {
-    		    authorizationToken = document.getElementById("tokenInput").value;
+            if(document.getElementById('tokenInput') && document.getElementById('tokenInput').value) {
+    		    authorizationToken = document.getElementById('tokenInput').value;
     		}
 
     		Jumio.initialize(authorizationToken, DATACENTER);
@@ -47,16 +50,36 @@ var app = {
     		}, function(error) {
     			 alert(JSON.stringify(error));
     		},
-//    		{
-//    		    loadingCircleIcon: "#000000",
-//    		    loadingCirclePlain: "#000000",
-//    		    loadingCircleGradientStart: "#000000",
-//    		    loadingCircleGradientEnd: "#000000",
-//    		    loadingErrorCircleGradientStart: "#000000",
-//    		    loadingErrorCircleGradientEnd: "#000000",
-//              primaryButtonBackground: {"light": "#FFC0CB", "dark": "#FF1493"}
-//    		}
+    		{
+//    		   background: "#AC3D9A",
+//             primaryColor: "#FF5722",
+//             loadingCircleIcon: "#F2F233",
+//             loadingCirclePlain: "#57ffc7",
+//             loadingCircleGradientStart: "#EC407A",
+//             loadingCircleGradientEnd: "#bc2e41",
+//             loadingErrorCircleGradientStart: "#AC3D9A",
+//             loadingErrorCircleGradientEnd: "#C31322",
+//             primaryButtonBackground: {"light": "#D900ff00", "dark": "#9Edd9E"}
+    		}
     		);
+    },
+    handleButtonUS: function() {
+        DATACENTER = 'US';
+        document.getElementById('buttonUS').style.backgroundColor = "#FFC055";
+        document.getElementById('buttonEU').style.backgroundColor = "#B4B7BB";
+        document.getElementById('buttonSG').style.backgroundColor = "#B4B7BB";
+    },
+    handleButtonEU: function() {
+        DATACENTER = 'EU';
+        document.getElementById('buttonEU').style.backgroundColor = "#FFC055";
+        document.getElementById('buttonUS').style.backgroundColor = "#B4B7BB";
+        document.getElementById('buttonSG').style.backgroundColor = "#B4B7BB";
+    },
+    handleButtonSG: function() {
+        DATACENTER = 'SG';
+        document.getElementById('buttonSG').style.backgroundColor = "#FFC055";
+        document.getElementById('buttonUS').style.backgroundColor = "#B4B7BB";
+        document.getElementById('buttonEU').style.backgroundColor = "#B4B7BB";
     }
 };
 

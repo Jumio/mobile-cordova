@@ -114,6 +114,16 @@ h1 {
     -webkit-animation:fade 3000ms infinite;
 }
 
+textInput {
+    margin-top: 10px;
+    padding: 5px;
+    font-size: 16pt;
+}
+
 button {
-  margin-top: 10px;
+    margin-top: 10px;
+    text-align: center;
+    padding: 5px;
+    font-size: 14px;
+    width: 30%;
 }

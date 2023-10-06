@@ -2,7 +2,7 @@
 
 Official Jumio Mobile SDK plugin for Apache Cordova
 
-This plugin is compatible with version 4.6.1 of the Jumio SDK. If you have questions, please reach out to your Account Manager or contact [Jumio Support](#support).
+This plugin is compatible with version 4.7.0 of the Jumio SDK. If you have questions, please reach out to your Account Manager or contact [Jumio Support](#support).
 
 # Table of Contents
 - [Compatibility](#compatibility)
@@ -10,14 +10,15 @@ This plugin is compatible with version 4.6.1 of the Jumio SDK. If you have quest
 - [Integration](#integration)
   - [iOS](#ios)
   - [Android](#android)
-    [Proguard](#proguard)
+    - [Proguard](#proguard)
 - [Usage](#usage)
 - [Customization](#customization)
 - [Configuration](#configuration)
 - [Callbacks](#callbacks)
 - [FAQ](#faq)
-  - [iOS Localization](#ios-localization)
-  - [Framework not found iProov.xcframework](#framework-not-found-iproovxcframework)
+  - [Android Issues](#android-issues)
+  - [iOS Issues](#ios-issues)
+    - [Framework not found iProov.xcframework](#framework-not-found-iproovxcframework)
 - [Support](#support)
 
 ## Compatibility
@@ -34,7 +35,7 @@ cordova create MyProject com.my.project "MyProject"
 cd MyProject
 cordova platform add ios
 cordova platform add android
-cordova plugin add https://github.com/Jumio/mobile-cordova.git#v4.6.1
+cordova plugin add https://github.com/Jumio/mobile-cordova.git#v4.7.0
 cd platforms/ios && pod install
 ```
 
@@ -69,7 +70,7 @@ Jumio.initialize(<AUTHORIZATION_TOKEN>, <DATACENTER>);
 
 Datacenter can either be **US**, **EU** or **SG**.
 
-For more information about how to obtain an AUTHORIZATION_TOKEN, please refer to our [API Guide](https://github.com/Jumio/implementation-guides/blob/master/api-guide/api_guide.md).
+For more information about how to obtain an AUTHORIZATION_TOKEN, please refer to our [API Guide](https://jumio.github.io/kyx/integration-guide.html).
 
 2. As soon as the SDK is initialized, the sdk is started by the following call.
 
@@ -85,7 +86,7 @@ The JumioSDK colors can be customized by overriding the custom theme `AppThemeCu
 ### iOS
 JumioSDK iOS appearance can be customized to your respective needs. You can customize each color based on the device's set appearance, for either Dark mode or Light mode, or you can set a single color for both appearances. Customization is optional and not required.
 
-You can pass the following customization options at [`Jumio.start`](demo/www/js/index.js#L45):
+You can pass the following customization options at [`Jumio.start`](demo/www/js/index.js#L40):
 
 | Customization key                               |
 |:------------------------------------------------|
@@ -168,10 +169,10 @@ Jumio.start(successCallback, errorCallback, {
 ```
 
 ## Configuration
-For more information about how to set specific SDK parameters (callbackUrl, userReference, country, ...), please refer to our [API Guide](https://github.com/Jumio/implementation-guides/blob/master/api-guide/api_guide.md#request-body).
+For more information about how to set specific SDK parameters (callbackUrl, userReference, country, ...), please refer to our [API Guide](https://jumio.github.io/kyx/integration-guide.html#request-body).
 
 ## Callback
-To get information about callbacks, Netverify Retrieval API, Netverify Delete API and Global Netverify settings and more, please read our [page with server related information](https://github.com/Jumio/implementation-guides/blob/master/api-guide/api_guide.md#callback).
+To get information about callbacks, Netverify Retrieval API, Netverify Delete API and Global Netverify settings and more, please read our [page with server related information](https://jumio.github.io/kyx/integration-guide.html#callback).
 
 ## Result Objects
 JumioSDK will return a JSONObject `documentData` with all  extracted data in case of a successfully completed workflow and `error` in case of error. An error object always includes an error code and an error message.
@@ -224,14 +225,16 @@ We recommend to download the files and add them to your project without changing
 
 ### iOS
 
-You also need to copy those files to the "ios/Assets" folder for Cordova to recognize them.
+You also need to copy those files to the `ios/Assets` folder for Cordova to recognize them.
 
 ### Android
 
-You need to copy those files to the assets folder of your Android project (Path: "app/src/main/assets/")
+You need to copy those files to the assets folder of your Android project (Path: `app/src/main/assets/`)
 
 
 # FAQ
+
+## Android Issues
 This is a list of common __Android build issues__ and how to resolve them:
 * `AAPT: error: resource android:attr/lStar not found` is resolved [in this Stackoverflow post](https://stackoverflow.com/a/70492116/1297835)
 * `Build-tool 32.0.0 is missing DX` (on Windows) -  [in this Stackoverflow post](https://stackoverflow.com/a/68430992/1297835)
@@ -240,8 +243,10 @@ This is a list of common __Android build issues__ and how to resolve them:
 
 * Device-ready not fired after X seconds    
   --> The plugin definition in "YOURPROJECT/platforms/android/platform_www/plugins/cordova-plugin-jumio-mobilesdk/www" might be duplicated/corrupted due to the issue mentioned [in this Stackoverflow post](https://stackoverflow.com/questions/28017540/cordova-plugin-javascript-gets-corrupted-when-added-to-project/28264312#28264312). Please fix the duplicated `cordova.define()` call in these files as mentioned in the post.
-  
-### iOS Simulator shows a white-screen, when the Jumio SDK is started
+
+## iOS Issues
+
+### iOS Simulator Shows a White Screen when Jumio SDK Starts
 The Jumio SDK does not support the iOS Simulator. Please run the Jumio SDK only on physical devices.
 
 ### iOS Runs on Debug, Crashes on Release Build
@@ -263,7 +268,7 @@ Alternatively, it is also possible to set the key `manageAppVersionAndBuildNumbe
 After installing Cocoapods, please localize your iOS application using the languages provided at the following path:   
 `ios -> Pods -> Jumio -> Localizations -> xx.lproj`
 
-## Framework not found iProov.xcframework
+### Framework not found iProov.xcframework
 If iOS application build is failing with `ld: framework not found iProov.xcframework` or `dyld: Symbol not found: ... Referenced from: /.../Frameworks/iProov.frameworks/iProov`, please make sure the necessary post install-hook has been included in your `Podfile`:
 ```
 post_install do |installer|

@@ -4,7 +4,6 @@ import android.content.Intent
 import android.content.pm.PackageManager.PERMISSION_GRANTED
 import android.os.Build
 import android.util.Log
-import com.jumio.cordova.demo.R
 import com.jumio.defaultui.JumioActivity
 import com.jumio.sdk.JumioSDK
 import com.jumio.sdk.credentials.JumioCredentialCategory.FACE
@@ -107,7 +106,7 @@ class JumioMobileSDK : CordovaPlugin() {
             putExtra(JumioActivity.EXTRA_DATACENTER, dataCenter)
 
             //The following intent extra can be used to customize the Theme of Default UI
-            putExtra(JumioActivity.EXTRA_CUSTOM_THEME, R.style.AppThemeCustomJumio)
+            putExtra(JumioActivity.EXTRA_CUSTOM_THEME, cordova.activity.applicationContext.getResources().getIdentifier("AppThemeCustomJumio", "style", cordova.activity.applicationContext.getPackageName()))
         }
 
         cordova.activity.startActivityForResult(intent, REQUEST_CODE)
