@@ -135,6 +135,8 @@ class JumioMobileSDK : CordovaPlugin() {
 
     private fun sendScanResult(jumioResult: JumioResult?) {
         val accountId = jumioResult?.accountId
+        val workflowId = jumioResult?.workflowExecutionId
+
         val credentialInfoList = jumioResult?.credentialInfos
 
         val result = JSONObject()
@@ -143,6 +145,7 @@ class JumioMobileSDK : CordovaPlugin() {
         credentialInfoList?.let {
             try {
                 accountId?.let { result.put("accountId", it) }
+                workflowId?.let { result.put("workflowId", it) }
             } catch (e: JSONException) {
                 showErrorMessage("Result could not be sent: " + e.localizedMessage)
             }

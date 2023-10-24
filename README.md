@@ -2,7 +2,8 @@
 
 Official Jumio Mobile SDK plugin for Apache Cordova
 
-This plugin is compatible with version 4.7.0 of the Jumio SDK. If you have questions, please reach out to your Account Manager or contact [Jumio Support](#support).
+This plugin is compatible with version 4.7.0 of the Jumio iOS SDK and version 4.7.1 of the Jumio Android SDK.    
+If you have questions, please reach out to your Account Manager or contact [Jumio Support](#support).
 
 # Table of Contents
 - [Compatibility](#compatibility)
@@ -18,7 +19,7 @@ This plugin is compatible with version 4.7.0 of the Jumio SDK. If you have quest
 - [FAQ](#faq)
   - [Android Issues](#android-issues)
   - [iOS Issues](#ios-issues)
-    - [iOS Fails to Build, Framework or Symbol not found](#ios-fails-to-build-framework-or-symbol-not-found)
+    - [Framework not found iProov.xcframework](#framework-not-found-iproovxcframework)
 - [Support](#support)
 
 ## Compatibility
@@ -35,20 +36,20 @@ cordova create MyProject com.my.project "MyProject"
 cd MyProject
 cordova platform add ios
 cordova platform add android
-cordova plugin add https://github.com/Jumio/mobile-cordova.git#v4.7.0
+cordova plugin add https://github.com/Jumio/mobile-cordova.git#v4.7.1
 cd platforms/ios && pod install
 ```
 
 ## Integration
 
 ### iOS
-Manual integration or dependency management via cocoapods possible, please see [the official documentation of the Jumio Mobile SDK for iOS](https://github.com/Jumio/mobile-sdk-ios/tree/v4.0.0#basics)
+Manual integration or dependency management via cocoapods possible, please see [the official documentation of the Jumio Mobile SDK for iOS](https://github.com/Jumio/mobile-sdk-ios/tree/master#basics)
 
 #### Device Risk
 To include Jumio's Device Risk functionality, you need to add `pod Jumio/DeviceRisk` to your Podfile.
 
 ### Android
-Add required permissions for the products as described in chapter [Permissions](https://github.com/Jumio/mobile-sdk-android/blob/v4.0.0/README.md#permissions)
+Add required permissions for the products as described in chapter [Permissions](https://github.com/Jumio/mobile-sdk-android/blob/master/README.md#permissions)
 
 To use the native Jumio Android component, your App needs to support AndroidX. This can be enabled by adding the following preference to your config.xml:
 
@@ -268,41 +269,21 @@ Alternatively, it is also possible to set the key `manageAppVersionAndBuildNumbe
 After installing Cocoapods, please localize your iOS application using the languages provided at the following path:   
 `ios -> Pods -> Jumio -> Localizations -> xx.lproj`
 
-### iOS Fails to Build, Framework or Symbol not found
-If iOS application build is failing with `ld: framework not found` or `dyld: Symbol not found: ...`, please make sure the necessary `pre-install` and `post-install` hooks have been included in your `Podfile`.
-This is needed in order for dynamic frameworks to install correctly:
-
-```
-dynamic_frameworks = ['Starscream', 'iProov', 'DatadogCore', 'DatadogInternal', 'DatadogRUM']
-
-# make all the other frameworks into static frameworks by overriding the static_framework? function to return true
-pre_install do |installer|
-  installer.pod_targets.each do |pod|
-    if !dynamic_frameworks.include?(pod.name)
-      puts "Overriding the static_framework? method for #{pod.name}"
-      def pod.static_framework?;
-        true
-      end
-      def pod.build_type;
-        Pod::BuildType.static_library
-      end
-    end
-  end
-end
-```
-
+### Framework not found iProov.xcframework
+If iOS application build is failing with `ld: framework not found iProov.xcframework` or `dyld: Symbol not found: ... Referenced from: /.../Frameworks/iProov.frameworks/iProov`, please make sure the necessary post install-hook has been included in your `Podfile`:
 ```
 post_install do |installer|
   installer.pods_project.targets.each do |target|
-    target.build_configurations.each do |config|
-        config.build_settings['BUILD_LIBRARY_FOR_DISTRIBUTION'] = 'YES'
-        config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '12.0'
+    if ['iProov', 'Starscream', 'DatadogSDK', 'SwiftProtobuf'].include? target.name
+      target.build_configurations.each do |config|
+          config.build_settings['BUILD_LIBRARY_FOR_DISTRIBUTION'] = 'YES'
+      end
     end
   end
 end
 ```
 
-For more information, please refer to our [iOS guides](https://github.com/Jumio/mobile-sdk-ios/blob/master/docs/integration_guide.md#via-cocoapods).
+For more information, please refer to our [iOS guides](https://github.com/Jumio/mobile-sdk-ios#certified-liveness-vendor).
 
 # Support
 

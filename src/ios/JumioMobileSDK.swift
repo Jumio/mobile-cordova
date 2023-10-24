@@ -123,12 +123,14 @@ extension JumioMobileSDK: Jumio.DefaultUIDelegate {
 
     private func handleResult(jumioResult: Jumio.Result) {
         let accountId = jumioResult.accountId
+        let workflowId = jumioResult.workflowExecutionId
         let authenticationResult = jumioResult.isSuccess
         let credentialInfos = jumioResult.credentialInfos
 
         if authenticationResult == true {
             var body: [String: Any?] = [
                 "accountId": accountId,
+                "workflowId": workflowId,
             ]
             var credentialArray = [[String: Any?]]()
 

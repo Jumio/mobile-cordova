@@ -18,7 +18,7 @@ repositories {
 }
 
 ext {
-    SDK_VERSION = "4.7.0"
+    SDK_VERSION = "4.7.1"
     kotlin_version = "1.8.0"
 }
 
