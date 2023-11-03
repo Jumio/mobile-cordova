@@ -24,6 +24,7 @@
             </config>
             <pods use-frameworks="true">
                 <pod name="JumioMobileSDK" spec="3.9.8" />
+                <pod name="Starscream" spec="4.0.4" />
             </pods>
         </podspec>
     </platform>
