@@ -2,7 +2,8 @@
 
 Official Jumio Mobile SDK plugin for Apache Cordova
 
-This plugin is compatible with version 3.9.2 of the Jumio SDK. If you have questions, please reach out to your Account Manager or contact [Jumio Support](#support).
+This plugin is compatible with version 3.9.8 of the Jumio iOS SDK and 3.9.8 of the Jumio Android SDK.     
+If you have questions, please reach out to your Account Manager or contact [Jumio Support](#support).
 
 # Table of Contents
 - [Compatibility](#compatibility)
@@ -34,7 +35,7 @@ cordova create MyProject com.my.project "MyProject"
 cd MyProject
 cordova platform add ios
 cordova platform add android
-cordova plugin add https://github.com/Jumio/mobile-cordova.git#v3.9.2
+cordova plugin add https://github.com/Jumio/mobile-cordova.git#v3.9.3
 ```
 
 ## Integration
@@ -236,21 +237,21 @@ Datacenter can either be **US**, **EU** or **SG**.
 
 Configure the SDK with the *configuration*-Object.
 
-| Configuration | Datatype | Description |
-| ------ | -------- | ----------- |
-| cardHolderNameRequired | Boolean |
-| sortCodeAndAccountNumberRequired | Boolean |
-| expiryRequired | Boolean |
-| cvvRequired | Boolean |
-| expiryEditable | Boolean |
-| cardHolderNameEditable | Boolean |
-| merchantReportingCriteria | String | Overwrite your specified reporting criteria to identify each scan attempt in your reports (max. 100 characters)
-| vibrationEffectEnabled | Boolean |
-| enableFlashOnScanStart | Boolean |
-| cardNumberMaskingEnabled | Boolean |
-| offlineToken | String | In your Jumio merchant backend on the "Settings" page under "API credentials" you can find your Offline token. In case you use your offline token, you must not set the API token and secret|
-| cameraPosition | String | Which camera is used by default. Can be **FRONT** or **BACK**. |
-| cardTypes | String-Array | An array of accepted card types. Available card types: **VISA**, **MASTER_CARD**, **AMERICAN_EXPRESS**, **CHINA_UNIONPAY**, **DINERS_CLUB**, **DISCOVER**, **JCB** |
+| Configuration                    | Datatype     | Description                                                                                                                                                                                  |
+|----------------------------------|--------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| cardHolderNameRequired           | Boolean      |                                                                                                                                                                                              |
+| sortCodeAndAccountNumberRequired | Boolean      |                                                                                                                                                                                              |
+| expiryRequired                   | Boolean      |                                                                                                                                                                                              |
+| cvvRequired                      | Boolean      |                                                                                                                                                                                              |
+| expiryEditable                   | Boolean      |                                                                                                                                                                                              |
+| cardHolderNameEditable           | Boolean      |                                                                                                                                                                                              |
+| merchantReportingCriteria        | String       | Overwrite your specified reporting criteria to identify each scan attempt in your reports (max. 100 characters)                                                                              |
+| vibrationEffectEnabled           | Boolean      |                                                                                                                                                                                              |
+| enableFlashOnScanStart           | Boolean      |                                                                                                                                                                                              |
+| cardNumberMaskingEnabled         | Boolean      |                                                                                                                                                                                              |
+| offlineToken                     | String       | In your Jumio merchant backend on the "Settings" page under "API credentials" you can find your Offline token. In case you use your offline token, you must not set the API token and secret |
+| cameraPosition                   | String       | Which camera is used by default. Can be **FRONT** or **BACK**.                                                                                                                               |
+| cardTypes                        | String-Array | An array of accepted card types. Available card types: **VISA**, **MASTER_CARD**, **AMERICAN_EXPRESS**, **CHINA_UNIONPAY**, **DINERS_CLUB**, **DISCOVER**, **JCB**                           |
 
 Initialization example with configuration.
 
@@ -285,13 +286,13 @@ Jumio.startBAM(function(cardInformation) {
 ### Android
 
 #### Netverify
-The Netverify SDK can be customized to the respective needs by following this [customization chapter](https://github.com/Jumio/mobile-sdk-android/blob/v3.9.2/docs/integration_id-verification-fastfill.md#customization).
+The Netverify SDK can be customized to the respective needs by following this [customization chapter](https://github.com/Jumio/mobile-sdk-android/blob/v3.9.5/docs/integration_id-verification-fastfill.md#customization).
 
 #### BAM Checkout
-The Netverify SDK can be customized to the respective needs by following this [customization chapter](https://github.com/Jumio/mobile-sdk-android/blob/v3.9.2/docs/integration_bam-checkout.md#customization).
+The Netverify SDK can be customized to the respective needs by following this [customization chapter](https://github.com/Jumio/mobile-sdk-android/blob/v3.9.5/docs/integration_bam-checkout.md#customization).
 
 #### Document Verification
-The Netverify SDK can be customized to the respective needs by following this [customization chapter](https://github.com/Jumio/mobile-sdk-android/blob/v3.9.2/docs/integration_document-verification.md#customization).
+The Netverify SDK can be customized to the respective needs by following this [customization chapter](https://github.com/Jumio/mobile-sdk-android/blob/v3.9.5/docs/integration_document-verification.md#customization).
 
 ### iOS
 The SDK can be customized to the respective needs. You can pass the following customization options to the initializer:
@@ -349,29 +350,29 @@ The JSONObject with all the extracted data that is returned for the specific pro
 
 *NetverifyDocumentData*
 
-| Parameter | Type | Max. length | Description  |
-|:-------------------|:----------- 	|:-------------|:-----------------|
-| selectedCountry | String| 3| [ISO 3166-1 alpha-3](http://en.wikipedia.org/wiki/ISO_3166-1_alpha-3) country code as provided or selected |
-| selectedDocumentType | String | 16| PASSPORT, DRIVER_LICENSE, IDENTITY_CARD or VISA |
-| idNumber | String | 100 | Identification number of the document |
-| personalNumber | String | 14| Personal number of the document|
-| issuingDate | Date | | Date of issue |
-| expiryDate | Date | | Date of expiry |
-| issuingCountry | String | 3 | Country of issue as ([ISO 3166-1 alpha-3](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-3)) country code |
-| lastName | String | 100 | Last name of the customer|
-| firstName | String | 100 | First name of the customer|
-| dob | Date | | Date of birth |
-| gender | String | 1| m, f or x |
-| originatingCountry | String | 3|Country of origin as ([ISO 3166-1 alpha-3](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-3)) country code |
-| addressLine | String | 64 | Street name	|
-| city | String | 64 | City |
-| subdivision | String | 3 | Last three characters of [ISO 3166-2:US](http://en.wikipedia.org/wiki/ISO_3166-2:US) state code	|
-| postCode | String | 15 | Postal code |
-| mrzData |  MRZ-DATA | | MRZ data, see table below |
-| optionalData1 | String | 50 | Optional field of MRZ line 1 |
-| optionalData2 | String | 50 | Optional field of MRZ line 2 |
-| placeOfBirth | String | 255 | Place of Birth |
-| extractionMethod | String | 12| MRZ, OCR, BARCODE, BARCODE_OCR or NONE |
+| Parameter | Type | Max. length | Description                                                                                                 |
+|:-------------------|:----------- 	|:-------------|:------------------------------------------------------------------------------------------------------------|
+| selectedCountry | String| 3| [ISO 3166-1 alpha-3](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-3) country code as provided or selected |
+| selectedDocumentType | String | 16| PASSPORT, DRIVER_LICENSE, IDENTITY_CARD or VISA                                                             |
+| idNumber | String | 100 | Identification number of the document                                                                       |
+| personalNumber | String | 14| Personal number of the document                                                                             |
+| issuingDate | Date | | Date of issue                                                                                               |
+| expiryDate | Date | | Date of expiry                                                                                              |
+| issuingCountry | String | 3 | Country of issue as ([ISO 3166-1 alpha-3](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-3)) country code   |
+| lastName | String | 100 | Last name of the customer                                                                                   |
+| firstName | String | 100 | First name of the customer                                                                                  |
+| dob | Date | | Date of birth                                                                                               |
+| gender | String | 1| m, f or x                                                                                                   |
+| originatingCountry | String | 3| Country of origin as ([ISO 3166-1 alpha-3](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-3)) country code  |
+| addressLine | String | 64 | Street name	                                                                                                |
+| city | String | 64 | City                                                                                                        |
+| subdivision | String | 3 | Last three characters of [ISO 3166-2:US](https://en.wikipedia.org/wiki/ISO_3166-2:US) state code	           |
+| postCode | String | 15 | Postal code                                                                                                 |
+| mrzData |  MRZ-DATA | | MRZ data, see table below                                                                                   |
+| optionalData1 | String | 50 | Optional field of MRZ line 1                                                                                |
+| optionalData2 | String | 50 | Optional field of MRZ line 2                                                                                |
+| placeOfBirth | String | 255 | Place of Birth                                                                                              |
+| extractionMethod | String | 12| MRZ, OCR, BARCODE, BARCODE_OCR or NONE                                                                      |
 
 *MRZ-Data*
 

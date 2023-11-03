@@ -3,12 +3,21 @@ apply plugin: 'kotlin-parcelize'
 
 repositories {
     google()
-    jcenter()
-    maven { url 'https://mobile-sdk.jumio.com' }
+    exclusiveContent {
+        forRepository {
+            maven {
+                url 'https://repo.mobile.jumio.ai'
+            }
+        }
+        filter {
+            includeGroup "com.jumio.android"
+            includeGroup "com.iproov.sdk"
+        }
+    }
 }
 
 ext {
-    SDK_VERSION = "3.9.2"
+    SDK_VERSION = "3.9.5"
     kotlin_version = "1.4.30"
 }
 

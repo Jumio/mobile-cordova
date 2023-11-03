@@ -1,7 +1,7 @@
 {
   "name": "com.jumio.cordova.demo",
   "displayName": "DemoApp",
-  "version": "3.9.2",
+  "version": "3.9.3",
   "description": "A sample Apache Cordova application that responds to the deviceready event.",
   "main": "index.js",
   "scripts": {
@@ -9,9 +9,7 @@
   },
   "author": "Apache Cordova Team",
   "license": "Apache-2.0",
-  "dependencies": {
-    "cordova-ios": "^6.2.0"
-  },
+  "dependencies": {},
   "cordova": {
     "plugins": {
       "cordova-plugin-enable-multidex": {},
@@ -24,6 +22,7 @@
   },
   "devDependencies": {
     "cordova-android": "^9.1.0",
+    "cordova-ios": "^6.3.0",
     "cordova-plugin-jumio-mobilesdk": "file:.."
   }
 }
