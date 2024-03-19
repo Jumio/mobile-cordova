@@ -2,7 +2,7 @@
 
 Official Jumio Mobile SDK plugin for Apache Cordova
 
-This plugin is compatible with version 4.7.0 of the Jumio iOS SDK and version 4.7.1 of the Jumio Android SDK.    
+This plugin is compatible with version 4.9.0 of the Jumio SDK.
 If you have questions, please reach out to your Account Manager or contact [Jumio Support](#support).
 
 # Table of Contents
@@ -20,6 +20,7 @@ If you have questions, please reach out to your Account Manager or contact [Jumi
   - [Android Issues](#android-issues)
   - [iOS Issues](#ios-issues)
     - [Framework not found iProov.xcframework](#framework-not-found-iproovxcframework)
+    - [Framework not found DatadogCore.xcframework](#framework-not-found-datadogcorexcframework)
 - [Support](#support)
 
 ## Compatibility
@@ -36,7 +37,7 @@ cordova create MyProject com.my.project "MyProject"
 cd MyProject
 cordova platform add ios
 cordova platform add android
-cordova plugin add https://github.com/Jumio/mobile-cordova.git#v4.7.1
+cordova plugin add https://github.com/Jumio/mobile-cordova.git#v4.9.0
 cd platforms/ios && pod install
 ```
 
@@ -45,7 +46,16 @@ cd platforms/ios && pod install
 ### iOS
 Manual integration or dependency management via cocoapods possible, please see [the official documentation of the Jumio Mobile SDK for iOS](https://github.com/Jumio/mobile-sdk-ios/tree/master#basics)
 
+#### NFC
+
+Check out the [NFC setup guide](https://github.com/Jumio/mobile-sdk-ios/blob/master/docs/integration_guide.md#nfc-setup).
+
+#### Digital Identity
+
+Check out the [Digital Identity setup guide](https://github.com/Jumio/mobile-sdk-ios/blob/master/docs/integration_guide.md#digital-identity-setup).
+
 #### Device Risk
+
 To include Jumio's Device Risk functionality, you need to add `pod Jumio/DeviceRisk` to your Podfile.
 
 ### Android
@@ -91,8 +101,10 @@ You can pass the following customization options at [`Jumio.start`](demo/www/js/
 
 | Customization key                               |
 |:------------------------------------------------|
-| iProovAnimationForeground                       |
-| iProovAnimationBackground                       |
+| facePrimary                                     |
+| faceSecondary                                   |
+| faceOutline                                     |
+| faceAnimationForeground                         |
 | iProovFilterForegroundColor                     |
 | iProovFilterBackgroundColor                     |
 | iProovTitleTextColor                            |
@@ -107,17 +119,22 @@ You can pass the following customization options at [`Jumio.start`](demo/www/js/
 | primaryButtonBackground                         |
 | primaryButtonBackgroundPressed                  |
 | primaryButtonBackgroundDisabled                 |
-| primaryButtonText                               |
+| primaryButtonForeground                         |
+| primaryButtonForegroundPressed                  |
+| primaryButtonForegroundDisabled                 |
+| primaryButtonOutline                            |
 | secondaryButtonBackground                       |
 | secondaryButtonBackgroundPressed                |
 | secondaryButtonBackgroundDisabled               |
-| secondaryButtonText                             |
+| secondaryButtonForeground                       |
+| secondaryButtonForegroundPressed                |
+| secondaryButtonForegroundDisabled               |
+| secondaryButtonOutline                          |
 | bubbleBackground                                |
 | bubbleForeground                                |
 | bubbleBackgroundSelected                        |
 | bubbleCircleItemForeground                      |
 | bubbleCircleItemBackground                      |
-| bubbleSelectionIconForeground                   |
 | loadingCirclePlain                              |
 | loadingCircleGradientStart                      |
 | loadingCircleGradientEnd                        |
@@ -136,18 +153,22 @@ You can pass the following customization options at [`Jumio.start`](demo/www/js/
 | scanViewBubbleForeground                        |
 | scanViewBubbleBackground                        |
 | scanViewForeground                              |
-| scanViewAnimationShutter                        |
+| scanViewDocumentShutter                         |
+| scanViewFaceShutter                             |
 | searchBubbleBackground                          |
 | searchBubbleForeground                          |
-| searchBubbleListItemSelected                    |
+| searchBubbleBackgroundSelected                  |
+| searchBubbleOutline                             |
 | confirmationImageBackground                     |
 | confirmationImageBackgroundBorder               |
 | confirmationIndicatorActive                     |
 | confirmationIndicatorDefault                    |
+| confirmationImageBorder                         | 
 | background                                      |
 | navigationIconColor                             |
 | textForegroundColor                             |
 | primaryColor                                    |
+| selectionIconForeground                         |
 
 All colors are provided with a HEX string with the following formats: `#ff00ff` or `#66ff00ff` if you want to set the alpha level.
 
@@ -180,28 +201,29 @@ JumioSDK will return a JSONObject `documentData` with all  extracted data in cas
 
 ### Result
 
-| Parameter            | Type     | Max. length | Description                                                                                                |
-|:---------------------|:---------|:------------|:-----------------------------------------------------------------------------------------------------------|
-| selectedCountry      | String   | 3           | [ISO 3166-1 alpha-3](http://en.wikipedia.org/wiki/ISO_3166-1_alpha-3) country code as provided or selected |
-| selectedDocumentType | String   | 16          | PASSPORT, DRIVER_LICENSE, IDENTITY_CARD or VISA                                                            |
-| idNumber             | String   | 100         | Identification number of the document                                                                      |
-| personalNumber       | String   | 14          | Personal number of the document                                                                            |
-| issuingDate          | Date     |             | Date of issue                                                                                              |
-| expiryDate           | Date     |             | Date of expiry                                                                                             |
-| issuingCountry       | String   | 3           | Country of issue as ([ISO 3166-1 alpha-3](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-3)) country code  |
-| lastName             | String   | 100         | Last name of the customer                                                                                  |
-| firstName            | String   | 100         | First name of the customer                                                                                 |
-| dob                  | Date     |             | Date of birth                                                                                              |
-| gender               | String   | 1           | m, f or x                                                                                                  |
-| originatingCountry   | String   | 3           | Country of origin as ([ISO 3166-1 alpha-3](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-3)) country code |
-| addressLine          | String   | 64          | Street name	                                                                                               |
-| city                 | String   | 64          | City                                                                                                       |
-| subdivision          | String   | 3           | Last three characters of [ISO 3166-2:US](http://en.wikipedia.org/wiki/ISO_3166-2:US) state code	           |
-| postCode             | String   | 15          | Postal code                                                                                                |
-| mrzData              | MRZ-DATA |             | MRZ data, see table below                                                                                  |
-| optionalData1        | String   | 50          | Optional field of MRZ line 1                                                                               |
-| optionalData2        | String   | 50          | Optional field of MRZ line 2                                                                               |
-| placeOfBirth         | String   | 255         | Place of Birth                                                                                             |
+| Parameter               | Type     | Max. length | Description                                                                                                |
+|:------------------------|:---------|:------------|:-----------------------------------------------------------------------------------------------------------|
+| selectedCountry         | String   | 3           | [ISO 3166-1 alpha-3](http://en.wikipedia.org/wiki/ISO_3166-1_alpha-3) country code as provided or selected |
+| selectedDocumentType    | String   | 16          | PASSPORT, DRIVER_LICENSE, IDENTITY_CARD or VISA                                                            |
+| selectedDocumentSubType | String   |             | Sub type of the scanned ID                                                                                 |
+| idNumber                | String   | 100         | Identification number of the document                                                                      |
+| personalNumber          | String   | 14          | Personal number of the document                                                                            |
+| issuingDate             | Date     |             | Date of issue                                                                                              |
+| expiryDate              | Date     |             | Date of expiry                                                                                             |
+| issuingCountry          | String   | 3           | Country of issue as ([ISO 3166-1 alpha-3](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-3)) country code  |
+| lastName                | String   | 100         | Last name of the customer                                                                                  |
+| firstName               | String   | 100         | First name of the customer                                                                                 |
+| dob                     | Date     |             | Date of birth                                                                                              |
+| gender                  | String   | 1           | m, f or x                                                                                                  |
+| originatingCountry      | String   | 3           | Country of origin as ([ISO 3166-1 alpha-3](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-3)) country code |
+| addressLine             | String   | 64          | Street name                                                                                                |
+| city                    | String   | 64          | City                                                                                                       |
+| subdivision             | String   | 3           | Last three characters of [ISO 3166-2:US](http://en.wikipedia.org/wiki/ISO_3166-2:US) state code            |
+| postCode                | String   | 15          | Postal code                                                                                                |
+| mrzData                 | MRZ-DATA |             | MRZ data, see table below                                                                                  |
+| optionalData1           | String   | 50          | Optional field of MRZ line 1                                                                               |
+| optionalData2           | String   | 50          | Optional field of MRZ line 2                                                                               |
+| placeOfBirth            | String   | 255         | Place of Birth                                                                                             |
 
 *MRZ-Data*
 
@@ -277,6 +299,20 @@ post_install do |installer|
     if ['iProov', 'Starscream', 'DatadogSDK', 'SwiftProtobuf'].include? target.name
       target.build_configurations.each do |config|
           config.build_settings['BUILD_LIBRARY_FOR_DISTRIBUTION'] = 'YES'
+      end
+    end
+  end
+end
+```
+
+### Framework not found DatadogCore.xcframework
+If iOS application build is failing with `ld: framework not found DatadogCore.xcframework` or `dyld: Symbol not found: ... Referenced from: /.../Frameworks/DatadogCore.frameworks/DatadogCore`, please make sure the necessary post install-hook has been included in your `Podfile`:
+```
+post_install do |installer|
+  installer.pods_project.targets.each do |target|
+    if ['DatadogRUM', 'DatadogCore', 'DatadogInternal'].include? target.name
+      target.build_configurations.each do |config|
+        config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '12.0'
       end
     end
   end

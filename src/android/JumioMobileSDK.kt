@@ -184,6 +184,7 @@ class JumioMobileSDK : CordovaPlugin() {
                 credentialMap.apply {
                     country?.let { put("selectedCountry", it) }
                     idType?.let { put("selectedDocumentType", it) }
+                    idSubType?.let { put("selectedDocumentSubType", it) }
                     documentNumber?.let { put("idNumber", it) }
                     personalNumber?.let { put("personalNumber", it) }
                     issuingDate?.let { put("issuingDate", it) }

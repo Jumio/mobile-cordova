@@ -18,8 +18,8 @@ repositories {
 }
 
 ext {
-    SDK_VERSION = "4.7.1"
-    kotlin_version = "1.8.0"
+    SDK_VERSION = "4.9.0"
+    kotlin_version = "1.9.10"
 }
 
 dependencies {
