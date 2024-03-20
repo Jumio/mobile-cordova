@@ -19,8 +19,7 @@ If you have questions, please reach out to your Account Manager or contact [Jumi
 - [FAQ](#faq)
   - [Android Issues](#android-issues)
   - [iOS Issues](#ios-issues)
-    - [Framework not found iProov.xcframework](#framework-not-found-iproovxcframework)
-    - [Framework not found DatadogCore.xcframework](#framework-not-found-datadogcorexcframework)
+    - [Framework not found](#framework-not-found)
 - [Support](#support)
 
 ## Compatibility
@@ -291,27 +290,14 @@ Alternatively, it is also possible to set the key `manageAppVersionAndBuildNumbe
 After installing Cocoapods, please localize your iOS application using the languages provided at the following path:   
 `ios -> Pods -> Jumio -> Localizations -> xx.lproj`
 
-### Framework not found iProov.xcframework
-If iOS application build is failing with `ld: framework not found iProov.xcframework` or `dyld: Symbol not found: ... Referenced from: /.../Frameworks/iProov.frameworks/iProov`, please make sure the necessary post install-hook has been included in your `Podfile`:
-```
-post_install do |installer|
-  installer.pods_project.targets.each do |target|
-    if ['iProov', 'Starscream', 'DatadogSDK', 'SwiftProtobuf'].include? target.name
-      target.build_configurations.each do |config|
-          config.build_settings['BUILD_LIBRARY_FOR_DISTRIBUTION'] = 'YES'
-      end
-    end
-  end
-end
-```
-
-### Framework not found DatadogCore.xcframework
+### Framework not found
 If iOS application build is failing with `ld: framework not found DatadogCore.xcframework` or `dyld: Symbol not found: ... Referenced from: /.../Frameworks/DatadogCore.frameworks/DatadogCore`, please make sure the necessary post install-hook has been included in your `Podfile`:
 ```
 post_install do |installer|
   installer.pods_project.targets.each do |target|
-    if ['DatadogRUM', 'DatadogCore', 'DatadogInternal'].include? target.name
+    if ['iProov', 'DatadogRUM', 'DatadogCore', 'DatadogInternal'].include? target.name
       target.build_configurations.each do |config|
+        config.build_settings['BUILD_LIBRARY_FOR_DISTRIBUTION'] = 'YES'
         config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '12.0'
       end
     end
