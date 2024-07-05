@@ -4,7 +4,7 @@ Demonstrates how to use the JumioMobileSDK plugin.
 ## Prerequisites
 
 * Cordova CLI 12.0.0
-* NodeJS 21.6.2
+* NodeJS 22.3.0
 
 ## Hooks
 
@@ -22,11 +22,12 @@ cordova plugin add --link ../
 cordova platform add android && cordova prepare android
 cordova platform add ios && cordova prepare ios && cd platforms/ios && pod install
 ```
-**_DISCLAIMER:_** The 'add platform' and 'prepare' commands need to be called separately due to cordova limitations.
+**_DISCLAIMER:_** The 'add platform' and 'prepare' commands need to be called separately due to Cordova limitations.
 
 ## Run the application
 ```
 cordova run android
 # OR
-cordova run ios
+cordova run ios --noprepare
 ```
+**_DISCLAIMER:_** For devices with iOS 17+ the application can only be run from XCode due to Cordova limitations.
