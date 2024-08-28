@@ -5,6 +5,7 @@ const path = require('path');
 
 // Path to the build.gradle file
 const buildGradlePath = path.join('platforms', 'android', 'app', 'build.gradle');
+const gradlePropertiesPath = path.join('platforms', 'android', 'gradle.properties');
 
 try {
     // Read the contents of the build.gradle file
@@ -16,11 +17,28 @@ try {
         `compileOptions {
         sourceCompatibility JavaVersion.VERSION_17
         targetCompatibility JavaVersion.VERSION_17
-    }`
+        }
+        kotlinOptions {
+            jvmTarget = JavaVersion.VERSION_17
+        }
+        kotlin {
+            jvmToolchain(17)
+        }
+        java {
+            sourceCompatibility = JavaVersion.VERSION_17
+            targetCompatibility = JavaVersion.VERSION_17
+        }`
     );
 
-    // Write the updated contents back to the build.gradle file
-    fs.writeFileSync(buildGradlePath, buildGradleContents, 'utf8');
+    // Read the contents of the gradle.properties file
+    let gradlePropertiesContents = fs.readFileSync(gradlePropertiesPath, 'utf8');
+
+    // Ignore JVM target validation
+    gradlePropertiesContents += '\n';
+    gradlePropertiesContents += 'kotlin.jvm.target.validation.mode=WARNING\n';
+
+    // Write update contents back to gradle.properties file
+    fs.writeFileSync(gradlePropertiesPath, gradlePropertiesContents, 'utf8');
 
     console.log('compileOptions updated successfully in build.gradle');
 } catch (err) {

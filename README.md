@@ -2,7 +2,7 @@
 
 Official Jumio Mobile SDK plugin for Apache Cordova
 
-This plugin is compatible with version 4.10.0 of the Jumio SDK.
+This plugin is compatible with version 4.11.0 of the Jumio SDK.
 If you have questions, please reach out to your Account Manager or contact [Jumio Support](#support).
 
 # Table of Contents
@@ -28,7 +28,7 @@ With this release, we only ensure compatibility with the latest Cordova versions
 At the time of this release, the following minimum versions are supported:
 * Cordova: 12.0.0
 * Cordova Android: 13.0.0
-* Cordova iOS: 7.1.0
+* Cordova iOS: 7.1.1
 
 ## Setup
 Create Cordova project and add our plugin
@@ -37,7 +37,7 @@ cordova create MyProject com.my.project "MyProject"
 cd MyProject
 cordova platform add ios
 cordova platform add android
-cordova plugin add https://github.com/Jumio/mobile-cordova.git#v4.10.0
+cordova plugin add https://github.com/Jumio/mobile-cordova.git#v4.11.0
 cd platforms/ios && pod install
 ```
 
@@ -292,7 +292,7 @@ If iOS application build is failing with `ld: framework not found iProov.xcframe
 ```
 post_install do |installer|
   installer.pods_project.targets.each do |target|
-    if ['iProov', 'Starscream', 'DatadogSDK', 'SwiftProtobuf'].include? target.name
+    if ['iProov', 'DatadogRUM', 'DatadogCore', 'DatadogInternal'].include? target.name
       target.build_configurations.each do |config|
           config.build_settings['BUILD_LIBRARY_FOR_DISTRIBUTION'] = 'YES'
       end
@@ -323,6 +323,10 @@ For more information, please refer to our [iOS guides](https://github.com/Jumio/
 If you have any questions regarding our implementation guide please contact Jumio Customer Service at support@jumio.com or https://support.jumio.com. The Jumio online helpdesk contains a wealth of information regarding our service including demo videos, product descriptions, FAQs and other things that may help to get you started with Jumio. Check it out at: https://support.jumio.com.
 
 ## Licenses
+The source code and software available on this website (“Software”) is provided by Jumio Corp. or its affiliated group companies (“Jumio”) "as is” and any express or implied warranties, including, but not limited to, the implied warranties of merchantability and fitness for a particular purpose are disclaimed. In no event shall Jumio be liable for any direct, indirect, incidental, special, exemplary, or consequential damages (including but not limited to procurement of substitute goods or services, loss of use, data, profits, or business interruption) however caused and on any theory of liability, whether in contract, strict liability, or tort (including negligence or otherwise) arising in any way out of the use of this Software, even if advised of the possibility of such damage.
+
+In any case, your use of this Software is subject to the terms and conditions that apply to your contractual relationship with Jumio. As regards Jumio’s privacy practices, please see our privacy notice available here: [Privacy Policy](https://www.jumio.com/legal-information/privacy-policy/).
+
 The software contains third-party open source software. For more information, please see [Android licenses](https://github.com/Jumio/mobile-sdk-android/tree/master/licenses) and [iOS licenses](https://github.com/Jumio/mobile-sdk-ios/tree/master/licenses)
 
 This software is based in part on the work of the Independent JPEG Group.
