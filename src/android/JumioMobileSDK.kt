@@ -9,6 +9,8 @@ import com.jumio.sdk.JumioSDK
 import com.jumio.sdk.credentials.JumioCredentialCategory.FACE
 import com.jumio.sdk.credentials.JumioCredentialCategory.ID
 import com.jumio.sdk.enums.JumioDataCenter
+import com.jumio.sdk.preload.JumioPreloadCallback
+import com.jumio.sdk.preload.JumioPreloader
 import com.jumio.sdk.result.JumioIDResult
 import com.jumio.sdk.result.JumioResult
 import org.apache.cordova.CallbackContext
@@ -20,16 +22,19 @@ import org.json.JSONArray
 import org.json.JSONException
 import org.json.JSONObject
 
-class JumioMobileSDK : CordovaPlugin() {
+class JumioMobileSDK : CordovaPlugin(), JumioPreloadCallback {
     companion object {
         private const val TAG = "JumioMobileSDK"
         private const val PERMISSION_REQUEST_CODE = 301
         private const val REQUEST_CODE = 101
         private const val ACTION_INIT = "initialize"
         private const val ACTION_START = "start"
+        private const val ACTION_SET_PRELOADER_FINISHED_BLOCK = "setPreloaderFinishedBlock"
+        private const val ACTION_PRELOAD_IF_NEEDED = "preloadIfNeeded"
     }
 
     private var callbackContext: CallbackContext? = null
+    private var preloaderFinishedCallback: (() -> Unit)? = null
 
     override fun execute(action: String, args: JSONArray, callbackContext: CallbackContext): Boolean {
         this.callbackContext = callbackContext
@@ -44,6 +49,20 @@ class JumioMobileSDK : CordovaPlugin() {
             }
             ACTION_START -> {
                 start()
+                result = PluginResult(NO_RESULT)
+                result.keepCallback = true
+                true
+            }
+            ACTION_SET_PRELOADER_FINISHED_BLOCK -> {
+                setPreloaderFinishedBlock {
+                    callbackContext.success()
+                }
+                result = PluginResult(NO_RESULT)
+                result.keepCallback = true
+                true
+            }
+            ACTION_PRELOAD_IF_NEEDED -> {
+                preloadIfNeeded()
                 result = PluginResult(NO_RESULT)
                 result.keepCallback = true
                 true
@@ -122,6 +141,24 @@ class JumioMobileSDK : CordovaPlugin() {
         }
         cordova.setActivityResultCallback(this)
         cordova.activity.runOnUiThread(runnable)
+    }
+
+    private fun setPreloaderFinishedBlock(completion: (() -> Unit)) {
+        with(JumioPreloader) {
+            init(cordova.activity)
+            setCallback(this@JumioMobileSDK)
+        }
+        preloaderFinishedCallback = completion
+    }
+
+    private fun preloadIfNeeded() {
+        with(JumioPreloader) {
+            preloadIfNeeded()
+        }
+    }
+
+    override fun preloadFinished() {
+        preloaderFinishedCallback?.invoke()
     }
 
     // Permissions

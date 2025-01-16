@@ -18,7 +18,7 @@ repositories {
 }
 
 ext {
-    SDK_VERSION = "4.11.0"
+    SDK_VERSION = "4.12.1"
     kotlin_version = "1.9.24"
 }
 
@@ -35,7 +35,7 @@ dependencies {
     implementation "com.jumio.android:liveness:${SDK_VERSION}"
 
     //only for the sample code
-    implementation "androidx.activity:activity-ktx:1.9.0"
+    implementation "androidx.activity:activity-ktx:1.9.3"
 
     //Kotlin
     implementation "androidx.multidex:multidex:2.0.1"

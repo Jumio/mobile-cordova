@@ -34,7 +34,14 @@ var app = {
     // Bind any cordova events here. Common events are:
     // 'pause', 'resume', etc.
     onDeviceReady: function() {
-
+        Jumio.setPreloaderFinishedBlock(
+            function(data) {
+                 console.log('All models are preloaded. You may start the SDK now!');
+            }, function(error) {
+                 alert(JSON.stringify(error));
+            }
+        );
+        Jumio.preloadIfNeeded()
 	},
 
 	start: function() {

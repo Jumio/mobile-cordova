@@ -2,7 +2,7 @@
 
 Official Jumio Mobile SDK plugin for Apache Cordova
 
-This plugin is compatible with version 4.11.0 of the Jumio SDK.
+This plugin is compatible with version 4.12.0 of the Jumio iOS SDK and version 4.12.1 of the Jumio Android SDK.
 If you have questions, please reach out to your Account Manager or contact [Jumio Support](#support).
 
 # Table of Contents
@@ -16,6 +16,8 @@ If you have questions, please reach out to your Account Manager or contact [Jumi
 - [Customization](#customization)
 - [Configuration](#configuration)
 - [Callbacks](#callbacks)
+- [Result Objects](#result-objects)
+- [Local Models for ID Verification and Liveness](#local-models-for-id-verification-and-liveness)
 - [FAQ](#faq)
   - [Android Issues](#android-issues)
   - [iOS Issues](#ios-issues)
@@ -37,7 +39,7 @@ cordova create MyProject com.my.project "MyProject"
 cd MyProject
 cordova platform add ios
 cordova platform add android
-cordova plugin add https://github.com/Jumio/mobile-cordova.git#v4.11.0
+cordova plugin add https://github.com/Jumio/mobile-cordova.git#v4.12.0
 cd platforms/ios && pod install
 ```
 
@@ -65,6 +67,16 @@ To use the native Jumio Android component, your App needs to support AndroidX. T
 
 ```xml
 <preference name="AndroidXEnabled" value="true" />
+```
+
+__Upgrade Gradle build tools__    
+The plugin requires at least version 8.0.0 of the Android build tools. This transitively requires an upgrade of the Gradle wrapper to version 8 and an update to Java 11.
+
+If necessary, modify the Gradle Wrapper version in `android/gradle.wrapper/gradle-wrapper.properties`:
+
+```groovy
+...
+distributionUrl=https\://services.gradle.org/distributions/gradle-8.6-bin.zip
 ```
 
 #### Proguard  
@@ -236,19 +248,25 @@ JumioSDK will return a JSONObject `documentData` with all  extracted data in cas
 | compositeValid      | BOOL   |             | True if composite check digit is valid, otherwise false                        |
 
 
-## Local Models for JumioDocfinder
+## Local Models for ID Verification and Liveness
 
-If you are using our JumioDocFinder module, you can download our encrypted models and add them to your bundle from [here](https://cdn.mobile.jumio.ai/model/classifier_on_device_ep_99_float16_quant.enc) and [here](https://cdn.mobile.jumio.ai/model/normalized_ensemble_passports_v2_float16_quant.enc).
+Our SDK requires several machine learning models to work best. We recommend to download the files and add them to your project without changing their names (the same way you add Localization files). This will save two network requests on runtime to download these files. 
 
-We recommend to download the files and add them to your project without changing their names (the same way you add Localization files). This will save two network requests on runtime to download these files.
+### Preloading models
+
+You can preload the ML models before initializing the Jumio SDK. To do so set the completion block with `JumioMobileSDK.setPreloaderFinishedBlock` and start the preloading with `JumioMobileSDK.preloadIfNeeded`.
 
 ### iOS
 
-You also need to copy those files to the `ios/Assets` folder for Cordova to recognize them.
+You can find the models in the [Bundling models in the app](https://github.com/Jumio/mobile-sdk-ios/blob/master/docs/integration_guide.md#bundling-models-in-the-app) section of our integration guide.
+
+You also need to copy those files to the "ios/Assets" folder for Cordova to recognize them.
 
 ### Android
 
-You need to copy those files to the assets folder of your Android project (Path: `app/src/main/assets/`)
+You can find the models in the [Bundling models in the app](https://github.com/Jumio/mobile-sdk-android/blob/master/docs/integration_guide.md#bundling-models-in-the-app) section of our integration guide.
+
+You need to copy those files to the assets folder of your Android project (Path: "app/src/main/assets/").
 
 
 # FAQ

@@ -25,6 +25,14 @@ function Jumio () {
 	this.start = function(success, error, customizations) {
 		exec(success, error, "JumioMobileSDK", "start", [customizations]);
 	};
+
+	this.setPreloaderFinishedBlock = function(success, error) {
+        exec(success, error, "JumioMobileSDK", "setPreloaderFinishedBlock", []);
+    };
+
+    this.preloadIfNeeded = function(success, error) {
+        exec(success, error, "JumioMobileSDK", "preloadIfNeeded", []);
+    };
 }
 
 // /**

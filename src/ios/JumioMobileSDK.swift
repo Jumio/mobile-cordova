@@ -8,7 +8,7 @@ import Jumio
 import UIKit
 
 @objc(JumioMobileSDK)
-class JumioMobileSDK: CDVPlugin {
+class JumioMobileSDK: CDVPlugin, JumioPreloaderDelegate {
     fileprivate var jumio: Jumio.SDK?
     fileprivate var jumioVC: Jumio.ViewController?
     fileprivate var callbackId: String?
@@ -72,6 +72,21 @@ class JumioMobileSDK: CDVPlugin {
             return false
         }
         return true
+    }
+
+    @objc(setPreloaderFinishedBlock:) func setPreloaderFinishedBlock(_ command: CDVInvokedUrlCommand) {
+        callbackId = command.callbackId
+
+        Jumio.Preloader.shared.delegate = self
+    }
+
+    @objc(preloadIfNeeded:) func preloadIfNeeded(_ command: CDVInvokedUrlCommand) {
+        Jumio.Preloader.shared.preloadIfNeeded()
+    }
+
+    func jumio(finished: Jumio.Preloader) {
+        let pluginResult = CDVPluginResult(status: CDVCommandStatus_OK, messageAs: [] )
+        commandDelegate.send(pluginResult, callbackId: callbackId)
     }
 
     private func getIDResult(idResult: Jumio.IDResult) -> [String: Any] {
@@ -439,6 +454,24 @@ extension JumioMobileSDK {
             customTheme.scanOverlay.scanBackground = Jumio.Theme.Value(light: UIColor(hexString: light), dark: UIColor(hexString: dark))
         } else if let scanOverlayBackground = customizations["scanOverlayBackground"] as? String {
             customTheme.scanOverlay.scanBackground = Jumio.Theme.Value(UIColor(hexString: scanOverlayBackground))
+        }
+
+        if let scanOverlayLivenessStroke = customizations["scanOverlayLivenessStroke"] as? [String: String?], let light = scanOverlayLivenessStroke["light"] as? String, let dark = scanOverlayLivenessStroke["dark"] as? String {
+            customTheme.scanOverlay.livenessStroke = Jumio.Theme.Value(light: UIColor(hexString: light), dark: UIColor(hexString: dark))
+        } else if let scanOverlayLivenessStroke = customizations["scanOverlayLivenessStroke"] as? String {
+            customTheme.scanOverlay.livenessStroke = Jumio.Theme.Value(UIColor(hexString: scanOverlayLivenessStroke))
+        }
+
+        if let scanOverlayLivenessStrokeAnimation = customizations["scanOverlayLivenessStrokeAnimation"] as? [String: String?], let light = scanOverlayLivenessStrokeAnimation["light"] as? String, let dark = scanOverlayLivenessStrokeAnimation["dark"] as? String {
+            customTheme.scanOverlay.livenessStrokeAnimation = Jumio.Theme.Value(light: UIColor(hexString: light), dark: UIColor(hexString: dark))
+        } else if let scanOverlayLivenessStrokeAnimation = customizations["scanOverlayLivenessStrokeAnimation"] as? String {
+            customTheme.scanOverlay.livenessStrokeAnimation = Jumio.Theme.Value(UIColor(hexString: scanOverlayLivenessStrokeAnimation))
+        }
+
+        if let scanOverlayLivenessStrokeAnimationCompleted = customizations["scanOverlayLivenessStrokeAnimationCompleted"] as? [String: String?], let light = scanOverlayLivenessStrokeAnimationCompleted["light"] as? String, let dark = scanOverlayLivenessStrokeAnimationCompleted["dark"] as? String {
+            customTheme.scanOverlay.livenessStrokeAnimationCompleted = Jumio.Theme.Value(light: UIColor(hexString: light), dark: UIColor(hexString: dark))
+        } else if let scanOverlayLivenessStrokeAnimationCompleted = customizations["scanOverlayLivenessStrokeAnimationCompleted"] as? String {
+            customTheme.scanOverlay.livenessStrokeAnimationCompleted = Jumio.Theme.Value(UIColor(hexString: scanOverlayLivenessStrokeAnimationCompleted))
         }
 
         // NFC
