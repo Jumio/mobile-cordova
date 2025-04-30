@@ -2,7 +2,7 @@
 
 Official Jumio Mobile SDK plugin for Apache Cordova
 
-This plugin is compatible with version 4.12.0 of the Jumio iOS SDK and version 4.12.1 of the Jumio Android SDK.
+This plugin is compatible with version 4.13.0 of the Jumio SDK.
 If you have questions, please reach out to your Account Manager or contact [Jumio Support](#support).
 
 # Table of Contents
@@ -29,7 +29,7 @@ If you have questions, please reach out to your Account Manager or contact [Jumi
 With this release, we only ensure compatibility with the latest Cordova versions and plugins.
 At the time of this release, the following minimum versions are supported:
 * Cordova: 12.0.0
-* Cordova Android: 13.0.0
+* Cordova Android: 14.0.0
 * Cordova iOS: 7.1.1
 
 ## Setup
@@ -39,7 +39,7 @@ cordova create MyProject com.my.project "MyProject"
 cd MyProject
 cordova platform add ios
 cordova platform add android
-cordova plugin add https://github.com/Jumio/mobile-cordova.git#v4.12.0
+cordova plugin add https://github.com/Jumio/mobile-cordova.git#v4.13.0
 cd platforms/ios && pod install
 ```
 
@@ -76,7 +76,7 @@ If necessary, modify the Gradle Wrapper version in `android/gradle.wrapper/gradl
 
 ```groovy
 ...
-distributionUrl=https\://services.gradle.org/distributions/gradle-8.6-bin.zip
+distributionUrl=https\://services.gradle.org/distributions/gradle-8.13-bin.zip
 ```
 
 #### Proguard  
@@ -310,10 +310,8 @@ If iOS application build is failing with `ld: framework not found iProov.xcframe
 ```
 post_install do |installer|
   installer.pods_project.targets.each do |target|
-    if ['iProov', 'DatadogRUM', 'DatadogCore', 'DatadogInternal'].include? target.name
-      target.build_configurations.each do |config|
-          config.build_settings['BUILD_LIBRARY_FOR_DISTRIBUTION'] = 'YES'
-      end
+    target.build_configurations.each do |config|
+        config.build_settings['BUILD_LIBRARY_FOR_DISTRIBUTION'] = 'YES'
     end
   end
 end
@@ -324,10 +322,8 @@ If iOS application build is failing with `ld: framework not found DatadogCore.xc
 ```
 post_install do |installer|
   installer.pods_project.targets.each do |target|
-    if ['DatadogRUM', 'DatadogCore', 'DatadogInternal'].include? target.name
-      target.build_configurations.each do |config|
-        config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '12.0'
-      end
+    target.build_configurations.each do |config|
+      config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '13.0'
     end
   end
 end
