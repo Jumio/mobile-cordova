@@ -20,13 +20,17 @@ class JumioMobileSDK: CDVPlugin, JumioPreloaderDelegate {
     @objc(initialize:) func initialize(_ command: CDVInvokedUrlCommand) {
         callbackId = command.callbackId
 
-        if command.arguments.count < 2 {
-            sendErrorMessage(errorMessage: "Missing required parameters authorizationToken, or dataCenter.")
+        guard let token = command.argument(at: 0) as? String, !token.isEmpty else {
+            let pluginResult = CDVPluginResult(status: CDVCommandStatus_ERROR, messageAs: "Missing required parameters one-time session authorization token.")
+            commandDelegate.send(pluginResult, callbackId: callbackId)
             return
         }
 
-        let token = command.argument(at: 0) as! String
-        let dataCenter = command.argument(at: 1) as! String
+        guard let dataCenter = command.argument(at: 1) as? String, !dataCenter.isEmpty else {
+            let pluginResult = CDVPluginResult(status: CDVCommandStatus_ERROR, messageAs: "Invalid Datacenter value.")
+            commandDelegate.send(pluginResult, callbackId: callbackId)
+            return
+        }
 
         jumio = Jumio.SDK()
         jumio?.defaultUIDelegate = self
@@ -41,6 +45,9 @@ class JumioMobileSDK: CDVPlugin, JumioPreloaderDelegate {
         default:
             jumio?.dataCenter = .US
         }
+
+        let pluginResult = CDVPluginResult(status: CDVCommandStatus_OK)
+        commandDelegate.send(pluginResult, callbackId: callbackId)
     }
 
     @objc(start:) func start(_ command: CDVInvokedUrlCommand) {
@@ -503,6 +510,36 @@ extension JumioMobileSDK {
             customTheme.nfc.phoneCover = Jumio.Theme.Value(light: UIColor(hexString: light), dark: UIColor(hexString: dark))
         } else if let nfcPhoneCover = customizations["nfcPhoneCover"] as? String {
             customTheme.nfc.phoneCover = Jumio.Theme.Value(UIColor(hexString: nfcPhoneCover))
+        }
+
+        if let nfcPhoneScreen = customizations["nfcPhoneScreen"] as? [String: String?], let light = nfcPhoneScreen["light"] as? String, let dark = nfcPhoneScreen["dark"] as? String {
+            customTheme.nfc.phoneScreen = Jumio.Theme.Value(light: UIColor(hexString: light), dark: UIColor(hexString: dark))
+        } else if let nfcPhoneScreen = customizations["nfcPhoneScreen"] as? String {
+            customTheme.nfc.phoneScreen = Jumio.Theme.Value(UIColor(hexString: nfcPhoneScreen))
+        }
+
+        if let nfcChipPrimary = customizations["nfcChipPrimary"] as? [String: String?], let light = nfcChipPrimary["light"] as? String, let dark = nfcChipPrimary["dark"] as? String {
+            customTheme.nfc.chipPrimary = Jumio.Theme.Value(light: UIColor(hexString: light), dark: UIColor(hexString: dark))
+        } else if let nfcChipPrimary = customizations["nfcChipPrimary"] as? String {
+            customTheme.nfc.chipPrimary = Jumio.Theme.Value(UIColor(hexString: nfcChipPrimary))
+        }
+
+        if let nfcChipSecondary = customizations["nfcChipSecondary"] as? [String: String?], let light = nfcChipSecondary["light"] as? String, let dark = nfcChipSecondary["dark"] as? String {
+            customTheme.nfc.chipSecondary = Jumio.Theme.Value(light: UIColor(hexString: light), dark: UIColor(hexString: dark))
+        } else if let nfcChipSecondary = customizations["nfcChipSecondary"] as? String {
+            customTheme.nfc.chipSecondary = Jumio.Theme.Value(UIColor(hexString: nfcChipSecondary))
+        }
+
+        if let nfcChipGlow = customizations["nfcChipGlow"] as? [String: String?], let light = nfcChipGlow["light"] as? String, let dark = nfcChipGlow["dark"] as? String {
+            customTheme.nfc.chipGlow = Jumio.Theme.Value(light: UIColor(hexString: light), dark: UIColor(hexString: dark))
+        } else if let nfcChipGlow = customizations["nfcChipGlow"] as? String {
+            customTheme.nfc.chipGlow = Jumio.Theme.Value(UIColor(hexString: nfcChipGlow))
+        }
+
+        if let nfcPulse = customizations["nfcPulse"] as? [String: String?], let light = nfcPulse["light"] as? String, let dark = nfcPulse["dark"] as? String {
+            customTheme.nfc.pulse = Jumio.Theme.Value(light: UIColor(hexString: light), dark: UIColor(hexString: dark))
+        } else if let nfcPulse = customizations["nfcPulse"] as? String {
+            customTheme.nfc.pulse = Jumio.Theme.Value(UIColor(hexString: nfcPulse))
         }
 
         // ScanView

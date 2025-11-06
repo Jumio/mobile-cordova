@@ -17,16 +17,33 @@
  * under the License.
  */
 
-var DATACENTER = 'DATACENTER';
+var DATACENTER = '';
 
 var app = {
     // Application Constructor
     initialize: function() {
         document.addEventListener('deviceready', this.onDeviceReady.bind(this), false);
-		document.getElementById('start').addEventListener('click', this.start);
+		document.getElementById('start').addEventListener('click', this.start.bind(this));
 		document.getElementById('buttonUS').addEventListener('click', this.handleButtonUS);
         document.getElementById('buttonEU').addEventListener('click', this.handleButtonEU);
         document.getElementById('buttonSG').addEventListener('click', this.handleButtonSG);
+        document.getElementById('modalCloseButton').addEventListener('click', () => {
+             document.getElementById('resultModalOverlay').style.display = 'none';
+        });
+    },
+
+    showModal: function(title, messageObject) {
+        document.getElementById('modalTitle').innerText = title;
+        document.getElementById('modalMessage').innerText = JSON.stringify(messageObject);
+        document.getElementById('resultModalOverlay').style.display = 'flex';
+    },
+
+    handleJumioResult: function(result) {
+        this.showModal('Jumio Result', result);
+    },
+
+    handleJumioError: function(error) {
+        this.showModal('Jumio Error', error);
     },
 
     // deviceready Event Handler
@@ -34,6 +51,21 @@ var app = {
     // Bind any cordova events here. Common events are:
     // 'pause', 'resume', etc.
     onDeviceReady: function() {
+        Jumio.getCachedResult(
+            (result) => {
+                if (result) {
+                    this.handleJumioResult(result);
+                } else {
+                    console.log('No cached result found.');
+                }
+            },
+            (error) => {
+                if (error) {
+                    this.handleJumioError(error);
+                }
+            }
+        );
+
         Jumio.setPreloaderFinishedBlock(
             function(data) {
                  console.log('All models are preloaded. You may start the SDK now!');
@@ -45,30 +77,34 @@ var app = {
 	},
 
 	start: function() {
-    		var authorizationToken = '';
-            if(document.getElementById('tokenInput') && document.getElementById('tokenInput').value) {
-    		    authorizationToken = document.getElementById('tokenInput').value;
-    		}
+        var authorizationToken = '';
+        if(document.getElementById('tokenInput') && document.getElementById('tokenInput').value) {
+            authorizationToken = document.getElementById('tokenInput').value;
+        }
 
-    		Jumio.initialize(authorizationToken, DATACENTER);
-
-    		Jumio.start(function(documentData) {
-    			 alert(JSON.stringify(documentData));
-    		}, function(error) {
-    			 alert(JSON.stringify(error));
-    		},
-    		{
-//    		   background: "#AC3D9A",
-//             primaryColor: "#FF5722",
-//             loadingCircleIcon: "#F2F233",
-//             loadingCirclePlain: "#57ffc7",
-//             loadingCircleGradientStart: "#EC407A",
-//             loadingCircleGradientEnd: "#bc2e41",
-//             loadingErrorCircleGradientStart: "#AC3D9A",
-//             loadingErrorCircleGradientEnd: "#C31322",
-//             primaryButtonBackground: {"light": "#D900ff00", "dark": "#9Edd9E"}
-    		}
-    		);
+        Jumio.initialize(authorizationToken, DATACENTER,
+            () => {
+                console.log('Jumio initialized successfully.');
+                Jumio.start(
+                    this.handleJumioResult.bind(this),
+                    this.handleJumioError.bind(this),
+                    {
+//                         background: "#AC3D9A",
+//                         primaryColor: "#FF5722",
+//                         loadingCircleIcon: "#F2F233",
+//                         loadingCirclePlain: "#57ffc7",
+//                         loadingCircleGradientStart: "#EC407A",
+//                         loadingCircleGradientEnd: "#bc2e41",
+//                         loadingErrorCircleGradientStart: "#AC3D9A",
+//                         loadingErrorCircleGradientEnd: "#C31322",
+//                         primaryButtonBackground: {"light": "#D900ff00", "dark": "#9Edd9E"}
+                    }
+                );
+            },
+            (error) => {
+                this.handleJumioError(error);
+            }
+        );
     },
     handleButtonUS: function() {
         DATACENTER = 'US';

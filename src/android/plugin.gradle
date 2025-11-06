@@ -18,8 +18,8 @@ repositories {
 }
 
 ext {
-    SDK_VERSION = "4.13.0"
-    kotlin_version = "2.1.0"
+    SDK_VERSION = "4.15.0"
+    kotlin_version = "2.1.20"
 }
 
 dependencies {
@@ -36,7 +36,7 @@ dependencies {
     implementation "com.jumio.android:camerax"
 
     //only for the sample code
-    implementation "androidx.activity:activity-ktx:1.9.3"
+    implementation "androidx.activity:activity-ktx:1.10.1"
 
     //Kotlin
     implementation "androidx.multidex:multidex:2.0.1"
