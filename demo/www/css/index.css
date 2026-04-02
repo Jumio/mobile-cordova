@@ -17,115 +17,116 @@
  * under the License.
  */
 * {
-    -webkit-tap-highlight-color: rgba(0,0,0,0); /* make transparent link selection, adjust last value opacity 0 to 1.0 */
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
 }
 
 body {
-    -webkit-touch-callout: none;                /* prevent callout to copy image, etc when tap to hold */
-    -webkit-text-size-adjust: none;             /* prevent webkit from resizing text to fit */
-    -webkit-user-select: none;                  /* prevent copy paste, to allow, change 'none' to 'text' */
-    background-color:#E4E4E4;
-    background-image:linear-gradient(top, #A7A7A7 0%, #E4E4E4 51%);
-    background-image:-webkit-linear-gradient(top, #A7A7A7 0%, #E4E4E4 51%);
-    background-image:-ms-linear-gradient(top, #A7A7A7 0%, #E4E4E4 51%);
-    background-image:-webkit-gradient(
-        linear,
-        left top,
-        left bottom,
-        color-stop(0, #A7A7A7),
-        color-stop(0.51, #E4E4E4)
-    );
-    background-attachment:fixed;
-    font-family:'HelveticaNeue-Light', 'HelveticaNeue', Helvetica, Arial, sans-serif;
-    font-size:12px;
-    height:100%;
-    margin:0px;
-    padding:0px;
-    text-transform:uppercase;
-    width:100%;
+    background-color: #F5F5F5;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
-/* Portrait layout (default) */
-.app {
-    background:url(../img/logo.png) no-repeat center top; /* 170px x 200px */
-    position:absolute;             /* position in the center of the screen */
-    left:50%;
-    top:50%;
-    height:50px;                   /* text area height */
-    width:225px;                   /* text area width */
-    text-align:center;
-    padding:180px 0px 0px 0px;     /* image height is 200px (bottom 20px are overlapped with text) */
-    margin:-115px 0px 0px -112px;  /* offset vertical: half of image height and text area height */
-                                   /* offset horizontal: half of text area width */
+.container {
+    width: 90%;
+    max-width: 400px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
 }
 
-/* Landscape layout (with min-width) */
-@media screen and (min-aspect-ratio: 1/1) and (min-width:400px) {
-    .app {
-        background-position:left center;
-        padding:75px 0px 75px 170px;  /* padding-top + padding-bottom + text area = image height */
-        margin:-90px 0px 0px -198px;  /* offset vertical: half of image height */
-                                      /* offset horizontal: half of image width and text area width */
-    }
+.logo {
+    width: 170px;
+    height: 200px;
+    object-fit: contain;
+    margin-bottom: 10px;
 }
 
 h1 {
-    font-size:24px;
-    font-weight:normal;
-    margin:0px;
-    overflow:visible;
-    padding:0px;
-    text-align:center;
+    font-size: 22px;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 30px;
+    text-transform: none;
 }
 
-.event {
-    border-radius:4px;
-    -webkit-border-radius:4px;
-    color:#FFFFFF;
-    font-size:12px;
-    margin:0px 30px;
-    padding:2px 0px;
+.input-wrapper {
+    position: relative;
+    width: 100%;
+    height: 50px;
+    margin-bottom: 20px;
 }
 
-.event.listening {
-    background-color:#333333;
-    display:block;
+#tokenInput {
+    width: 100%;
+    height: 100%;
+    padding: 0 40px 0 15px;
+    font-size: 16px;
+    border: 1px solid #CCC;
+    border-radius: 8px;
+    background: #FFF;
+    outline: none;
 }
 
-.event.received {
-    background-color:#4B946A;
-    display:none;
+#tokenInput:focus {
+    border-color: #007AFF;
 }
 
-@keyframes fade {
-    from { opacity: 1.0; }
-    50% { opacity: 0.4; }
-    to { opacity: 1.0; }
+.clear-button {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 22px;
+    height: 22px;
+    background: #E0E0E0;
+    color: white;
+    border-radius: 50%;
+    font-size: 12px;
+    line-height: 22px;
+    display: none;
+    cursor: pointer;
 }
 
-@-webkit-keyframes fade {
-    from { opacity: 1.0; }
-    50% { opacity: 0.4; }
-    to { opacity: 1.0; }
+.button-stack {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
 }
 
-.blink {
-    animation:fade 3000ms infinite;
-    -webkit-animation:fade 3000ms infinite;
+.button {
+    height: 48px;
+    border-radius: 8px;
+    border: 1px solid #CCC;
+    background: #FFF;
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.2s;
 }
 
-textInput {
-    margin-top: 10px;
-    padding: 5px;
-    font-size: 16pt;
+.primary-button {
+    background-color: #FFF;
+    color: #000;
 }
 
-button {
-    margin-top: 10px;
-    text-align: center;
-    padding: 5px;
-    font-size: 14px;
-    width: 30%;
+.datacenter-group {
+    display: flex;
+    gap: 10px;
+}
+
+.dc-button {
+    flex: 1;
+    background-color: #007AFF;
+    color: #FFF;
+    border: none;
 }
 
 .modal-overlay {
@@ -136,11 +137,9 @@ button {
     top: 0;
     width: 100%;
     height: 100%;
-    display: flex;
+    background-color: rgba(0, 0, 0, 0.4);
     justify-content: center;
     align-items: center;
-    background-color: rgba(0, 0, 0, 0.2);
-    display: none;
 }
 
 .modal-content {
@@ -150,7 +149,6 @@ button {
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
     width: 90%;
     max-width: 320px;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
     color: #333;
     text-align: center;
     line-height: 1.5;

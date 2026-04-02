@@ -2,7 +2,7 @@
 
 Official Jumio Mobile SDK plugin for Apache Cordova
 
-This plugin is compatible with version 4.15.0 of the Jumio SDK.
+This plugin is compatible with version 4.17.0 of the Jumio SDK.
 If you have questions, please reach out to your Account Manager or contact [Jumio Support](#support).
 
 # Table of Contents
@@ -21,14 +21,13 @@ If you have questions, please reach out to your Account Manager or contact [Jumi
 - [FAQ](#faq)
   - [Android Issues](#android-issues)
   - [iOS Issues](#ios-issues)
-    - [Framework not found iProov.xcframework](#framework-not-found-iproovxcframework)
-    - [Framework not found DatadogCore.xcframework](#framework-not-found-datadogcorexcframework)
+    - [App Crash at Launch for iOS](#app-crash-at-launch-for-ios)
 - [Support](#support)
 
 ## Compatibility
 With this release, we only ensure compatibility with the latest Cordova versions and plugins.
 At the time of this release, the following minimum versions are supported:
-* Cordova: 12.0.0
+* Cordova: 13.0.0
 * Cordova Android: 14.0.1
 * Cordova iOS: 7.1.1
 
@@ -39,7 +38,7 @@ cordova create MyProject com.my.project "MyProject"
 cd MyProject
 cordova platform add ios
 cordova platform add android
-cordova plugin add https://github.com/Jumio/mobile-cordova.git#v4.15.0
+cordova plugin add https://github.com/Jumio/mobile-cordova.git#v4.17.0
 cd platforms/ios && pod install
 ```
 
@@ -117,13 +116,6 @@ You can pass the following customization options at [`Jumio.start`](demo/www/js/
 | faceSecondary                                   |
 | faceOutline                                     |
 | faceAnimationForeground                         |
-| iProovFilterForegroundColor                     |
-| iProovFilterBackgroundColor                     |
-| iProovTitleTextColor                            |
-| iProovCloseButtonTintColor                      |
-| iProovSurroundColor                             |
-| iProovPromptTextColor                           |
-| iProovPromptBackgroundColor                     |
 | genuinePresenceAssuranceReadyOvalStrokeColor    |
 | genuinePresenceAssuranceNotReadyOvalStrokeColor |
 | livenessAssuranceOvalStrokeColor                |
@@ -167,8 +159,7 @@ You can pass the following customization options at [`Jumio.start`](demo/www/js/
 | scanViewTooltipForeground                       |
 | scanViewTooltipBackground                       |
 | scanViewForeground                              |
-| scanViewDocumentShutter                         |
-| scanViewFaceShutter                             |
+| scanViewShutter                                 |
 | searchBubbleBackground                          |
 | searchBubbleForeground                          |
 | searchBubbleOutline                             |
@@ -182,6 +173,7 @@ You can pass the following customization options at [`Jumio.start`](demo/www/js/
 | textForegroundColor                             |
 | primaryColor                                    |
 | selectionIconForeground                         |
+| termsOfUseForeground                            |
 
 All colors are provided with a HEX string with the following formats: `#ff00ff` or `#66ff00ff` if you want to set the alpha level.
 
@@ -310,25 +302,24 @@ Alternatively, it is also possible to set the key `manageAppVersionAndBuildNumbe
 After installing Cocoapods, please localize your iOS application using the languages provided at the following path:   
 `ios -> Pods -> Jumio -> Localizations -> xx.lproj`
 
-### Framework not found iProov.xcframework
-If iOS application build is failing with `ld: framework not found iProov.xcframework` or `dyld: Symbol not found: ... Referenced from: /.../Frameworks/iProov.frameworks/iProov`, please make sure the necessary post install-hook has been included in your `Podfile`:
+### App Crash at Launch for iOS
+If iOS application crashes immediately after launch and without additional information, but works fine for Android, please make sure the following lines have been added to your `Podfile`:
 ```
 post_install do |installer|
-  installer.pods_project.targets.each do |target|
-    target.build_configurations.each do |config|
+    installer.pods_project.targets.each do |target|
+      target.build_configurations.each do |config|
         config.build_settings['BUILD_LIBRARY_FOR_DISTRIBUTION'] = 'YES'
+      end
     end
-  end
 end
 ```
 
-### Framework not found DatadogCore.xcframework
-If iOS application build is failing with `ld: framework not found DatadogCore.xcframework` or `dyld: Symbol not found: ... Referenced from: /.../Frameworks/DatadogCore.frameworks/DatadogCore`, please make sure the necessary post install-hook has been included in your `Podfile`:
+If you are working with Xcode 15 and above, please make sure the following lines have been added to your `Podfile`:
 ```
 post_install do |installer|
-  installer.pods_project.targets.each do |target|
-    target.build_configurations.each do |config|
-      config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '13.0'
+    installer.pods_project.targets.each do |target|
+      target.build_configurations.each do |config|
+        config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '13.0'
     end
   end
 end

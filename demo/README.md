@@ -2,8 +2,8 @@
 Demonstrates how to use the JumioMobileSDK plugin.
 
 ## Prerequisites
-* Cordova CLI 12.0.0
-* NodeJS 24.10.0
+* Cordova CLI 13.0.0
+* NodeJS 25.8.1
 
 ## Hooks
 

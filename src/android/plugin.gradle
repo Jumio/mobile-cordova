@@ -12,35 +12,31 @@ repositories {
         }
         filter {
             includeGroup "com.jumio.android"
-            includeGroup "com.iproov.sdk"
         }
     }
 }
 
 ext {
-    SDK_VERSION = "4.15.0"
-    kotlin_version = "2.1.20"
+    SDK_VERSION = "4.17.0"
 }
 
 dependencies {
+    // Kotlin
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:2.1.20"
+    // only for the sample code
+    implementation "androidx.activity:activity-ktx:1.10.1"
+    implementation "androidx.multidex:multidex:2.0.1"
+
     // Jumio dependencies
     implementation platform("com.jumio.android:bom:${SDK_VERSION}")
     implementation "com.jumio.android:core"
     implementation "com.jumio.android:docfinder"
     implementation "com.jumio.android:nfc"
     implementation "com.jumio.android:barcode-mlkit"
-    implementation "com.jumio.android:iproov"
     implementation "com.jumio.android:defaultui"
     implementation "com.jumio.android:digital-identity"
     implementation "com.jumio.android:liveness"
     implementation "com.jumio.android:camerax"
-
-    //only for the sample code
-    implementation "androidx.activity:activity-ktx:1.10.1"
-
-    //Kotlin
-    implementation "androidx.multidex:multidex:2.0.1"
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
 
     implementation fileTree(dir: 'libs', include: '*.jar')
 }

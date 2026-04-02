@@ -19,29 +19,49 @@ post_install do |installer|
         end
     end
 
-    # Add Localization to Resources group to make iProov work
-    destinationFolder = './DemoApp/Resources'
+    # Add Localization to Resources group
+    destinationFolder = './App/Resources'
     localizableName = 'Localizable-Jumio.strings'
     project = installer.aggregate_targets[0].user_project
+
     FileUtils.mkdir_p destinationFolder
-    FileUtils.cp_r './Pods/Jumio/Localization', destinationFolder
-    resourcesGroup = project.groups.find do |group|
-     group.name == 'Resources'
+
+    if Dir.exist?('./Pods/Jumio/Localization')
+        FileUtils.cp_r './Pods/Jumio/Localization', destinationFolder
     end
-    localizableGroup = resourcesGroup.children.select {|group|
-     group.name == localizableName
-    }[0]
+
+    appGroup = project.groups.find { |group| group.name == 'App' || group.path == 'App' }
+
+    if appGroup
+        resourcesGroup = appGroup.children.find { |group| group.name == 'Resources' || group.path == 'Resources' }
+    else
+        resourcesGroup = project.groups.find { |group| group.name == 'Resources' || group.path == 'Resources' }
+    end
+
+    if resourcesGroup.nil?
+        resourcesGroup = appGroup ? appGroup.new_group('Resources') : project.new_group('Resources')
+    end
+
+    localizableGroup = resourcesGroup.children.find { |group| group.name == localizableName }
     if localizableGroup.nil?
-     localizableGroup = resourcesGroup.new_variant_group(localizableName)
+        localizableGroup = resourcesGroup.new_variant_group(localizableName)
     end
-    Dir.foreach(destinationFolder + '/Localization') do |folder|
-     if folder.include? ".lproj"
-       localizableGroup.new_file('./Localization/' + folder + '/Localizable-Jumio.strings')
-     end
+
+    localizationDir = destinationFolder + '/Localization'
+    if Dir.exist?(localizationDir)
+        Dir.foreach(localizationDir) do |folder|
+            if folder.include? ".lproj"
+                localizableGroup.new_file('Localization/' + folder + '/Localizable-Jumio.strings')
+            end
+        end
     end
+
     project.native_targets.each do |target|
-      target.add_resources([localizableGroup])
+        if target.name == 'App'
+            target.add_resources([localizableGroup])
+        end
     end
+
     project.save
 
     installer.generated_projects.each do |project|

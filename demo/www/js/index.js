@@ -30,6 +30,19 @@ var app = {
         document.getElementById('modalCloseButton').addEventListener('click', () => {
              document.getElementById('resultModalOverlay').style.display = 'none';
         });
+
+        const tokenInput = document.getElementById('tokenInput');
+        const clearBtn = document.getElementById('clearInput');
+
+        tokenInput.addEventListener('input', () => {
+            clearBtn.style.display = tokenInput.value.length > 0 ? 'block' : 'none';
+        });
+
+        clearBtn.addEventListener('click', () => {
+            tokenInput.value = '';
+            clearBtn.style.display = 'none';
+            tokenInput.focus();
+        });
     },
 
     showModal: function(title, messageObject) {
@@ -108,21 +121,22 @@ var app = {
     },
     handleButtonUS: function() {
         DATACENTER = 'US';
-        document.getElementById('buttonUS').style.backgroundColor = "#FFC055";
-        document.getElementById('buttonEU').style.backgroundColor = "#B4B7BB";
-        document.getElementById('buttonSG').style.backgroundColor = "#B4B7BB";
+        app.updateButtonStyles('buttonUS');
     },
     handleButtonEU: function() {
         DATACENTER = 'EU';
-        document.getElementById('buttonEU').style.backgroundColor = "#FFC055";
-        document.getElementById('buttonUS').style.backgroundColor = "#B4B7BB";
-        document.getElementById('buttonSG').style.backgroundColor = "#B4B7BB";
+        app.updateButtonStyles('buttonEU');
     },
     handleButtonSG: function() {
         DATACENTER = 'SG';
-        document.getElementById('buttonSG').style.backgroundColor = "#FFC055";
-        document.getElementById('buttonUS').style.backgroundColor = "#B4B7BB";
-        document.getElementById('buttonEU').style.backgroundColor = "#B4B7BB";
+        app.updateButtonStyles('buttonSG');
+    },
+    updateButtonStyles: function(selectedId) {
+        const ids = ['buttonUS', 'buttonEU', 'buttonSG'];
+        ids.forEach(id => {
+            const btn = document.getElementById(id);
+            btn.style.backgroundColor = (id === selectedId) ? "#FFC055" : "#B4B7BB";
+        });
     }
 };
 

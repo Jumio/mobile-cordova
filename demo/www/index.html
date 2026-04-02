@@ -28,32 +28,44 @@
             * Disables use of inline scripts in order to mitigate risk of XSS vulnerabilities. To change this:
                 * Enable inline JS: add 'unsafe-inline' to default-src
         -->
+        <meta charset="utf-8">
         <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: gap: https://ssl.gstatic.com 'unsafe-eval'; style-src 'self' 'unsafe-inline'; media-src *; img-src 'self' data: content:;">
-        <meta name="format-detection" content="telephone=no">
-        <meta name="msapplication-tap-highlight" content="no">
         <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width">
         <link rel="stylesheet" type="text/css" href="css/index.css">
-        <title>Hello World</title>
+        <title>Jumio Mobile SDK</title>
     </head>
     <body>
-        <div class="app">
+        <div class="container">
+            <img src="img/logo.png" alt="Jumio Logo" class="logo">
+
             <h1>Jumio Mobile SDK</h1>
-            <input id="tokenInput" type="text" class="inputText" placeholder="Authorization token">
-            <div>
-                <button id="buttonUS" type="button" class="button">US</button>
-                <button id="buttonEU" type="button" class="button">EU</button>
-                <button id="buttonSG" type="button" class="button">SG</button>
+
+            <div class="input-wrapper">
+                <input id="tokenInput" type="text" placeholder="Authorization token">
+                <div id="clearInput" class="clear-button">✕</div>
             </div>
-            <button id="start" type="button" class="button">Start</button>
-            <p id="logtitle" style="visibility: hidden">Log: </p>
-            <p id="log"></p>
-            <div id="resultModalOverlay" class="modal-overlay">
-                <div class="modal-content">
-                    <h2 id="modalTitle"></h2>
-                    <pre id="modalMessage"></pre> <button id="modalCloseButton" class="modal-button">Close</button>
+
+            <div class="button-stack">
+                <button id="start" type="button" class="button primary-button">Start</button>
+
+                <div class="datacenter-group">
+                    <button id="buttonUS" type="button" class="button dc-button">US</button>
+                    <button id="buttonEU" type="button" class="button dc-button">EU</button>
+                    <button id="buttonSG" type="button" class="button dc-button">SG</button>
                 </div>
             </div>
+
+            <p id="log"></p>
         </div>
+
+        <div id="resultModalOverlay" class="modal-overlay">
+            <div class="modal-content">
+                <h2 id="modalTitle"></h2>
+                <pre id="modalMessage"></pre>
+                <button id="modalCloseButton" class="modal-button">Close</button>
+            </div>
+        </div>
+
         <script type="text/javascript" src="cordova.js"></script>
         <script type="text/javascript" src="js/index.js"></script>
     </body>

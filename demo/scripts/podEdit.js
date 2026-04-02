@@ -6,12 +6,12 @@ module.exports = function() {
         if (error) throw error;
 
         fs.readFile('scripts/podExtension', 'utf-8', function(error, extensionData){
-            if (error) throw err;
+            if (error) throw error;
 
             const newValue = podData + extensionData;
 
             fs.writeFile(podfilePath, newValue, 'utf-8', function (error) {
-                if (error) throw err;
+                if (error) throw error;
             });
         });
     });

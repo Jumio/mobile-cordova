@@ -18,16 +18,21 @@ class JumioMobileSDK: CDVPlugin, JumioPreloaderDelegate {
     }
 
     @objc(initialize:) func initialize(_ command: CDVInvokedUrlCommand) {
-        callbackId = command.callbackId
+        guard let callbackId = command.callbackId else {
+            print("Error: No callbackId provided by Cordova.")
+            return
+        }
 
         guard let token = command.argument(at: 0) as? String, !token.isEmpty else {
-            let pluginResult = CDVPluginResult(status: CDVCommandStatus_ERROR, messageAs: "Missing required parameters one-time session authorization token.")
+            let pluginResult = CDVPluginResult(status: CDVCommandStatus.error, messageAs: "Missing required parameters one-time session authorization token.")
             commandDelegate.send(pluginResult, callbackId: callbackId)
             return
         }
 
-        guard let dataCenter = command.argument(at: 1) as? String, !dataCenter.isEmpty else {
-            let pluginResult = CDVPluginResult(status: CDVCommandStatus_ERROR, messageAs: "Invalid Datacenter value.")
+        guard let dataCenterString = command.argument(at: 1) as? String,
+              let validDataCenter = getJumioDataCenter(dataCenterString) else {
+
+            let pluginResult = CDVPluginResult(status: CDVCommandStatus.error, messageAs: "Invalid Datacenter value.")
             commandDelegate.send(pluginResult, callbackId: callbackId)
             return
         }
@@ -35,18 +40,10 @@ class JumioMobileSDK: CDVPlugin, JumioPreloaderDelegate {
         jumio = Jumio.SDK()
         jumio?.defaultUIDelegate = self
         jumio?.token = token
+        jumio?.dataCenter = validDataCenter
         jumio?.setResourcesBundle(Bundle.main)
 
-        switch dataCenter.lowercased() {
-        case "eu":
-            jumio?.dataCenter = .EU
-        case "sg":
-            jumio?.dataCenter = .SG
-        default:
-            jumio?.dataCenter = .US
-        }
-
-        let pluginResult = CDVPluginResult(status: CDVCommandStatus_OK)
+        let pluginResult = CDVPluginResult(status: CDVCommandStatus.ok)
         commandDelegate.send(pluginResult, callbackId: callbackId)
     }
 
@@ -68,10 +65,9 @@ class JumioMobileSDK: CDVPlugin, JumioPreloaderDelegate {
 
         jumioVC.modalPresentationStyle = .fullScreen
 
-        guard let rootViewController = UIApplication.shared.windows.first?.rootViewController
-        else { return }
-
-        rootViewController.present(jumioVC, animated: true)
+        DispatchQueue.main.async {
+            self.viewController.present(jumioVC, animated: true)
+        }
     }
 
     @objc(handleDeepLink:) func handleDeepLink(url: NSURL) -> Bool {
@@ -92,8 +88,13 @@ class JumioMobileSDK: CDVPlugin, JumioPreloaderDelegate {
     }
 
     func jumio(finished: Jumio.Preloader) {
-        let pluginResult = CDVPluginResult(status: CDVCommandStatus_OK, messageAs: [] )
-        commandDelegate.send(pluginResult, callbackId: callbackId)
+        guard let savedCallbackId = self.callbackId else {
+            print("Error: No saved callbackId found to return the result to Cordova.")
+            return
+        }
+
+        let pluginResult = CDVPluginResult(status: CDVCommandStatus.ok, messageAs: [] )
+        commandDelegate.send(pluginResult, callbackId: savedCallbackId)
     }
 
     private func getIDResult(idResult: Jumio.IDResult) -> [String: Any] {
@@ -130,6 +131,19 @@ class JumioMobileSDK: CDVPlugin, JumioPreloaderDelegate {
         ]
 
         return result.compactMapValues { $0 }
+    }
+
+    private func getJumioDataCenter(_ dataCenter: String) -> Jumio.DataCenter? {
+        switch dataCenter.lowercased() {
+        case "eu":
+            return .EU
+        case "sg":
+            return .SG
+        case "us":
+            return .US
+        default:
+            return nil
+        }
     }
 }
 
@@ -170,11 +184,11 @@ extension JumioMobileSDK: Jumio.DefaultUIDelegate {
                     eventResultMap = eventResultMap.merging(getFaceResult(faceResult: faceResult), uniquingKeysWith: { first, _ in first })
                 }
 
-                credentialArray.append(eventResultMap)
+                credentialArray.append(eventResultMap.compactMapValues { $0 })
             }
             body["credentials"] = credentialArray
 
-            sendScanResult(body: body)
+            sendScanResult(body: body.compactMapValues { $0 })
         } else {
             guard let error = jumioResult.error else { return }
             let errorMessage = error.message
@@ -190,19 +204,34 @@ extension JumioMobileSDK: Jumio.DefaultUIDelegate {
     }
 
     private func sendErrorMessage(errorMessage: String) {
+        guard let savedCallbackId = self.callbackId else {
+            print("Error: No saved callbackId found to return the result to Cordova.")
+            return
+        }
+
         let result = ["errorMessage": errorMessage]
-        let pluginResult = CDVPluginResult(status: CDVCommandStatus_ERROR, messageAs: result)
-        commandDelegate.send(pluginResult, callbackId: callbackId)
+        let pluginResult = CDVPluginResult(status: CDVCommandStatus.error, messageAs: result)
+        commandDelegate.send(pluginResult, callbackId: savedCallbackId)
     }
 
     private func sendScanErrorMessage(body: [String: Any?]) {
-        let pluginResult = CDVPluginResult(status: CDVCommandStatus_ERROR, messageAs: body as [AnyHashable: Any])
-        commandDelegate.send(pluginResult, callbackId: callbackId)
+        guard let savedCallbackId = self.callbackId else {
+            print("Error: No saved callbackId found to return the result to Cordova.")
+            return
+        }
+
+        let pluginResult = CDVPluginResult(status: CDVCommandStatus.error, messageAs: body as [AnyHashable: Any])
+        commandDelegate.send(pluginResult, callbackId: savedCallbackId)
     }
 
     private func sendScanResult(body: [String: Any?]) {
-        let pluginResult = CDVPluginResult(status: CDVCommandStatus_OK, messageAs: body as [AnyHashable: Any])
-        commandDelegate.send(pluginResult, callbackId: callbackId)
+        guard let savedCallbackId = self.callbackId else {
+            print("Error: No saved callbackId found to return the result to Cordova.")
+            return
+        }
+
+        let pluginResult = CDVPluginResult(status: CDVCommandStatus.ok, messageAs: body as [AnyHashable: Any])
+        commandDelegate.send(pluginResult, callbackId: savedCallbackId)
     }
 }
 
@@ -234,73 +263,6 @@ extension JumioMobileSDK {
             customTheme.scanHelp.faceAnimationForeground = Jumio.Theme.Value(light: UIColor(hexString: light), dark: UIColor(hexString: dark))
         } else if let faceAnimationForeground = customizations["faceAnimationForeground"] as? String {
             customTheme.scanHelp.faceAnimationForeground = Jumio.Theme.Value(UIColor(hexString: faceAnimationForeground))
-        }
-
-        // IProov
-        if let iProovFilterForegroundColor = customizations["iProovFilterForegroundColor"] as? [String: String?], let light = iProovFilterForegroundColor["light"] as? String, let dark = iProovFilterForegroundColor["dark"] as? String {
-            customTheme.iProov.filterForegroundColor = Jumio.Theme.Value(light: UIColor(hexString: light), dark: UIColor(hexString: dark))
-        } else if let iProovFilterForegroundColor = customizations["iProovFilterForegroundColor"] as? String {
-            customTheme.iProov.filterForegroundColor = Jumio.Theme.Value(UIColor(hexString: iProovFilterForegroundColor))
-        }
-
-        if let iProovFilterBackgroundColor = customizations["iProovFilterBackgroundColor"] as? [String: String?], let light = iProovFilterBackgroundColor["light"] as? String, let dark = iProovFilterBackgroundColor["dark"] as? String {
-            customTheme.iProov.filterBackgroundColor = Jumio.Theme.Value(light: UIColor(hexString: light), dark: UIColor(hexString: dark))
-        } else if let iProovFilterBackgroundColor = customizations["iProovFilterBackgroundColor"] as? String {
-            customTheme.iProov.filterBackgroundColor = Jumio.Theme.Value(UIColor(hexString: iProovFilterBackgroundColor))
-        }
-
-        if let iProovTitleTextColor = customizations["iProovTitleTextColor"] as? [String: String?], let light = iProovTitleTextColor["light"] as? String, let dark = iProovTitleTextColor["dark"] as? String {
-            customTheme.iProov.titleTextColor = Jumio.Theme.Value(light: UIColor(hexString: light), dark: UIColor(hexString: dark))
-        } else if let iProovTitleTextColor = customizations["iProovTitleTextColor"] as? String {
-            customTheme.iProov.titleTextColor = Jumio.Theme.Value(UIColor(hexString: iProovTitleTextColor))
-        }
-
-        if let iProovCloseButtonTintColor = customizations["iProovCloseButtonTintColor"] as? [String: String?], let light = iProovCloseButtonTintColor["light"] as? String, let dark = iProovCloseButtonTintColor["dark"] as? String {
-            customTheme.iProov.closeButtonTintColor = Jumio.Theme.Value(light: UIColor(hexString: light), dark: UIColor(hexString: dark))
-        } else if let iProovCloseButtonTintColor = customizations["iProovCloseButtonTintColor"] as? String {
-            customTheme.iProov.closeButtonTintColor = Jumio.Theme.Value(UIColor(hexString: iProovCloseButtonTintColor))
-        }
-
-        if let iProovSurroundColor = customizations["iProovSurroundColor"] as? [String: String?], let light = iProovSurroundColor["light"] as? String, let dark = iProovSurroundColor["dark"] as? String {
-            customTheme.iProov.surroundColor = Jumio.Theme.Value(light: UIColor(hexString: light), dark: UIColor(hexString: dark))
-        } else if let iProovSurroundColor = customizations["iProovSurroundColor"] as? String {
-            customTheme.iProov.surroundColor = Jumio.Theme.Value(UIColor(hexString: iProovSurroundColor))
-        }
-
-        if let iProovPromptTextColor = customizations["iProovPromptTextColor"] as? [String: String?], let light = iProovPromptTextColor["light"] as? String, let dark = iProovPromptTextColor["dark"] as? String {
-            customTheme.iProov.promptTextColor = Jumio.Theme.Value(light: UIColor(hexString: light), dark: UIColor(hexString: dark))
-        } else if let iProovPromptTextColor = customizations["iProovPromptTextColor"] as? String {
-            customTheme.iProov.promptTextColor = Jumio.Theme.Value(UIColor(hexString: iProovPromptTextColor))
-        }
-
-        if let iProovPromptBackgroundColor = customizations["iProovPromptBackgroundColor"] as? [String: String?], let light = iProovPromptBackgroundColor["light"] as? String, let dark = iProovPromptBackgroundColor["dark"] as? String {
-            customTheme.iProov.promptBackgroundColor = Jumio.Theme.Value(light: UIColor(hexString: light), dark: UIColor(hexString: dark))
-        } else if let iProovPromptBackgroundColor = customizations["iProovPromptBackgroundColor"] as? String {
-            customTheme.iProov.promptBackgroundColor = Jumio.Theme.Value(UIColor(hexString: iProovPromptBackgroundColor))
-        }
-
-        if let genuinePresenceAssuranceReadyOvalStrokeColor = customizations["genuinePresenceAssuranceReadyOvalStrokeColor"] as? [String: String?], let light = genuinePresenceAssuranceReadyOvalStrokeColor["light"] as? String, let dark = genuinePresenceAssuranceReadyOvalStrokeColor["dark"] as? String {
-            customTheme.iProov.genuinePresenceAssuranceReadyOvalStrokeColor = Jumio.Theme.Value(light: UIColor(hexString: light), dark: UIColor(hexString: dark))
-        } else if let genuinePresenceAssuranceReadyOvalStrokeColor = customizations["genuinePresenceAssuranceReadyOvalStrokeColor"] as? String {
-            customTheme.iProov.genuinePresenceAssuranceReadyOvalStrokeColor = Jumio.Theme.Value(UIColor(hexString: genuinePresenceAssuranceReadyOvalStrokeColor))
-        }
-
-        if let genuinePresenceAssuranceNotReadyOvalStrokeColor = customizations["genuinePresenceAssuranceNotReadyOvalStrokeColor"] as? [String: String?], let light = genuinePresenceAssuranceNotReadyOvalStrokeColor["light"] as? String, let dark = genuinePresenceAssuranceNotReadyOvalStrokeColor["dark"] as? String {
-            customTheme.iProov.genuinePresenceAssuranceNotReadyOvalStrokeColor = Jumio.Theme.Value(light: UIColor(hexString: light), dark: UIColor(hexString: dark))
-        } else if let genuinePresenceAssuranceNotReadyOvalStrokeColor = customizations["genuinePresenceAssuranceNotReadyOvalStrokeColor"] as? String {
-            customTheme.iProov.genuinePresenceAssuranceNotReadyOvalStrokeColor = Jumio.Theme.Value(UIColor(hexString: genuinePresenceAssuranceNotReadyOvalStrokeColor))
-        }
-
-        if let livenessAssuranceOvalStrokeColor = customizations["livenessAssuranceOvalStrokeColor"] as? [String: String?], let light = livenessAssuranceOvalStrokeColor["light"] as? String, let dark = livenessAssuranceOvalStrokeColor["dark"] as? String {
-            customTheme.iProov.livenessAssuranceOvalStrokeColor = Jumio.Theme.Value(light: UIColor(hexString: light), dark: UIColor(hexString: dark))
-        } else if let livenessAssuranceOvalStrokeColor = customizations["livenessAssuranceOvalStrokeColor"] as? String {
-            customTheme.iProov.livenessAssuranceOvalStrokeColor = Jumio.Theme.Value(UIColor(hexString: livenessAssuranceOvalStrokeColor))
-        }
-
-        if let livenessAssuranceCompletedOvalStrokeColor = customizations["livenessAssuranceCompletedOvalStrokeColor"] as? [String: String?], let light = livenessAssuranceCompletedOvalStrokeColor["light"] as? String, let dark = livenessAssuranceCompletedOvalStrokeColor["dark"] as? String {
-            customTheme.iProov.livenessAssuranceCompletedOvalStrokeColor = Jumio.Theme.Value(light: UIColor(hexString: light), dark: UIColor(hexString: dark))
-        } else if let livenessAssuranceCompletedOvalStrokeColor = customizations["livenessAssuranceCompletedOvalStrokeColor"] as? String {
-            customTheme.iProov.livenessAssuranceCompletedOvalStrokeColor = Jumio.Theme.Value(UIColor(hexString: livenessAssuranceCompletedOvalStrokeColor))
         }
 
         // Primary & Secondry Buttons
@@ -561,16 +523,10 @@ extension JumioMobileSDK {
             customTheme.scanView.foreground = Jumio.Theme.Value(UIColor(hexString: scanViewForeground))
         }
 
-        if let scanViewDocumentShutter = customizations["scanViewDocumentShutter"] as? [String: String?], let light = scanViewDocumentShutter["light"] as? String, let dark = scanViewDocumentShutter["dark"] as? String {
-            customTheme.scanView.documentShutter = Jumio.Theme.Value(light: UIColor(hexString: light), dark: UIColor(hexString: dark))
-        } else if let scanViewDocumentShutter = customizations["scanViewDocumentShutter"] as? String {
-            customTheme.scanView.documentShutter = Jumio.Theme.Value(UIColor(hexString: scanViewDocumentShutter))
-        }
-
-        if let scanViewFaceShutter = customizations["scanViewFaceShutter"] as? [String: String?], let light = scanViewFaceShutter["light"] as? String, let dark = scanViewFaceShutter["dark"] as? String {
-            customTheme.scanView.faceShutter = Jumio.Theme.Value(light: UIColor(hexString: light), dark: UIColor(hexString: dark))
-        } else if let scanViewFaceShutter = customizations["scanViewFaceShutter"] as? String {
-            customTheme.scanView.faceShutter = Jumio.Theme.Value(UIColor(hexString: scanViewFaceShutter))
+        if let scanViewShutter = customizations["scanViewShutter"] as? [String: String?], let light = scanViewShutter["light"] as? String, let dark = scanViewShutter["dark"] as? String {
+            customTheme.scanView.shutter = Jumio.Theme.Value(light: UIColor(hexString: light), dark: UIColor(hexString: dark))
+        } else if let scanViewShutter = customizations["scanViewShutter"] as? String {
+            customTheme.scanView.shutter = Jumio.Theme.Value(UIColor(hexString: scanViewShutter))
         }
 
         // Search Bubble
@@ -654,6 +610,12 @@ extension JumioMobileSDK {
             customTheme.selectionIconForeground = Jumio.Theme.Value(UIColor(hexString: selectionIconForeground))
         }
 
+        // TermOfUse
+        if let termsOfUseForeground = customizations["termsOfUseForeground"] as? [String: String?], let light = termsOfUseForeground["light"] as? String, let dark = termsOfUseForeground["dark"] as? String {
+            customTheme.termsOfUseForeground = Jumio.Theme.Value(light: UIColor(hexString: light), dark: UIColor(hexString: dark))
+        } else if let termsOfUseForeground = customizations["termsOfUseForeground"] as? String {
+            customTheme.termsOfUseForeground = Jumio.Theme.Value(UIColor(hexString: termsOfUseForeground))
+        }
         return customTheme
     }
 }
