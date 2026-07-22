@@ -33,9 +33,19 @@ try {
     // Read the contents of the gradle.properties file
     let gradlePropertiesContents = fs.readFileSync(gradlePropertiesPath, 'utf8');
 
+    gradlePropertiesContents = gradlePropertiesContents.replace(
+        /android\.enableJetifier\s*=\s*true/g,
+        'android.enableJetifier=false'
+    );
+
+    if (!gradlePropertiesContents.includes('android.jetifier.ignorelist')) {
+        gradlePropertiesContents += '\nandroid.jetifier.ignorelist=bcprov-jdk18on\n';
+    }
+
     // Ignore JVM target validation
-    gradlePropertiesContents += '\n';
-    gradlePropertiesContents += 'kotlin.jvm.target.validation.mode=WARNING\n';
+    if (!gradlePropertiesContents.includes('kotlin.jvm.target.validation.mode=WARNING')) {
+        gradlePropertiesContents += '\nkotlin.jvm.target.validation.mode=WARNING\n';
+    }
 
     // Write update contents back to gradle.properties file
     fs.writeFileSync(gradlePropertiesPath, gradlePropertiesContents, 'utf8');

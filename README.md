@@ -2,7 +2,7 @@
 
 Official Jumio Mobile SDK plugin for Apache Cordova
 
-This plugin is compatible with version 4.17.0 of the Jumio SDK.
+This plugin is compatible with version 4.18.0 of the Jumio SDK.
 If you have questions, please reach out to your Account Manager or contact [Jumio Support](#support).
 
 # Table of Contents
@@ -28,8 +28,8 @@ If you have questions, please reach out to your Account Manager or contact [Jumi
 With this release, we only ensure compatibility with the latest Cordova versions and plugins.
 At the time of this release, the following minimum versions are supported:
 * Cordova: 13.0.0
-* Cordova Android: 14.0.1
-* Cordova iOS: 7.1.1
+* Cordova Android: 15.0.0
+* Cordova iOS: 8.1.1
 
 ## Setup
 Create Cordova project and add our plugin
@@ -38,7 +38,7 @@ cordova create MyProject com.my.project "MyProject"
 cd MyProject
 cordova platform add ios
 cordova platform add android
-cordova plugin add https://github.com/Jumio/mobile-cordova.git#v4.17.0
+cordova plugin add https://github.com/Jumio/mobile-cordova.git#v4.18.0
 cd platforms/ios && pod install
 ```
 
