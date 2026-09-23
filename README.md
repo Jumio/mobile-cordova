@@ -2,7 +2,7 @@
 
 Official Jumio Mobile SDK plugin for Apache Cordova
 
-This plugin is compatible with version 4.18.0 of the Jumio SDK.
+This plugin is compatible with version 4.19.0 of the Jumio SDK.
 If you have questions, please reach out to your Account Manager or contact [Jumio Support](#support).
 
 # Table of Contents
@@ -28,7 +28,7 @@ If you have questions, please reach out to your Account Manager or contact [Jumi
 With this release, we only ensure compatibility with the latest Cordova versions and plugins.
 At the time of this release, the following minimum versions are supported:
 * Cordova: 13.0.0
-* Cordova Android: 15.0.0
+* Cordova Android: 15.1.0
 * Cordova iOS: 8.1.1
 
 ## Setup
@@ -38,7 +38,7 @@ cordova create MyProject com.my.project "MyProject"
 cd MyProject
 cordova platform add ios
 cordova platform add android
-cordova plugin add https://github.com/Jumio/mobile-cordova.git#v4.18.0
+cordova plugin add https://github.com/Jumio/mobile-cordova.git#v4.19.0
 cd platforms/ios && pod install
 ```
 
@@ -69,13 +69,13 @@ To use the native Jumio Android component, your App needs to support AndroidX. T
 ```
 
 __Upgrade Gradle build tools__    
-The plugin requires at least version 8.0.0 of the Android build tools. This transitively requires an upgrade of the Gradle wrapper to version 8 and an update to Java 11.
+The plugin requires at least version 9.4.0 of the Android build tools. This transitively requires an upgrade of the Gradle wrapper to version 9.7.1 and an update to Java 17.
 
 If necessary, modify the Gradle Wrapper version in `android/gradle.wrapper/gradle-wrapper.properties`:
 
 ```groovy
 ...
-distributionUrl=https\://services.gradle.org/distributions/gradle-8.13-bin.zip
+distributionUrl=https\://services.gradle.org/distributions/gradle-9.7.1-bin.zip
 ```
 
 #### Proguard  
@@ -173,6 +173,17 @@ You can pass the following customization options at [`Jumio.start`](demo/www/js/
 | textForegroundColor                             |
 | primaryColor                                    |
 | selectionIconForeground                         |
+| fasterVerificationBackCardBackground            |
+| fasterVerificationBackCardOutline               |
+| fasterVerificationBackCardAvatar                |
+| fasterVerificationBackCardDetailLine            |
+| fasterVerificationFrontCardBackground           |
+| fasterVerificationFrontCardOutline              |
+| fasterVerificationFrontCardPhotoBackground      |
+| fasterVerificationFrontCardPhotoAvatar          |
+| fasterVerificationFrontCardDetailLine           |
+| fasterVerificationVerifiedAccent                |
+| fasterVerificationVerifiedBadgeBackground       |
 | termsOfUseForeground                            |
 
 All colors are provided with a HEX string with the following formats: `#ff00ff` or `#66ff00ff` if you want to set the alpha level.
@@ -319,7 +330,7 @@ If you are working with Xcode 15 and above, please make sure the following lines
 post_install do |installer|
     installer.pods_project.targets.each do |target|
       target.build_configurations.each do |config|
-        config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '13.0'
+        config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '15.0'
     end
   end
 end

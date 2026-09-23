@@ -1,4 +1,9 @@
-apply plugin: 'kotlin-android'
+// AGP 9+ registers a 'kotlin' extension via its built-in Kotlin support.
+// Applying kotlin-android on top of that fails with "Cannot add extension
+// with name 'kotlin'", so only apply it when that extension isn't already present.
+if (project.extensions.findByName('kotlin') == null) {
+    apply plugin: 'kotlin-android'
+}
 
 repositories {
     google()
@@ -17,7 +22,7 @@ repositories {
 }
 
 ext {
-    SDK_VERSION = "4.18.0"
+    SDK_VERSION = "4.19.0"
 }
 
 dependencies {
